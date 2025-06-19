@@ -18,6 +18,7 @@ interface SliderProps {
 
 export default function Slider({ sliderList }: SliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
+  
 
   useEffect(() => {
     if (sliderList.length === 0) return

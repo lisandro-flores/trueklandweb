@@ -4,7 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import SignInForm from "./SignInForm"
 import SignUpForm from "./SignUpForm"
-
+import imagen from '@/assets/images/Cam.jpeg'
 export default function LoginPage() {
   const [showSignIn, setShowSignIn] = useState(true)
 
@@ -16,7 +16,7 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       <div className="relative h-64 md:h-96 w-full">
         <Image
-          src="./../../assets/images/cam.png"
+          src={imagen}
           alt="TrueKland"
           fill
           className="object-cover rounded-b-3xl"
