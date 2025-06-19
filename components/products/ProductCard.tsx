@@ -29,7 +29,7 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const [isLiked, setIsLiked] = useState(false)
   const [imageError, setImageError] = useState(false)
-console.log(product)
+
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString)

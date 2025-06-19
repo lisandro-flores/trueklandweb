@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { getAuth, onAuthStateChanged, User } from "firebase/auth"
-import { getFirestore, collection, getDocs, query, where } from "firebase/firestore"
+import { getFirestore, collection, query, where, getCountFromServer } from "firebase/firestore"
 import { app } from "@/lib/firebase"
 import LoadingSpinner from "../ui/loading-spinner"
 import Image from "next/image"
@@ -16,6 +16,12 @@ export default function Header() {
   const [exchangeCount, setExchangeCount] = useState(0)
   const [postCount, setPostCount] = useState(0)
   const [chatCount, setChatCount] = useState(0)
+  const [visible, setVisible] = useState(true) // Nuevo estado
+
+  useEffect(() => {
+    const timer = setTimeout(() => setVisible(false), 3000)
+    return () => clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     const auth = getAuth(app)
@@ -36,25 +42,32 @@ export default function Header() {
 
   useEffect(() => {
     const fetchCounts = async () => {
-      const db = getFirestore(app)
-      if (user) {
-        // Contar intercambios del usuario
-        const exchangesSnapshot = await getDocs(
+      if (!user) return
+      try {
+        const db = getFirestore(app)
+        // Intercambios
+        const exchangesCountSnap = await getCountFromServer(
           query(collection(db, "Exchanges"), where("userId", "==", user.uid))
         )
-        setExchangeCount(exchangesSnapshot.size)
+        setExchangeCount(exchangesCountSnap.data().count)
 
-        // Contar publicaciones del usuario
-        const postsSnapshot = await getDocs(
+        // Publicaciones
+        const postsCountSnap = await getCountFromServer(
           query(collection(db, "UserPost"), where("userId", "==", user.uid))
         )
-        setPostCount(postsSnapshot.size)
+        setPostCount(postsCountSnap.data().count)
 
-        // Contar chats activos del usuario
-        const chatsSnapshot = await getDocs(
+        // Chats activos
+        const chatsCountSnap = await getCountFromServer(
           query(collection(db, "Chats"), where("members", "array-contains", user.uid))
         )
-        setChatCount(chatsSnapshot.size)
+        setChatCount(chatsCountSnap.data().count)
+      } catch (error) {
+        setExchangeCount(0)
+        setPostCount(0)
+        setChatCount(0)
+        // Opcional: muestra un toast o mensaje de error
+        console.error("Error al obtener los contadores:", error)
       }
     }
     fetchCounts()
@@ -66,6 +79,8 @@ export default function Header() {
     if (hour < 18) return "¡Buenas tardes!"
     return "¡Buenas noches!"
   }
+
+  if (!visible) return null // Oculta el componente después de 3s
 
   if (loading) {
     return <LoadingSpinner />

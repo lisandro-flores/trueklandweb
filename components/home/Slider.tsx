@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 interface SliderItem {
   id?: string
   name: string
-  imageUrl: string
+  image: string
   description?: string
 }
 
@@ -18,7 +18,7 @@ interface SliderProps {
 
 export default function Slider({ sliderList }: SliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
-  
+  console.log("Slider List:", sliderList)
 
   useEffect(() => {
     if (sliderList.length === 0) return
@@ -53,7 +53,7 @@ export default function Slider({ sliderList }: SliderProps) {
     <div className="relative h-48 md:h-64 rounded-2xl overflow-hidden group">
       <div className="relative w-full h-full">
         <Image
-          src={sliderList[currentIndex]?.imageUrl || "/placeholder.svg?height=300&width=800"}
+          src={sliderList[currentIndex]?.image || "/placeholder.svg?height=300&width=800"}
           alt={sliderList[currentIndex]?.name || "Slider"}
           fill
           className="object-cover transition-all duration-500"

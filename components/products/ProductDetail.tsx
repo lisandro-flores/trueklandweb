@@ -20,7 +20,7 @@ interface Product {
   desc: string
   category: string
   price: string
-  image: string
+  images: string
   userName: string
   userEmail: string
   userImage: string
@@ -46,6 +46,7 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
     const fetchProduct = async () => {
       try {
         const productDoc = await getDoc(doc(db, "UserPost", productId))
+       
         if (productDoc.exists()) {
           setProduct({
             id: productDoc.id,
@@ -188,7 +189,7 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
           <CardContent className="p-0">
             <div className="aspect-square relative rounded-lg overflow-hidden">
               <Image
-                src={imageError ? "/placeholder.svg?height=600&width=600" : product.image}
+                src={imageError ? "/placeholder.svg?height=600&width=600" : product.images[0]}
                 alt={product.title}
                 fill
                 className="object-cover"
