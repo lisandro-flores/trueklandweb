@@ -3,14 +3,16 @@
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { ChevronRight } from "lucide-react"
+import { ChevronRight, Sparkles, Grid3X3, Package, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 
 interface Category {
   id?: string
   name: string
   icon: string
   color?: string
+  count?: number
 }
 
 interface CategoriesProps {
@@ -22,59 +24,151 @@ export default function Categories({ categoryList }: CategoriesProps) {
   const displayedCategories = showAll ? categoryList : categoryList.slice(0, 8)
 
   const defaultCategories: Category[] = [
-    { name: "Electrónicos", icon: "📱", color: "from-blue-500 to-blue-600" },
-    { name: "Ropa", icon: "👕", color: "from-pink-500 to-pink-600" },
-    { name: "Hogar", icon: "🏠", color: "from-green-500 to-green-600" },
-    { name: "Deportes", icon: "⚽", color: "from-orange-500 to-orange-600" },
-    { name: "Libros", icon: "📚", color: "from-purple-500 to-purple-600" },
-    { name: "Juguetes", icon: "🧸", color: "from-yellow-500 to-yellow-600" },
-    { name: "Música", icon: "🎵", color: "from-indigo-500 to-indigo-600" },
-    { name: "Otros", icon: "📦", color: "from-gray-500 to-gray-600" },
+    { name: "Electrónicos", icon: "📱", color: "from-[#91f2b3] to-[#fcf326]", count: 245 },
+    { name: "Ropa", icon: "👕", color: "from-[#fcf326] to-[#91f2b3]", count: 189 },
+    { name: "Hogar", icon: "🏠", color: "from-[#91f2b3] to-[#fcf326]", count: 156 },
+    { name: "Deportes", icon: "⚽", color: "from-[#fcf326] to-[#91f2b3]", count: 98 },
+    { name: "Libros", icon: "📚", color: "from-[#91f2b3] to-[#fcf326]", count: 134 },
+    { name: "Juguetes", icon: "🧸", color: "from-[#fcf326] to-[#91f2b3]", count: 87 },
+    { name: "Música", icon: "🎵", color: "from-[#91f2b3] to-[#fcf326]", count: 76 },
+    { name: "Otros", icon: "📦", color: "from-[#fcf326] to-[#91f2b3]", count: 203 },
   ]
 
   const categoriesToShow = categoryList.length > 0 ? displayedCategories : defaultCategories
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold gradient-text">Categorías</h2>
+    <div className="space-y-8 relative">
+      {/* Header Section */}
+      <div className="relative flex items-center justify-between">
+        <div className="flex items-center space-x-4">
+          {/* Icon Badge */}
+          <div className="w-12 h-12 bg-gradient-to-br from-[#91f2b3] to-[#fcf326] rounded-full flex items-center justify-center shadow-lg">
+            <Grid3X3 className="w-6 h-6 text-gray-800" />
+          </div>
+
+          {/* Title */}
+          <div className="space-y-1">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#91f2b3]">
+              Categorías Populares
+            </h2>
+            <p className="text-gray-600 text-sm sm:text-base">Explora por categorías y encuentra lo que buscas</p>
+          </div>
+        </div>
+
+        {/* View Toggle */}
         {categoryList.length > 8 && (
-          <Button variant="ghost" onClick={() => setShowAll(!showAll)} className="text-primary hover:text-primary/80">
-            {showAll ? "Ver menos" : "Ver todas"}
-            <ChevronRight className={`ml-1 h-4 w-4 transition-transform ${showAll ? "rotate-90" : ""}`} />
+          <Button
+            variant="ghost"
+            onClick={() => setShowAll(!showAll)}
+            className="bg-white border border-gray-200 hover:bg-gray-50 hover:shadow-lg transition-all duration-300 group px-6 py-3 rounded-full"
+          >
+            <span className="font-medium text-gray-700 group-hover:text-gray-800">
+              {showAll ? "Ver menos" : "Ver todas"}
+            </span>
+            <ChevronRight
+              className={`ml-2 h-4 w-4 transition-all duration-300 group-hover:text-[#91f2b3] ${
+                showAll ? "rotate-90" : ""
+              }`}
+            />
           </Button>
         )}
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+      {/* Categories Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 sm:gap-6">
         {categoriesToShow.map((category, index) => (
-          <Link key={category.id || index} href={`/category/${encodeURIComponent(category.name)}`} className="group">
-            <div className="glass-effect rounded-2xl p-4 text-center hover:scale-105 transition-all duration-200 animate-fade-in">
-              {category.icon.startsWith("http") ? (
-                <div className="w-12 h-12 mx-auto mb-3 rounded-full overflow-hidden">
-                  <Image
-                    src={category.icon || "/placeholder.svg"}
-                    alt={category.name}
-                    width={48}
-                    height={48}
-                    className="object-cover"
-                  />
+          <Link
+            key={category.id || index}
+            href={`/category/${encodeURIComponent(category.name)}`}
+            className="group relative"
+          >
+            {/* Category Card */}
+            <div className="bg-white rounded-3xl border border-gray-200 shadow-lg group-hover:shadow-xl transition-all duration-300 overflow-hidden transform group-hover:scale-105">
+              {/* Background Gradient */}
+              <div className="bg-gradient-to-br from-white to-gray-50 group-hover:from-[#91f2b3] group-hover:to-[#fcf326] transition-all duration-300">
+                {/* Content */}
+                <div className="p-4 sm:p-6 text-center space-y-3 sm:space-y-4">
+                  {/* Icon Container */}
+                  <div className="relative mx-auto">
+                    {category.icon.startsWith("http") ? (
+                      <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-full overflow-hidden border-3 border-gray-200 shadow-lg">
+                        <Image
+                          src={category.icon || "/placeholder.svg"}
+                          alt={category.name}
+                          width={64}
+                          height={64}
+                          className="object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        className={`w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-full bg-gradient-to-br ${
+                          category.color || "from-[#91f2b3] to-[#fcf326]"
+                        } flex items-center justify-center text-2xl sm:text-3xl shadow-lg border-3 border-white`}
+                      >
+                        {category.icon}
+                      </div>
+                    )}
+
+                    {/* Popular Badge - Siempre visible para las primeras 3 */}
+                    {index < 3 && (
+                      <div className="absolute -top-2 -right-2 z-10">
+                        <div className="w-6 h-6 bg-gradient-to-r from-[#fcf326] to-[#91f2b3] rounded-full flex items-center justify-center shadow-lg">
+                          <Star className="w-3 h-3 text-gray-800" />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Category Info */}
+                  <div className="space-y-2">
+                    <h3 className="font-bold text-sm sm:text-base text-gray-800 leading-tight">{category.name}</h3>
+
+                    {/* Product Count - Siempre visible */}
+                    <Badge
+                      variant="secondary"
+                      className="bg-[#91f2b3] text-gray-800 border-0 px-3 py-1 text-xs font-medium rounded-full"
+                    >
+                      <Package className="w-3 h-3 mr-1" />
+                      {category.count || 0} productos
+                    </Badge>
+                  </div>
                 </div>
-              ) : (
-                <div
-                  className={`w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-r ${
-                    category.color || "from-blue-500 to-purple-600"
-                  } flex items-center justify-center text-2xl`}
-                >
-                  {category.icon}
-                </div>
-              )}
-              <h3 className="font-semibold text-sm text-gray-700 group-hover:text-primary transition-colors">
-                {category.name}
-              </h3>
+
+                {/* Bottom Accent Line - Siempre visible */}
+                <div className="h-1 bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3]"></div>
+              </div>
             </div>
           </Link>
         ))}
+      </div>
+
+      {/* Show More Indicator */}
+      {!showAll && categoryList.length > 8 && (
+        <div className="text-center mt-8">
+          <div className="inline-flex items-center space-x-2 bg-[#91f2b3] text-gray-800 px-6 py-3 rounded-full text-sm font-medium border border-gray-200 shadow-lg">
+            <Sparkles className="w-4 h-4" />
+            <span>+{categoryList.length - 8} categorías más disponibles</span>
+          </div>
+        </div>
+      )}
+
+      {/* Bottom Info Section */}
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-4 sm:p-6">
+        <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
+          <div className="flex items-center space-x-2">
+            <div className="w-2 h-2 bg-[#91f2b3] rounded-full"></div>
+            <span>Categorías verificadas</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Star className="w-4 h-4 text-[#fcf326]" />
+            <span>Productos de calidad</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-2 h-2 bg-[#fcf326] rounded-full"></div>
+            <span>Actualizadas diariamente</span>
+          </div>
+        </div>
       </div>
     </div>
   )
