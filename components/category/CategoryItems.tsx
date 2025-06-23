@@ -16,7 +16,7 @@ interface Product {
   desc: string
   category: string
   price: string
-  image: string
+  images: string[]
   userName: string
   userEmail: string
   userImage: string
@@ -45,10 +45,26 @@ export default function CategoryItems({ category }: CategoryItemsProps) {
           orderBy("createdAt", "desc"),
         )
         const postsSnapshot = await getDocs(postsQuery)
-        const productsData = postsSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as Product[]
+        const productsData = postsSnapshot.docs.map((doc) => {
+          const data = doc.data()
+          return {
+            id: doc.id,
+            title: data.title,
+            desc: data.desc,
+            category: data.category,
+            price: data.price,
+            images: Array.isArray(data.images)
+              ? data.images
+              : data.image
+                ? [data.image]
+                : [],
+            userName: data.userName,
+            userEmail: data.userEmail,
+            userImage: data.userImage,
+            createdAt: data.createdAt,
+            isAuthorized: data.isAuthorized,
+          }
+        }) as Product[]
 
         setProducts(productsData)
       } catch (error) {
