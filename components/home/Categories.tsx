@@ -1,11 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { ChevronRight, Sparkles, Grid3X3, Package, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { getFirestore, collection, query, where, getCountFromServer } from "firebase/firestore"
+import { app } from "@/lib/firebase"
 
 interface Category {
   id?: string
@@ -21,20 +23,34 @@ interface CategoriesProps {
 
 export default function Categories({ categoryList }: CategoriesProps) {
   const [showAll, setShowAll] = useState(false)
-  const displayedCategories = showAll ? categoryList : categoryList.slice(0, 8)
+  const [categoriesWithCount, setCategoriesWithCount] = useState<Category[]>(categoryList)
+  const displayedCategories = showAll ? categoriesWithCount : categoriesWithCount.slice(0, 8)
 
-  const defaultCategories: Category[] = [
-    { name: "Electrónicos", icon: "📱", color: "from-[#91f2b3] to-[#fcf326]", count: 245 },
-    { name: "Ropa", icon: "👕", color: "from-[#fcf326] to-[#91f2b3]", count: 189 },
-    { name: "Hogar", icon: "🏠", color: "from-[#91f2b3] to-[#fcf326]", count: 156 },
-    { name: "Deportes", icon: "⚽", color: "from-[#fcf326] to-[#91f2b3]", count: 98 },
-    { name: "Libros", icon: "📚", color: "from-[#91f2b3] to-[#fcf326]", count: 134 },
-    { name: "Juguetes", icon: "🧸", color: "from-[#fcf326] to-[#91f2b3]", count: 87 },
-    { name: "Música", icon: "🎵", color: "from-[#91f2b3] to-[#fcf326]", count: 76 },
-    { name: "Otros", icon: "📦", color: "from-[#fcf326] to-[#91f2b3]", count: 203 },
-  ]
+  useEffect(() => {
+    const fetchCounts = async () => {
+      const db = getFirestore(app)
+      const updatedCategories = await Promise.all(
+        categoryList.map(async (cat) => {
+          try {
+            const snap = await getCountFromServer(
+              query(
+                collection(db, "UserPost"),
+                where("category", "==", cat.name),
+                where("isAuthorized", "==", true)
+              )
+            )
+            return { ...cat, count: snap.data().count }
+          } catch {
+            return { ...cat, count: 0 }
+          }
+        })
+      )
+      setCategoriesWithCount(updatedCategories)
+    }
+    fetchCounts()
+  }, [categoryList])
 
-  const categoriesToShow = categoryList.length > 0 ? displayedCategories : defaultCategories
+  const categoriesToShow = categoriesWithCount.length > 0 ? displayedCategories : [];
 
   return (
     <div className="space-y-8 relative">
