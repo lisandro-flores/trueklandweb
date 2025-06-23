@@ -10,7 +10,12 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "TrueKland - Intercambia, Conecta y Descubre",
   description: "Plataforma de intercambio de artículos",
-    generator: 'v0.dev'
+  manifest: "/manifest.json",
+  icons:{
+    apple: "/icon512_rounded.png",
+    icon: "/icon512_rounded.png"
+  },
+  generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -21,6 +26,11 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={inter.className}>
+        <head>
+          <link rel="manifest" href="/manifest.json" />
+          <meta name="theme-color" content="#ffffff" />
+          <link rel="apple-touch-icon" href="/icon512_rounded.png" />
+        </head>
         <AuthProvider>
           {children}
           <Toaster />

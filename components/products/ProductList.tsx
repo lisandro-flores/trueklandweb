@@ -171,7 +171,7 @@ export default function ProductList({ products, viewMode = "grid", showHeader = 
                   className="relative bg-gradient-to-r from-[#91f2b3] to-[#fcf326] text-gray-800 px-8 py-4 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center space-x-3"
                 >
                   <Package className="w-5 h-5" />
-                  <span>Ver {products.length - 8} productos más</span>
+                  <span>{`Ver ${products.length - 8} productos más`}</span>
                   <Sparkles className="w-4 h-4" />
                 </Button>
               </div>
