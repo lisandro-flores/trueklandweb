@@ -32,7 +32,11 @@ export default function ChatList() {
     if (!user) return
 
     const chatsRef = collection(db, "chats")
-    const q = query(chatsRef, where("users", "array-contains", user.email), orderBy("lastMessageTime", "desc"))
+    const q = query(
+      chatsRef,
+      where("users", "array-contains", user.email),
+      orderBy("createdAt", "desc")
+    )
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const chatsData = snapshot.docs.map((doc) => ({
