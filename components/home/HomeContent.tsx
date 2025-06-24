@@ -70,12 +70,7 @@ export default function HomeContent() {
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-12 py-8">
-          {/* Hero Slider */}
-          <section className="relative">
-            <div className="bg-white rounded-3xl border border-gray-200 shadow-xl overflow-hidden">
-              <Slider sliderList={sliderList} />
-            </div>
-          </section>
+          
 
           {/* Categories */}
           <section className="space-y-6">
