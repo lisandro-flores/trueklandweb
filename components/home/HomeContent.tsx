@@ -19,10 +19,7 @@ export default function HomeContent() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const slidersSnapshot = await getDocs(collection(db, "Sliders"))
-        const sliders = slidersSnapshot.docs.map((doc) => doc.data())
-        setSliderList(sliders)
-
+      
         const categoriesSnapshot = await getDocs(collection(db, "Category"))
         const categories = categoriesSnapshot.docs.map((doc) => doc.data())
         setCategoryList(categories)
@@ -70,8 +67,7 @@ export default function HomeContent() {
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-12 py-8">
-          
-
+        
           {/* Categories */}
           <section className="space-y-6">
             <div className="text-center space-y-3">

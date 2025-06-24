@@ -118,24 +118,27 @@ export default function Navbar() {
                             : "text-gray-700 hover:bg-[#fcf326] hover:text-gray-800 border-transparent hover:scale-105 hover:shadow-lg hover:shadow-[#fcf326]/30",
                         )}
                       >
-                        <div className="relative z-10 flex items-center gap-3">
-                          <item.icon
-                            className={cn(
-                              "h-5 w-5 transition-all duration-300",
-                              isActive ? "drop-shadow-sm" : "group-hover:scale-110",
+                        <div className="relative flex items-center gap-3">
+                          <div className="relative">
+                            <item.icon
+                              className={cn(
+                                "h-5 w-5 transition-all duration-300",
+                                isActive ? "drop-shadow-sm" : "group-hover:scale-110",
+                              )}
+                            />
+                            {item.badge && (
+                              <span className="absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
+                                <Badge
+                                  variant="destructive"
+                                  className="flex items-center justify-center h-5 w-5 p-0 text-xs font-bold bg-gradient-to-r from-red-500 to-red-600 text-white border-2 border-white rounded-full shadow"
+                                >
+                                  {item.badge > 99 ? "99+" : item.badge}
+                                </Badge>
+                              </span>
                             )}
-                          />
+                          </div>
                           <span className="hidden lg:inline font-medium tracking-wide">{item.name}</span>
                         </div>
-
-                        {item.badge && (
-                          <Badge
-                            variant="destructive"
-                            className="absolute flex items-center justify-center -top-2 -right-2 h-6 w-6 p-0 text-xs font-bold bg-red-500 text-white border-2 border-white rounded-full shadow-lg animate-pulse z-20"
-                          >
-                            {item.badge}
-                          </Badge>
-                        )}
 
                         {/* Shine effect */}
                         <div className="absolute inset-0 bg-white/30 -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
@@ -176,23 +179,26 @@ export default function Navbar() {
                     )}
                   >
                     <div className="relative z-10 flex flex-col items-center gap-1">
-                      <item.icon
-                        className={cn(
-                          "h-6 w-6 transition-all duration-300",
-                          isActive ? "drop-shadow-sm" : "group-hover:scale-110",
+                      <div className="relative">
+                        <item.icon
+                          className={cn(
+                            "h-6 w-6 transition-all duration-300",
+                            isActive ? "drop-shadow-sm" : "group-hover:scale-110",
+                          )}
+                        />
+                        {item.badge && (
+                          <span className="absolute -top-2 -right-2 z-20">
+                            <Badge
+                              variant="destructive"
+                              className="flex items-center justify-center h-5 w-5 p-0 text-[10px] font-bold bg-gradient-to-r from-red-500 to-red-600 text-white border-2 border-white rounded-full shadow"
+                            >
+                              {item.badge > 9 ? "9+" : item.badge}
+                            </Badge>
+                          </span>
                         )}
-                      />
+                      </div>
                       <span className="text-xs font-semibold leading-tight tracking-wide">{item.name}</span>
                     </div>
-
-                    {item.badge && (
-                      <Badge
-                        variant="destructive"
-                        className="absolute flex items-center justify-center -top-1 -right-1 h-5 w-5 p-0 text-xs font-bold bg-red-500 text-white border-2 border-white rounded-full shadow-lg animate-pulse z-20"
-                      >
-                        {item.badge}
-                      </Badge>
-                    )}
 
                     {/* Shine effect */}
                     <div className="absolute inset-0 bg-white/30 -translate-y-full group-hover:translate-y-full transition-transform duration-700" />
