@@ -4,11 +4,10 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { doc, getDoc, getFirestore } from "firebase/firestore"
-import { ArrowLeft, Heart, MessageCircle, Share2, User, Calendar, Edit } from "lucide-react"
+import { ArrowLeft, Heart, MessageCircle, Share2, User, Calendar, Edit, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
 import { useAuth } from "@/context/AuthContext"
 import { useToast } from "@/components/ui/use-toast"
 import { app } from "@/lib/firebase"
@@ -46,7 +45,7 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
     const fetchProduct = async () => {
       try {
         const productDoc = await getDoc(doc(db, "UserPost", productId))
-       
+
         if (productDoc.exists()) {
           setProduct({
             id: productDoc.id,
@@ -114,21 +113,19 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
       return
     }
 
-    // Navigate to chat
-    router.push(`/chats/new?with=${product?.userEmail}`)
+  router.push(`/chats/new?with=${product?.userEmail}`)
+
   }
 
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString)
       return date.toLocaleDateString("es-ES", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
         day: "numeric",
+        month: "short",
       })
     } catch {
-      return "Fecha no disponible"
+      return "N/A"
     }
   }
 
@@ -138,8 +135,8 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
 
   if (!product) {
     return (
-      <div className="text-center py-16">
-        <h2 className="text-2xl font-bold text-gray-600 mb-4">Producto no encontrado</h2>
+      <div className="text-center py-8">
+        <h2 className="text-lg font-bold text-gray-600 mb-2">Producto no encontrado</h2>
         <Button onClick={() => router.push("/explore")}>Volver a explorar</Button>
       </div>
     )
@@ -148,126 +145,162 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
   const isOwner = user?.email === product.userEmail
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6 animate-fade-in">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <Button variant="ghost" onClick={() => router.back()} className="flex items-center space-x-2">
-          <ArrowLeft className="h-4 w-4" />
-          <span>Volver</span>
-        </Button>
-
-        <div className="flex items-center space-x-2">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-4xl mx-auto px-4 py-6">
+        {/* Compact Header */}
+        <div className="flex items-center justify-between mb-6">
           <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setIsLiked(!isLiked)}
-            className={isLiked ? "text-red-500 border-red-500" : ""}
+            variant="ghost"
+            onClick={() => router.back()}
+            className="flex items-center space-x-2 hover:bg-gray-100 text-sm"
           >
-            <Heart className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
+            <ArrowLeft className="h-4 w-4" />
+            <span>Volver</span>
           </Button>
 
-          <Button variant="outline" size="icon" onClick={handleShare}>
-            <Share2 className="h-4 w-4" />
-          </Button>
-
-          {isOwner && (
+          <div className="flex items-center space-x-2">
             <Button
               variant="outline"
-              onClick={() => router.push(`/product/${productId}/edit`)}
-              className="flex items-center space-x-2"
+              size="sm"
+              onClick={() => setIsLiked(!isLiked)}
+              className={`transition-all duration-300 ${
+                isLiked ? "text-red-500 bg-red-50 border-red-200" : "hover:bg-gray-100"
+              }`}
             >
-              <Edit className="h-4 w-4" />
-              <span>Editar</span>
+              <Heart className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
+
             </Button>
-          )}
+
+            <Button variant="outline" size="sm" onClick={handleShare} className="hover:bg-gray-100">
+              <Share2 className="h-4 w-4" />
+            </Button>
+
+            {isOwner && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => router.push(`/product/${productId}/edit`)
+}
+                className="hover:bg-gray-100"
+              >
+                <Edit className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Image */}
-        <Card className="glass-effect border-0">
-          <CardContent className="p-0">
-            <div className="aspect-square relative rounded-lg overflow-hidden">
-              <Image
-                src={imageError ? "/placeholder.svg?height=600&width=600" : product.images[0]}
-                alt={product.title}
-                fill
-                className="object-cover"
-                onError={() => setImageError(true)}
-                priority
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Product Info */}
-        <div className="space-y-6">
-          <Card className="glass-effect border-0">
-            <CardContent className="p-6">
-              <div className="flex items-start justify-between mb-4">
-                <Badge variant="secondary" className="text-sm">
-                  {product.category}
-                </Badge>
-                <div className="flex items-center text-sm text-gray-500">
-                  <Calendar className="h-4 w-4 mr-1" />
-                  {formatDate(product.createdAt)}
-                </div>
-              </div>
-
-              <h1 className="text-3xl font-bold mb-4 gradient-text">{product.title}</h1>
-
-              {product.price && <div className="text-2xl font-bold text-primary mb-4">${product.price}</div>}
-
-              <p className="text-gray-700 leading-relaxed mb-6">{product.desc}</p>
-
-              <Separator className="my-6" />
-
-              {/* Seller Info */}
-              <div className="flex items-center space-x-4 mb-6">
-                <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-200">
-                  {product.userImage ? (
-                    <Image
-                      src={product.userImage || "/placeholder.svg"}
-                      alt={product.userName}
-                      width={48}
-                      height={48}
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <User className="h-6 w-6 text-gray-500" />
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <h3 className="font-semibold">{product.userName}</h3>
-                  <p className="text-sm text-gray-600">Vendedor</p>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="space-y-3">
-                {!isOwner && (
-                  <Button
-                    onClick={handleStartChat}
-                    className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 h-12"
-                  >
-                    <MessageCircle className="h-5 w-5 mr-2" />
-                    Contactar Vendedor
-                  </Button>
-                )}
-
-                <Button
-                  variant="outline"
-                  onClick={() => router.push(`/user/${encodeURIComponent(product.userEmail)}`)}
-                  className="w-full h-12"
-                >
-                  <User className="h-5 w-5 mr-2" />
-                  Ver Perfil del Vendedor
-                </Button>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Large Image Section - Mantiene el tamaño original */}
+          <Card className="overflow-hidden border shadow-sm bg-white">
+            <CardContent className="p-0">
+              <div className="aspect-square relative group">
+                <Image
+                  src={imageError ? "/placeholder.svg?height=400&width=400" : product.images[0]}
+                  alt={product.title}
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  onError={() => setImageError(true)}
+                  priority
+                />
               </div>
             </CardContent>
           </Card>
+
+          {/* Compact Product Information */}
+          <div className="space-y-4">
+            {/* Main Product Card */}
+            <Card className="border shadow-sm bg-white">
+              <CardContent className="p-5">
+                {/* Category and Date */}
+                <div className="flex items-center justify-between mb-4">
+                  <Badge variant="secondary" className="text-xs">
+                    {product.category}
+                  </Badge>
+                  <div className="flex items-center text-xs text-gray-500">
+                    <Calendar className="h-3 w-3 mr-1" />
+                    {formatDate(product.createdAt)}
+                  </div>
+                </div>
+
+                {/* Title */}
+                <h1 className="text-2xl lg:text-3xl font-bold mb-4 text-gray-900">{product.title}</h1>
+
+                {/* Price */}
+                {product.price && (
+                  <div className="mb-4">
+                    <div className="inline-flex items-center bg-blue-600 text-white px-4 py-2 rounded-xl shadow-md">
+                      <span className="text-2xl font-bold">${product.price}</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Description */}
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold mb-2 text-gray-800">Descripción</h3>
+                  <p className="text-gray-700 text-sm leading-relaxed bg-gray-50 p-4 rounded-lg border-l-4 border-blue-500">
+                    {product.desc}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Seller Information Card */}
+            <Card className="border shadow-sm bg-white">
+              <CardContent className="p-5">
+                <div className="flex items-center space-x-4 mb-4">
+                  <div className="relative">
+                    <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-200">
+                      {product.userImage ? (
+                        <Image
+                          src={product.userImage || "/placeholder.svg"}
+                          alt={product.userName}
+                          width={48}
+                          height={48}
+                          className="object-cover w-full h-full"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                          <User className="h-6 w-6 text-gray-500" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                  </div>
+
+                  <div className="flex-1">
+                    <h4 className="text-lg font-bold text-gray-900">{product.userName}</h4>
+                    <div className="flex items-center text-xs text-gray-500">
+                      <Star className="h-3 w-3 text-yellow-400 mr-1" />
+                      <span>4.8 (127)</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="space-y-3">
+                  {!isOwner && (
+                    <Button
+                      onClick={handleStartChat}
+                      className="w-full h-10 text-sm font-semibold bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg transition-all duration-300"
+                    >
+                      <MessageCircle className="h-4 w-4 mr-2" />
+                      Contactar Vendedor
+                    </Button>
+                  )}
+
+                  <Button
+                    variant="outline"
+                    onClick={() => router.push(`/user/${encodeURIComponent(product.userEmail)}`)
+}
+                    className="w-full h-9 text-sm border-gray-300 hover:border-gray-400 hover:bg-gray-50"
+                  >
+                    <User className="h-4 w-4 mr-2" />
+                    Ver Perfil
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
