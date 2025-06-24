@@ -113,9 +113,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </Button>
         </Link>
 
-        <Button variant="outline" size="icon" className="hover:bg-primary hover:text-white">
-          <MessageCircle className="h-4 w-4" />
-        </Button>
+       
       </CardFooter>
     </Card>
   )

@@ -26,7 +26,19 @@ export default function Navbar() {
     const q = query(chatsRef, where("users", "array-contains", user.email))
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      setUnreadChats(snapshot.docs.length)
+      let count = 0
+      snapshot.docs.forEach((doc) => {
+        const data = doc.data()
+        // Solo cuenta si hay mensajes no leídos y el último mensaje no es del usuario actual
+        if (
+          data.unreadCount &&
+          data.unreadCount > 0 &&
+          data.lastMessageSender !== user.email
+        ) {
+          count++
+        }
+      })
+      setUnreadChats(count)
     })
 
     return () => unsubscribe()

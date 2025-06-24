@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-import { doc, getDoc, getFirestore } from "firebase/firestore"
+import { doc, getDoc, getFirestore, collection, query, where, getDocs, addDoc, serverTimestamp } from "firebase/firestore"
 import { ArrowLeft, Heart, MessageCircle, Share2, User, Calendar, Edit, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -94,7 +94,7 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
     }
   }
 
-  const handleStartChat = () => {
+  const handleStartChat = async () => {
     if (!user) {
       toast({
         title: "Inicia sesión",
@@ -113,8 +113,43 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
       return
     }
 
-  router.push(`/chats/new?with=${product?.userEmail}`)
+    // Buscar si ya existe un chat entre ambos usuarios
+    const chatsRef = collection(db, "chats")
+    const q = query(
+      chatsRef,
+      where("users", "array-contains", user.email)
+    )
+    const querySnapshot = await getDocs(q)
+    let chatId: string | null = null
 
+    querySnapshot.forEach((doc) => {
+      const data = doc.data()
+      if (product && data.users.includes(product.userEmail)) {
+        chatId = doc.id
+      }
+    })
+
+    // Si no existe, crear el chat
+    if (!chatId) {
+      if (!product) {
+        toast({
+          title: "Error",
+          description: "Producto no encontrado",
+          variant: "destructive",
+        })
+        return
+      }
+      const newChat = await addDoc(chatsRef, {
+        users: [user.email, product.userEmail],
+        lastMessage: "",
+        lastMessageTime: serverTimestamp(),
+        lastMessageSender: "",
+        createdAt: serverTimestamp(),
+      })
+      chatId = newChat.id
+    }
+
+    router.push(`/chats/${chatId}`)
   }
 
   const formatDate = (dateString: string) => {

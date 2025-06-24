@@ -177,10 +177,10 @@ export default function SignInForm() {
 
       {/* Security Note */}
       <div className="text-center">
-        <p className="text-xs text-gray-500 flex items-center justify-center space-x-1.5">
-          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#91f2b3] rounded-full animate-pulse"></div>
+        <span className="text-xs text-gray-500 flex items-center justify-center space-x-1.5">
+          <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#91f2b3] rounded-full animate-pulse inline-block"></span>
           <span>Conexión segura SSL</span>
-        </p>
+        </span>
       </div>
     </div>
   )
