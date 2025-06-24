@@ -18,6 +18,7 @@ interface Chat {
   lastMessageTime: string
   lastMessageSender: string
   unreadCount?: number
+  createdAt?: string
 }
 
 export default function ChatList() {
@@ -39,10 +40,26 @@ export default function ChatList() {
     )
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const chatsData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Chat[]
+      const chatsData: Chat[] = snapshot.docs.map((doc) => {
+        const data = doc.data()
+        return {
+          id: doc.id,
+          users: data.users || [],
+          lastMessage: data.lastMessage || "",
+          lastMessageTime: data.lastMessageTime?.toDate ? data.lastMessageTime.toDate().toISOString() : (data.lastMessageTime || ""),
+          lastMessageSender: data.lastMessageSender || "",
+          unreadCount: data.unreadCount,
+        }
+      })
+
+      // Imprimir cada chat con fechas legibles
+      chatsData.forEach(chat => {
+        console.log({
+          ...chat,
+          createdAt: chat.createdAt?.toString(),
+          lastMessageTime: chat.lastMessageTime?.toString(),
+        })
+      })
 
       setChats(chatsData)
       setFilteredChats(chatsData)
