@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Image from "next/image"
 import { collection, getDocs, query, where, orderBy, getFirestore } from "firebase/firestore"
 import { Search, Filter, SlidersHorizontal, Sparkles, TrendingUp } from "lucide-react"
 import { Input } from "@/components/ui/input"
@@ -8,27 +9,9 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { app } from "@/lib/firebase"
+import { Product, Category } from "@/lib/types"
 import ProductList from "../products/ProductList"
 import LoadingSpinner from "../ui/loading-spinner"
-
-interface Product {
-  id: string
-  title: string
-  desc: string
-  category: string
-  price: string
-  image: string
-  userName: string
-  userEmail: string
-  userImage: string
-  createdAt: string
-  isAuthorized: boolean
-}
-
-interface Category {
-  name: string
-  icon: string
-}
 
 export default function ExploreContent() {
   const [products, setProducts] = useState<Product[]>([])
@@ -51,17 +34,39 @@ export default function ExploreContent() {
           orderBy("createdAt", "desc"),
         )
         const postsSnapshot = await getDocs(postsQuery)
-        const productsData = postsSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as Product[]
+        const productsData = postsSnapshot.docs.map((doc) => {
+          const data = doc.data()
+          return {
+            id: doc.id,
+            title: data.title || '',
+            desc: data.desc || '',
+            category: data.category || '',
+            price: data.price || '0',
+            images: data.images || [data.image || ''].filter(Boolean), // Convert single image to array
+            userName: data.userName || '',
+            userEmail: data.userEmail || '',
+            userImage: data.userImage || '',
+            createdAt: data.createdAt || '',
+            isAuthorized: data.isAuthorized || false,
+            condition: data.condition || 'bueno',
+            tags: data.tags || []
+          }
+        }) as Product[]
 
         setProducts(productsData)
         setFilteredProducts(productsData)
 
         // Fetch categories
         const categoriesSnapshot = await getDocs(collection(db, "Category"))
-        const categoriesData = categoriesSnapshot.docs.map((doc) => doc.data()) as Category[]
+        const categoriesData = categoriesSnapshot.docs.map((doc) => {
+          const data = doc.data()
+          return {
+            id: doc.id,
+            name: data.name || '',
+            icon: data.icon || '',
+            color: data.color || '#000000'
+          }
+        }) as Category[]
         setCategories(categoriesData)
       } catch (error) {
         console.error("Error fetching data:", error)
@@ -212,10 +217,12 @@ export default function ExploreContent() {
                           <SelectItem key={category.name} value={category.name}>
                             <div className="flex items-center space-x-2">
                               {category.icon && category.icon.startsWith("http") ? (
-                                <img
+                                <Image
                                   src={category.icon || "/placeholder.svg"}
                                   alt={category.name}
-                                  className="w-4 h-4 rounded-sm object-cover"
+                                  width={16}
+                                  height={16}
+                                  className="rounded-sm object-cover"
                                 />
                               ) : (
                                 <span className="text-sm">{category.icon || "📦"}</span>

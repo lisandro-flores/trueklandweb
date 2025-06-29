@@ -209,7 +209,7 @@ export default function CategoryItems({ category }: CategoryItemsProps) {
 
                   <p className="text-gray-600 text-lg leading-relaxed">
                     Aún no hay productos en la categoría{" "}
-                    <span className="font-semibold text-[#91f2b3]">"{category}"</span>. ¡Esta es tu oportunidad de ser
+                    <span className="font-semibold text-[#91f2b3]">&ldquo;{category}&rdquo;</span>. ¡Esta es tu oportunidad de ser
                     el primero en compartir algo increíble!
                   </p>
 

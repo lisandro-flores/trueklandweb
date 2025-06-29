@@ -1,14 +1,14 @@
 "use client"
 
-import { useEffect } from "react"
+import React, { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/context/AuthContext"
 import DashboardLayout from "@/components/layouts/DashboardLayout"
 import UserProfile from "@/components/user/UserProfile"
 import LoadingSpinner from "@/components/ui/loading-spinner"
 
-export default function UserProfilePage({ params }: { params: { email: string } }) {
-  const { email } = params
+export default function UserProfilePage({ params }: { params: Promise<{ email: string }> }) {
+  const { email } = React.use(params)
   const { user, loading } = useAuth()
   const router = useRouter()
 

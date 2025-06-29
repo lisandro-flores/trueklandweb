@@ -3,31 +3,18 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-import { collection, query, where, getDocs, orderBy, getFirestore } from "firebase/firestore"
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore"
 import { ArrowLeft, User, MessageCircle, Calendar, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { useAuth } from "@/context/AuthContext"
-import { useToast } from "@/components/ui/use-toast"
-import { app } from "@/lib/firebase"
+import { useToast } from "@/hooks/use-toast"
+import { db } from "@/lib/firebase"
+import { Product } from "@/lib/types"
 import ProductList from "../products/ProductList"
 import LoadingSpinner from "../ui/loading-spinner"
-
-interface Product {
-  id: string
-  title: string
-  desc: string
-  category: string
-  price: string
-  image: string
-  userName: string
-  userEmail: string
-  userImage: string
-  createdAt: string
-  isAuthorized: boolean
-}
 
 interface UserProfileProps {
   email: string
@@ -40,7 +27,6 @@ export default function UserProfile({ email }: UserProfileProps) {
   const router = useRouter()
   const { user } = useAuth()
   const { toast } = useToast()
-  const db = getFirestore(app)
 
   useEffect(() => {
     const fetchUserProducts = async () => {
@@ -52,10 +38,24 @@ export default function UserProfile({ email }: UserProfileProps) {
           orderBy("createdAt", "desc"),
         )
         const productsSnapshot = await getDocs(productsQuery)
-        const productsData = productsSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as Product[]
+        const productsData = productsSnapshot.docs.map((doc) => {
+          const data = doc.data()
+          return {
+            id: doc.id,
+            title: data.title || '',
+            desc: data.desc || '',
+            category: data.category || '',
+            price: data.price || '0',
+            images: data.images || [data.image || ''].filter(Boolean), // Convert single image to array
+            userName: data.userName || '',
+            userEmail: data.userEmail || '',
+            userImage: data.userImage || '',
+            createdAt: data.createdAt || '',
+            isAuthorized: data.isAuthorized || false,
+            condition: data.condition || 'bueno',
+            tags: data.tags || []
+          }
+        }) as Product[]
 
         setProducts(productsData)
 
@@ -73,7 +73,7 @@ export default function UserProfile({ email }: UserProfileProps) {
     }
 
     fetchUserProducts()
-  }, [email, db])
+  }, [email])
 
   const handleStartChat = () => {
     if (!user) {

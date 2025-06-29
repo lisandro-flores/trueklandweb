@@ -1,12 +1,11 @@
-import React from "react";
-import * as WebBrowser from "expo-web-browser";
+import { useEffect } from "react";
 
-
+// Web-compatible version - no-op since browsers don't need warm-up
 export const useWarmUpBrowser = () => {
-  React.useEffect(() => {
-    void WebBrowser.warmUpAsync();
+  useEffect(() => {
+    // No-op for web browsers
     return () => {
-      void WebBrowser.coolDownAsync();
+      // No-op cleanup
     };
   }, []);
 };

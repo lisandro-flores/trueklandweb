@@ -6,7 +6,7 @@ import { getFirestore, doc, setDoc } from "firebase/firestore"
 import { Eye, EyeOff, Mail, Lock, User, CheckCircle, ArrowRight, Sparkles, Send, UserPlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/hooks/use-toast"
 import { app } from "@/lib/firebase"
 
 interface SignUpFormProps {
@@ -90,8 +90,9 @@ export default function SignUpForm({ onSignUpSuccess }: SignUpFormProps) {
         title: "¡Registro exitoso! 🎉",
         description: "Se ha enviado un correo de verificación. Por favor, revisa tu correo electrónico.",
       })
-    } catch (error: any) {
-      if (error.code === "auth/email-already-in-use") {
+    } catch (error: unknown) {
+      const authError = error as { code?: string }
+      if (authError.code === "auth/email-already-in-use") {
         toast({
           title: "Error",
           description: "El correo electrónico ya está en uso. Por favor, usa otro correo.",

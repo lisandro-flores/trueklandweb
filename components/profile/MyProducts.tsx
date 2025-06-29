@@ -2,35 +2,21 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { collection, query, where, getDocs, orderBy, getFirestore } from "firebase/firestore"
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore"
 import { ArrowLeft, Plus, Package } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { useAuth } from "@/context/AuthContext"
-import { app } from "@/lib/firebase"
+import { db } from "@/lib/firebase"
+import { Product } from "@/lib/types"
 import ProductList from "../products/ProductList"
 import LoadingSpinner from "../ui/loading-spinner"
-
-interface Product {
-  id: string
-  title: string
-  desc: string
-  category: string
-  price: string
-  image: string
-  userName: string
-  userEmail: string
-  userImage: string
-  createdAt: string
-  isAuthorized: boolean
-}
 
 export default function MyProducts() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const { user } = useAuth()
   const router = useRouter()
-  const db = getFirestore(app)
 
   useEffect(() => {
     const fetchMyProducts = async () => {
@@ -43,10 +29,24 @@ export default function MyProducts() {
           orderBy("createdAt", "desc"),
         )
         const productsSnapshot = await getDocs(productsQuery)
-        const productsData = productsSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as Product[]
+        const productsData = productsSnapshot.docs.map((doc) => {
+          const data = doc.data()
+          return {
+            id: doc.id,
+            title: data.title || '',
+            desc: data.desc || '',
+            category: data.category || '',
+            price: data.price || '0',
+            images: data.images || [data.image || ''].filter(Boolean), // Convert single image to array
+            userName: data.userName || '',
+            userEmail: data.userEmail || '',
+            userImage: data.userImage || '',
+            createdAt: data.createdAt || '',
+            isAuthorized: data.isAuthorized || false,
+            condition: data.condition || 'bueno',
+            tags: data.tags || []
+          }
+        }) as Product[]
 
         setProducts(productsData)
       } catch (error) {
@@ -57,7 +57,7 @@ export default function MyProducts() {
     }
 
     fetchMyProducts()
-  }, [user, db])
+  }, [user])
 
   if (loading) {
     return <LoadingSpinner />

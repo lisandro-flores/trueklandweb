@@ -6,7 +6,7 @@ import { signInWithEmailAndPassword, getAuth } from "firebase/auth"
 import { Eye, EyeOff, Mail, Lock, ArrowRight, Sparkles, LogIn } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/hooks/use-toast"
 import { app } from "@/lib/firebase"
 
 export default function SignInForm() {
@@ -61,15 +61,16 @@ export default function SignInForm() {
           variant: "destructive",
         })
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err)
-      if (err.code === "auth/wrong-password") {
+      const error = err as { code?: string }
+      if (error.code === "auth/wrong-password") {
         toast({
           title: "Error",
           description: "La contraseña es incorrecta.",
           variant: "destructive",
         })
-      } else if (err.code === "auth/user-not-found") {
+      } else if (error.code === "auth/user-not-found") {
         toast({
           title: "Error",
           description: "No hay ningún usuario registrado con este correo electrónico.",
@@ -91,10 +92,10 @@ export default function SignInForm() {
     <div className="space-y-4 sm:space-y-6 lg:space-y-8">
       {/* Welcome Message - Only show on mobile */}
       <div className="text-center space-y-2 lg:hidden">
-        <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-[#91f2b3]/30 to-[#fcf326]/30 rounded-full mb-3">
+        <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 glass-effect rounded-2xl mb-3 border border-white/30">
           <LogIn className="w-6 h-6 sm:w-8 sm:h-8 text-[#91f2b3]" />
         </div>
-        <h3 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#91f2b3] to-[#fcf326] bg-clip-text text-transparent">
+        <h3 className="text-xl sm:text-2xl font-bold gradient-text">
           ¡Bienvenido! 👋
         </h3>
         <p className="text-gray-600 text-sm sm:text-base">Inicia sesión para continuar</p>
@@ -102,39 +103,39 @@ export default function SignInForm() {
 
       {/* Email Field */}
       <div className="space-y-2">
-        <label className="text-xs sm:text-sm font-semibold text-gray-700 flex items-center space-x-2">
+        <label className="text-xs sm:text-sm font-semibold text-gray-800 flex items-center space-x-2">
           <Mail className="w-3 h-3 sm:w-4 sm:h-4 text-[#91f2b3]" />
           <span>Correo electrónico</span>
         </label>
         <div className="relative group">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#91f2b3] to-[#fcf326] rounded-xl sm:rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#91f2b3]/20 to-[#fcf326]/20 rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity"></div>
           <Input
             type="email"
             placeholder="tu@email.com"
             value={emailAddress}
             onChange={(e) => setEmailAddress(e.target.value)}
-            className="relative h-11 sm:h-12 lg:h-14 text-sm sm:text-base lg:text-lg border-0 bg-white/90 backdrop-blur-sm shadow-lg rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-[#91f2b3] focus:bg-white transition-all duration-300 pl-10 sm:pl-12"
+            className="input-modern relative h-11 sm:h-12 lg:h-14 text-sm sm:text-base lg:text-lg pl-10 sm:pl-12"
           />
-          <Mail className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400 group-hover:text-[#91f2b3] transition-colors" />
+          <Mail className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-500 group-hover:text-[#91f2b3] transition-colors" />
         </div>
       </div>
 
       {/* Password Field */}
       <div className="space-y-2">
-        <label className="text-xs sm:text-sm font-semibold text-gray-700 flex items-center space-x-2">
+        <label className="text-xs sm:text-sm font-semibold text-gray-800 flex items-center space-x-2">
           <Lock className="w-3 h-3 sm:w-4 sm:h-4 text-[#fcf326]" />
           <span>Contraseña</span>
         </label>
         <div className="relative group">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#fcf326] to-[#91f2b3] rounded-xl sm:rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#fcf326]/20 to-[#91f2b3]/20 rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity"></div>
           <Input
             type={passwordVisible ? "text" : "password"}
             placeholder="Tu contraseña segura"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="relative h-11 sm:h-12 lg:h-14 text-sm sm:text-base lg:text-lg border-0 bg-white/90 backdrop-blur-sm shadow-lg rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-[#fcf326] focus:bg-white transition-all duration-300 pl-10 sm:pl-12 pr-10 sm:pr-12"
+            className="input-modern relative h-11 sm:h-12 lg:h-14 text-sm sm:text-base lg:text-lg pl-10 sm:pl-12 pr-10 sm:pr-12"
           />
-          <Lock className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400 group-hover:text-[#fcf326] transition-colors" />
+          <Lock className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-500 group-hover:text-[#fcf326] transition-colors" />
           <button
             type="button"
             onClick={() => setPasswordVisible(!passwordVisible)}
@@ -158,7 +159,7 @@ export default function SignInForm() {
         <Button
           onClick={onSignInPress}
           disabled={loading}
-          className="relative w-full h-12 sm:h-14 lg:h-16 rounded-full text-sm sm:text-base lg:text-lg font-semibold bg-gradient-to-r from-[#91f2b3] to-[#fcf326] hover:from-[#91f2b3]/90 hover:to-[#fcf326]/90 text-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center space-x-2 sm:space-x-3"
+          className="btn-primary relative w-full h-12 sm:h-14 lg:h-16 rounded-full text-sm sm:text-base lg:text-lg font-semibold flex items-center justify-center space-x-2 sm:space-x-3"
         >
           {loading ? (
             <>

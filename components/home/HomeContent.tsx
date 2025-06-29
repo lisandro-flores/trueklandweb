@@ -1,58 +1,70 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { collection, getDocs, query, where, orderBy, getFirestore } from "firebase/firestore"
-import { app } from "@/lib/firebase"
+import { collection, getDocs } from "firebase/firestore"
+import { db } from "@/lib/firebase"
+import { useProducts } from "@/hooks/useProducts"
+import { Category } from "@/lib/types"
 import Header from "./Header"
-import Slider from "./Slider"
 import Categories from "./Categories"
 import ProductList from "../products/ProductList"
 import LoadingSpinner from "../ui/loading-spinner"
 
 export default function HomeContent() {
-  const [sliderList, setSliderList] = useState<any[]>([])
-  const [categoryList, setCategoryList] = useState<any[]>([])
-  const [latestItemList, setLatestItemList] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
-  const db = getFirestore(app)
+  const [categories, setCategories] = useState<Category[]>([])
+  const [categoriesLoading, setCategoriesLoading] = useState(true)
+  const { products, loading: productsLoading, error } = useProducts()
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCategories = async () => {
       try {
-      
         const categoriesSnapshot = await getDocs(collection(db, "Category"))
-        const categories = categoriesSnapshot.docs.map((doc) => doc.data())
-        setCategoryList(categories)
-
-        const postsQuery = query(
-          collection(db, "UserPost"),
-          where("isAuthorized", "==", true),
-          orderBy("createdAt", "desc"),
-        )
-        const postsSnapshot = await getDocs(postsQuery)
-        const items = postsSnapshot.docs.map((doc) => ({
+        const categoriesData = categoriesSnapshot.docs.map((doc) => ({
           id: doc.id,
-          ...doc.data(),
-        }))
-        setLatestItemList(items)
+          name: doc.data().name || '',
+          icon: doc.data().icon || '',
+          color: doc.data().color || '#000000',
+          ...doc.data()
+        })) as Category[]
+        setCategories(categoriesData)
       } catch (error) {
-        console.error("Error fetching data:", error)
+        console.error("Error fetching categories:", error)
       } finally {
-        setLoading(false)
+        setCategoriesLoading(false)
       }
     }
 
-    fetchData()
-  }, [db])
+    fetchCategories()
+  }, [])
 
-  if (loading) {
+  const isLoading = categoriesLoading || productsLoading
+
+  if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center space-y-4">
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center space-y-6 glass p-8 rounded-2xl">
           <LoadingSpinner />
-          <div className="space-y-2">
-            <h3 className="text-xl font-semibold text-gray-700">Cargando contenido</h3>
-            <p className="text-gray-500">Preparando la mejor experiencia para ti...</p>
+          <div className="space-y-3">
+            <h3 className="text-xl font-semibold text-[var(--color-gris-oscuro)]">Cargando TruekLand</h3>
+            <p className="text-[var(--color-azul-oscuro)]">Preparando la mejor experiencia para ti...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center space-y-6 glass p-8 rounded-2xl">
+          <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto">
+            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div className="space-y-3">
+            <h3 className="text-xl font-semibold text-[var(--color-gris-oscuro)]">Error al cargar</h3>
+            <p className="text-[var(--color-azul-oscuro)]">No se pudo cargar el contenido. Intenta recargar la página.</p>
           </div>
         </div>
       </div>
@@ -60,28 +72,28 @@ export default function HomeContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       <div className="relative z-10">
-        <div className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+        <div className="sticky top-0 z-50 glass border-b border-white/20 shadow-lg backdrop-blur-16">
           <Header />
         </div>
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-12 py-8">
+        <div className="space-y-8 md:space-y-12 py-6 md:py-8">
         
           {/* Categories */}
           <section className="space-y-6">
-            <div className="text-center space-y-3">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#91f2b3]">
+            <div className="text-center space-y-4 page-header">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[var(--color-gris-oscuro)]">
                 Explora Categorías
               </h2>
-              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+              <p className="text-[var(--color-azul-oscuro)] text-lg max-w-2xl mx-auto leading-relaxed">
                 Descubre productos increíbles organizados por categorías
               </p>
-              <div className="w-24 h-1 bg-[#fcf326] rounded-full mx-auto"></div>
+              <div className="w-24 h-1 bg-gradient-primary rounded-full mx-auto"></div>
             </div>
 
-            <div className="bg-white rounded-3xl border border-gray-200 shadow-lg p-6 sm:p-8">
-              <Categories categoryList={categoryList} />
+            <div className="card p-6 sm:p-8">
+              <Categories categoryList={categories} />
             </div>
           </section>
 
@@ -101,9 +113,9 @@ export default function HomeContent() {
               </p>
             </div>
 
-            {latestItemList.length > 0 ? (
+            {products.length > 0 ? (
               <div className="bg-white rounded-3xl border border-gray-200 shadow-lg p-6 sm:p-8">
-                <ProductList products={latestItemList} />
+                <ProductList products={products} />
               </div>
             ) : (
               <div className="bg-white rounded-3xl border border-gray-200 shadow-lg">

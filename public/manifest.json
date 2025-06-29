@@ -1,26 +1,29 @@
 {
-    "theme_color": "#8936FF",
-    "background_color": "#2EC6FE",
+    "theme_color": "#00D8E8",
+    "background_color": "#F6F7F9",
     "start_url": "/",
     "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait-primary",
     "icons": [
         {
-        "purpose": "maskable",
-        "sizes": "512x512",
-        "src": "icon512_maskable.png",
-        "type": "image/png"
+            "purpose": "maskable",
+            "sizes": "512x512",
+            "src": "icon512_maskable.png",
+            "type": "image/png"
         },
         {
-        "purpose": "any",
-        "sizes": "512x512",
-        "src": "icon512_rounded.png",
-        "type": "image/png"
+            "purpose": "any",
+            "sizes": "512x512",
+            "src": "icon512_rounded.png",
+            "type": "image/png"
         }
     ],
-    "orientation": "any",
-    "display": "standalone",
     "dir": "auto",
     "lang": "es-ES",
-    "name": "TruekLand",
-    "short_name": "TruekLand"
+    "name": "TruekLand - Intercambia, Conecta y Descubre",
+    "short_name": "TruekLand",
+    "description": "Plataforma de intercambio de artículos donde cada objeto tiene una segunda oportunidad",
+    "categories": ["marketplace", "social", "shopping"],
+    "prefer_related_applications": false
 }

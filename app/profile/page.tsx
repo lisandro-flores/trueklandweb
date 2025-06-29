@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import { useAuth } from "@/context/AuthContext"
 import DashboardLayout from "@/components/layouts/DashboardLayout"
 import ProfileContent from "@/components/profile/ProfileContent"
@@ -156,10 +157,12 @@ export default function ProfilePage() {
                 <div className="relative">
                   {user.photoURL ? (
                     <div className="relative">
-                      <img
+                      <Image
                         src={user.photoURL || "/placeholder.svg"}
                         alt={user.displayName || "Avatar"}
-                        className="w-16 h-16 rounded-full border-3 border-white/50 shadow-lg"
+                        width={64}
+                        height={64}
+                        className="rounded-full border-3 border-white/50 shadow-lg"
                       />
                       <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-[#91f2b3] rounded-full border-2 border-white flex items-center justify-center">
                         <div className="w-2 h-2 bg-white rounded-full"></div>

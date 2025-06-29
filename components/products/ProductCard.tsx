@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Heart, MessageCircle, User, Calendar } from "lucide-react"
+import { Heart, User, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
@@ -44,8 +44,8 @@ export default function ProductCard({ product }: ProductCardProps) {
   }
 
   return (
-    <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 glass-effect border-0">
-      <div className="relative overflow-hidden rounded-t-lg">
+    <Card className="group product-card mobile-card">
+      <div className="relative overflow-hidden rounded-t-xl">
         <div className="aspect-square relative">
           <Image
             src={imageError ? "/placeholder.svg?height=300&width=300" : (product.images && product.images.length > 0 ? product.images[0] : "/placeholder.svg?height=300&width=300")}
@@ -57,63 +57,75 @@ export default function ProductCard({ product }: ProductCardProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
 
-        <Badge className="absolute top-2 left-2 bg-white/90 text-gray-700 hover:bg-white">{product.category}</Badge>
+        <Badge className="absolute top-3 left-3 badge-primary backdrop-blur-sm">
+          {product.category}
+        </Badge>
 
         <Button
           variant="ghost"
           size="icon"
-          className={`absolute top-2 right-2 bg-white/90 hover:bg-white ${isLiked ? "text-red-500" : "text-gray-600"}`}
+          className={`absolute top-3 right-3 glass h-9 w-9 touch-target ${
+            isLiked ? "text-red-500" : "text-gray-600"
+          }`}
           onClick={(e) => {
             e.preventDefault()
             setIsLiked(!isLiked)
           }}
         >
-          <Heart className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
+          <Heart className={`h-4 w-4 transition-all duration-300 ${isLiked ? "fill-current scale-110" : ""}`} />
         </Button>
       </div>
 
-      <CardContent className="p-4">
-        <h3 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+      <CardContent className="p-4 md:p-6">
+        <h3 className="font-semibold text-lg md:text-xl mb-2 line-clamp-2 group-hover:text-[var(--color-turquesa)] transition-colors duration-300">
           {product.title}
         </h3>
 
-        <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.desc}</p>
+        <p className="text-[var(--color-azul-oscuro)] text-sm mb-4 line-clamp-2 leading-relaxed">{product.desc}</p>
 
-        <div className="flex items-center space-x-2 mb-3">
-          <div className="w-6 h-6 rounded-full overflow-hidden bg-gray-200">
+        <div className="flex items-center space-x-3 mb-4">
+          <div className="w-8 h-8 rounded-full overflow-hidden glass ring-2 ring-[var(--color-turquesa)]/20 flex-shrink-0">
             {product.userImage ? (
               <Image
                 src={product.userImage || "/placeholder.svg"}
                 alt={product.userName}
-                width={24}
-                height={24}
-                className="object-cover"
+                width={32}
+                height={32}
+                className="object-cover w-full h-full"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <User className="h-3 w-3 text-gray-500" />
+              <div className="w-full h-full flex items-center justify-center bg-gradient-primary">
+                <User className="h-4 w-4 text-white" />
               </div>
             )}
           </div>
-          <span className="text-sm text-gray-600 truncate">{product.userName}</span>
+          <div className="flex-1 min-w-0">
+            <span className="text-sm text-[var(--color-gris-oscuro)] truncate font-medium block">{product.userName}</span>
+            <div className="flex items-center text-xs text-[var(--color-azul-oscuro)] mt-1">
+              <Calendar className="h-3 w-3 mr-1 flex-shrink-0" />
+              {formatDate(product.createdAt)}
+            </div>
+          </div>
         </div>
 
-        <div className="flex items-center text-xs text-gray-500 mb-3">
-          <Calendar className="h-3 w-3 mr-1" />
-          {formatDate(product.createdAt)}
-        </div>
-
-        {product.price && <div className="text-lg font-bold text-primary mb-2">${product.price}</div>}
+        {product.price && (
+          <div className="text-lg font-bold bg-gradient-primary bg-clip-text text-transparent mb-3">
+            ${product.price}
+          </div>
+        )}
       </CardContent>
 
-      <CardFooter className="p-4 pt-0 flex space-x-2">
-        <Link href={`/product/${product.id}`} className="flex-1">
-          <Button className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700">
-            Ver Detalles
+      <CardFooter className="p-4 pt-0">
+        <Link href={`/product/${product.id}`} className="w-full">
+          <Button className="btn-primary w-full touch-target">
+            <span className="flex items-center justify-center gap-2">
+              Ver Detalles
+              <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </span>
           </Button>
         </Link>
-
-       
       </CardFooter>
     </Card>
   )
