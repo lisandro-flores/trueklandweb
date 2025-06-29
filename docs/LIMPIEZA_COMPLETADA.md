@@ -61,6 +61,27 @@
 - ✅ Variables de entorno documentadas
 - ✅ Configuración de Next.js optimizada
 
+## 🔧 Correcciones Post-Limpieza
+
+### ✅ Referencias Corregidas (29 Junio 2025)
+
+#### Importaciones de `use-toast`
+- Corregidas **7 importaciones** que apuntaban a `@/components/ui/use-toast`
+- Actualizadas para usar `@/hooks/use-toast`
+- Archivos corregidos:
+  - `components/auth/SignInForm.tsx`
+  - `components/auth/SignUpForm.tsx` 
+  - `components/chat/ChatRoom.tsx`
+  - `components/products/EditProduct.tsx`
+  - `components/products/ProductDetail.tsx`
+  - `components/profile/ProfileContent.tsx`
+  - `components/user/UserProfile.tsx`
+
+#### Referencias a Componentes Eliminados
+- Corregida importación en `app/add-post/page.tsx`
+- Cambio: `AddPostFormNew` → `AddPostForm`
+- ✅ **Build exitoso** - Sin errores de compilación
+
 ## 📋 Próximos Pasos Recomendados
 
 1. **Configurar variables de entorno**

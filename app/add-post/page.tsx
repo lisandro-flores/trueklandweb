@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/context/AuthContext"
 import DashboardLayout from "@/components/layouts/DashboardLayout"
-import AddPostFormNew from "@/components/posts/AddPostFormNew"
+import AddPostForm from "@/components/posts/AddPostForm"
 import LoadingSpinner from "@/components/ui/loading-spinner"
 
 export default function AddPostPage() {
@@ -27,7 +27,7 @@ export default function AddPostPage() {
 
   return (
     <DashboardLayout>
-      <AddPostFormNew />
+      <AddPostForm />
     </DashboardLayout>
   )
 }
