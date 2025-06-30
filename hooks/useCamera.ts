@@ -41,6 +41,22 @@ export const useCamera = (): UseCameraReturn => {
     setError(null)
 
     try {
+      // Primero verificar permisos
+      if ('permissions' in navigator) {
+        try {
+          const permission = await navigator.permissions.query({ name: 'camera' as PermissionName })
+          if (permission.state === 'denied') {
+            setError('Permisos de cámara denegados. Ve a configuración del navegador para habilitarlos.')
+            setHasPermission(false)
+            setIsLoading(false)
+            return false
+          }
+        } catch (e) {
+          // Algunos navegadores no soportan la API de permisos, continuamos
+          console.log('Permissions API not supported, continuing...')
+        }
+      }
+
       // Configuraciones optimizadas para móvil
       const constraints: MediaStreamConstraints = {
         video: {
@@ -68,17 +84,34 @@ export const useCamera = (): UseCameraReturn => {
       if (err instanceof Error) {
         switch (err.name) {
           case 'NotAllowedError':
-            setError('Permisos de cámara denegados. Por favor, permite el acceso a la cámara.')
+            setError('Permisos de cámara denegados. Para usar la cámara:\n1. Toca el ícono de candado/configuración en la barra de dirección\n2. Permite el acceso a la cámara\n3. Recarga la página')
             setHasPermission(false)
             break
           case 'NotFoundError':
             setError('No se encontró ninguna cámara en el dispositivo.')
             break
           case 'NotReadableError':
-            setError('La cámara está siendo usada por otra aplicación.')
+            setError('La cámara está siendo usada por otra aplicación. Cierra otras apps que puedan estar usando la cámara.')
             break
           case 'OverconstrainedError':
-            setError('La configuración de la cámara no es compatible.')
+            setError('La configuración de la cámara no es compatible. Intentando con configuración básica...')
+            // Intentar con configuración más básica
+            try {
+              const basicConstraints: MediaStreamConstraints = {
+                video: { facingMode: 'environment' },
+                audio: false
+              }
+              const basicStream = await navigator.mediaDevices.getUserMedia(basicConstraints)
+              setStream(basicStream)
+              setHasPermission(true)
+              if (videoRef.current) {
+                videoRef.current.srcObject = basicStream
+              }
+              setError(null)
+              return true
+            } catch (basicErr) {
+              setError('Error de configuración de cámara incluso con configuración básica')
+            }
             break
           default:
             setError('Error al acceder a la cámara: ' + err.message)

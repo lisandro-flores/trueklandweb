@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { useCamera } from '@/hooks/useCamera'
+import CameraPermissionHelper from '@/components/ui/camera-permission-helper'
 import Image from 'next/image'
 
 interface MobileCameraProps {
@@ -121,8 +122,18 @@ export default function MobileCamera({ onCapture, onClose, isOpen }: MobileCamer
 
           {/* Content */}
           <div className="relative">
-            {/* Error State */}
-            {error && (
+            {/* Permission Error - Show Helper */}
+            {error && hasPermission === false && (
+              <div className="p-4">
+                <CameraPermissionHelper 
+                  onRetry={startCamera}
+                  error={error}
+                />
+              </div>
+            )}
+
+            {/* Other Errors */}
+            {error && hasPermission !== false && (
               <div className="p-4">
                 <Alert className="border-red-500/50 bg-red-500/10">
                   <AlertCircle className="h-4 w-4 text-red-500" />
@@ -130,6 +141,15 @@ export default function MobileCamera({ onCapture, onClose, isOpen }: MobileCamer
                     {error}
                   </AlertDescription>
                 </Alert>
+                <div className="mt-4">
+                  <Button 
+                    onClick={startCamera}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    Reintentar
+                  </Button>
+                </div>
               </div>
             )}
 

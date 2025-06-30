@@ -25,5 +25,11 @@
     "short_name": "TruekLand",
     "description": "Plataforma de intercambio de artículos donde cada objeto tiene una segunda oportunidad",
     "categories": ["marketplace", "social", "shopping"],
-    "prefer_related_applications": false
+    "prefer_related_applications": false,
+    "permissions": [
+        "camera"
+    ],
+    "features": [
+        "camera"
+    ]
 }

@@ -7,6 +7,8 @@ interface PWAInstallPrompt {
   installPWA: () => Promise<void>
   isInstalled: boolean
   isStandalone: boolean
+  supportsCamera: boolean
+  requestCameraPermission: () => Promise<boolean>
 }
 
 export function usePWA(): PWAInstallPrompt {
@@ -14,6 +16,7 @@ export function usePWA(): PWAInstallPrompt {
   const [canInstall, setCanInstall] = useState(false)
   const [isInstalled, setIsInstalled] = useState(false)
   const [isStandalone, setIsStandalone] = useState(false)
+  const [supportsCamera, setSupportsCamera] = useState(false)
 
   useEffect(() => {
     // Detectar si ya está instalada como PWA
@@ -23,6 +26,13 @@ export function usePWA(): PWAInstallPrompt {
       
       setIsStandalone(isStandaloneMode || isIOSStandalone)
       setIsInstalled(isStandaloneMode || isIOSStandalone)
+    }
+
+    // Verificar soporte de cámara
+    const checkCameraSupport = () => {
+      const hasCamera = 'mediaDevices' in navigator && 
+                       'getUserMedia' in navigator.mediaDevices
+      setSupportsCamera(hasCamera)
     }
 
     // Escuchar evento de instalación
@@ -40,6 +50,7 @@ export function usePWA(): PWAInstallPrompt {
     }
 
     checkIfInstalled()
+    checkCameraSupport()
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
     window.addEventListener('appinstalled', handleAppInstalled)
 
@@ -67,10 +78,30 @@ export function usePWA(): PWAInstallPrompt {
     }
   }
 
+  const requestCameraPermission = async (): Promise<boolean> => {
+    if (!supportsCamera) return false
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'environment' },
+        audio: false 
+      })
+      
+      // Cerrar inmediatamente el stream de prueba
+      stream.getTracks().forEach(track => track.stop())
+      return true
+    } catch (error) {
+      console.error('Camera permission denied:', error)
+      return false
+    }
+  }
+
   return {
     canInstall,
     installPWA,
     isInstalled,
-    isStandalone
+    isStandalone,
+    supportsCamera,
+    requestCameraPermission
   }
 }

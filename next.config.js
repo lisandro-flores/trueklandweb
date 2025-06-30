@@ -58,10 +58,10 @@ const nextConfig = {
             key: 'Referrer-Policy',
             value: 'strict-origin-when-cross-origin'
           },
-          // Permissions Policy
+          // Permissions Policy - Permitir cámara para la funcionalidad de la app
           {
             key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()'
+            value: 'camera=(self), microphone=(), geolocation=()'
           }
         ]
       }
