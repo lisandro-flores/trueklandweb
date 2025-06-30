@@ -5,7 +5,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-import { doc, getDoc, updateDoc, deleteDoc, getFirestore } from "firebase/firestore"
+import { doc, getDoc, deleteDoc, getFirestore } from "firebase/firestore"
 import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage"
 import { ArrowLeft, Upload, Trash2, Save } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -15,7 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useAuth } from "@/context/AuthContext"
 import { useToast } from "@/hooks/use-toast"
-import { app } from "@/lib/firebase"
+import { app, updateProduct } from "@/lib/firebase"
 import LoadingSpinner from "../ui/loading-spinner"
 
 interface Product {
@@ -146,22 +146,28 @@ export default function EditProduct({ productId }: EditProductProps) {
         imageUrl = await getDownloadURL(snapshot.ref)
       }
 
-      // Update product
-      await updateDoc(doc(db, "UserPost", productId), {
+      // Update product using the new Firebase function
+      const result = await updateProduct(productId, {
         title: formData.title.trim(),
         desc: formData.desc.trim(),
         category: formData.category,
         price: formData.price.trim(),
         image: imageUrl,
-        updatedAt: new Date().toISOString(),
       })
 
-      toast({
-        title: "Éxito",
-        description: "Producto actualizado correctamente",
-      })
-
-      router.push(`/product/${productId}`)
+      if (result.success) {
+        toast({
+          title: "Éxito",
+          description: "Producto actualizado correctamente",
+        })
+        router.push(`/product/${productId}`)
+      } else {
+        toast({
+          title: "Error",
+          description: result.message || "Error al actualizar el producto",
+          variant: "destructive",
+        })
+      }
     } catch (error) {
       console.error("Error updating product:", error)
       toast({

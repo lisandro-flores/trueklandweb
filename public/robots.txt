@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: http://localhost:3000/sitemap.xml
+
+# Evitar indexación de rutas sensibles
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /chats/
+Disallow: /_next/
+Disallow: /api/

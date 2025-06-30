@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { collection, addDoc, getDocs, getFirestore } from "firebase/firestore"
 import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage"
-import { Upload, Plus, X } from "lucide-react"
+import { Upload, Plus, X, Camera } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,9 +15,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useAuth } from "@/context/AuthContext"
 import { useToast } from "@/hooks/use-toast"
+import { useMobile, supportsCamera } from "@/hooks/use-mobile"
 import { app } from "@/lib/firebase"
 import { DEFAULT_CATEGORIES, APP_LIMITS, ERROR_MESSAGES, SUCCESS_MESSAGES } from "@/lib/constants"
 import LoadingSpinner from "../ui/loading-spinner"
+import MobileCamera from "../ui/mobile-camera"
 
 interface Category {
   name: string
@@ -37,10 +39,13 @@ export default function AddPostForm() {
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
+  const [showCamera, setShowCamera] = useState(false)
 
   const router = useRouter()
   const { user } = useAuth()
   const { toast } = useToast()
+  const isMobile = useMobile()
+  const hasCameraSupport = supportsCamera()
   const db = getFirestore(app)
   const storage = getStorage(app)
 
@@ -91,6 +96,21 @@ export default function AddPostForm() {
       }
       reader.readAsDataURL(file)
     }
+  }
+
+  const handleCameraCapture = (file: File) => {
+    setSelectedImage(file)
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      setImagePreview(e.target?.result as string)
+    }
+    reader.readAsDataURL(file)
+    setShowCamera(false)
+    
+    toast({
+      title: "¡Foto capturada! 📸",
+      description: "La imagen se ha agregado exitosamente.",
+    })
   }
 
   const removeImage = () => {
@@ -249,6 +269,19 @@ export default function AddPostForm() {
                       </span>
                     </Button>
                   </label>
+                  
+                  {/* Camera Button - Only show on mobile devices with camera support */}
+                  {isMobile && hasCameraSupport && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="btn-secondary"
+                      onClick={() => setShowCamera(true)}
+                    >
+                      <Camera className="h-4 w-4 mr-2" />
+                      Tomar Foto
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
@@ -328,6 +361,13 @@ export default function AddPostForm() {
           </form>
         </CardContent>
       </Card>
+
+      {/* Mobile Camera Modal */}
+      <MobileCamera
+        isOpen={showCamera}
+        onCapture={handleCameraCapture}
+        onClose={() => setShowCamera(false)}
+      />
     </div>
   )
 }

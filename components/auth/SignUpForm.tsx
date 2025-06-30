@@ -1,13 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth"
-import { getFirestore, doc, setDoc } from "firebase/firestore"
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithPopup } from "firebase/auth"
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore"
 import { Eye, EyeOff, Mail, Lock, User, CheckCircle, ArrowRight, Sparkles, Send, UserPlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/use-toast"
-import { app } from "@/lib/firebase"
+import { app, googleProvider } from "@/lib/firebase"
+import Image from "next/image"
 
 interface SignUpFormProps {
   onSignUpSuccess: () => void
@@ -139,6 +140,67 @@ export default function SignUpForm({ onSignUpSuccess }: SignUpFormProps) {
     }
   }
 
+  const onGoogleSignUp = async () => {
+    setLoading(true)
+    
+    try {
+      const result = await signInWithPopup(auth, googleProvider)
+      const user = result.user
+
+      // Verificar si el usuario ya existe en Firestore
+      const userDocRef = doc(db, "Users", user.uid)
+      const userDoc = await getDoc(userDocRef)
+
+      if (!userDoc.exists()) {
+        // Crear documento del usuario si no existe
+        await setDoc(userDocRef, {
+          name: user.displayName || "",
+          email: user.email || "",
+          imageUrl: user.photoURL || "",
+          createdAt: new Date().toISOString(),
+          provider: "google"
+        })
+      }
+
+      toast({
+        title: "¡Registro exitoso! 🎉",
+        description: "Te has registrado con Google exitosamente.",
+      })
+      onSignUpSuccess()
+    } catch (err: unknown) {
+      console.error(err)
+      const error = err as { code?: string; message?: string }
+      
+      if (error.code === "auth/popup-closed-by-user") {
+        toast({
+          title: "Cancelado",
+          description: "El registro fue cancelado.",
+          variant: "destructive",
+        })
+      } else if (error.code === "auth/popup-blocked") {
+        toast({
+          title: "Popup bloqueado",
+          description: "Por favor, permite las ventanas emergentes para continuar.",
+          variant: "destructive",
+        })
+      } else if (error.code === "auth/account-exists-with-different-credential") {
+        toast({
+          title: "Cuenta existente",
+          description: "Ya existe una cuenta con este correo electrónico.",
+          variant: "destructive",
+        })
+      } else {
+        toast({
+          title: "Error",
+          description: "Hubo un problema al registrarse con Google.",
+          variant: "destructive",
+        })
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
   if (pendingVerification) {
     return (
       <div className="space-y-6 sm:space-y-8 lg:space-y-10 text-center">
@@ -201,6 +263,36 @@ export default function SignUpForm({ onSignUpSuccess }: SignUpFormProps) {
           ¡Únete! 🚀
         </h3>
         <p className="text-gray-600 text-sm sm:text-base">Crea tu cuenta gratuita</p>
+      </div>
+
+      {/* Google Sign Up Button */}
+      <div className="relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-red-500/20 rounded-2xl blur opacity-20"></div>
+        <Button
+          onClick={onGoogleSignUp}
+          disabled={loading}
+          variant="outline"
+          className="relative w-full h-12 sm:h-14 lg:h-16 rounded-2xl border-2 border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-semibold flex items-center justify-center space-x-3"
+        >
+          <Image
+            src="/assets/Google.svg"
+            alt="Google"
+            width={20}
+            height={20}
+            className="sm:w-6 sm:h-6"
+          />
+          <span className="text-sm sm:text-base">Registrarse con Google</span>
+        </Button>
+      </div>
+
+      {/* Divider */}
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-gray-300"></div>
+        </div>
+        <div className="relative flex justify-center text-sm">
+          <span className="px-4 bg-white text-gray-500">o regístrate con email</span>
+        </div>
       </div>
 
       {/* Full Name Field */}

@@ -15,17 +15,24 @@ import {
   getDoc,
   setDoc,
   updateDoc,
+  deleteDoc,
   serverTimestamp,
   getFirestore,
 } from "firebase/firestore"
 import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage"
-import { ArrowLeft, Send, ImageIcon, User } from "lucide-react"
+import { ArrowLeft, Send, ImageIcon, User, Trash2, MoreVertical } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu"
 import { useAuth } from "@/context/AuthContext"
 import { useToast } from "@/hooks/use-toast"
-import { app } from "@/lib/firebase"
+import { app, deleteChat } from "@/lib/firebase"
 import LoadingSpinner from "../ui/loading-spinner"
 
 interface Message {
@@ -230,6 +237,53 @@ export default function ChatRoom({ chatId }: ChatRoomProps) {
     }
   }
 
+  const deleteMessage = async (messageId: string) => {
+    try {
+      await deleteDoc(doc(db, "chats", chatId, "messages", messageId))
+      toast({
+        title: "Mensaje eliminado",
+        description: "El mensaje se ha eliminado correctamente",
+      })
+    } catch (error) {
+      console.error("Error deleting message:", error)
+      toast({
+        title: "Error",
+        description: "Error al eliminar el mensaje",
+        variant: "destructive",
+      })
+    }
+  }
+
+  const handleDeleteChat = async () => {
+    if (!confirm("¿Estás seguro de que quieres eliminar este chat completo? Esta acción no se puede deshacer.")) {
+      return
+    }
+
+    try {
+      const result = await deleteChat(chatId)
+      if (result.success) {
+        toast({
+          title: "Chat eliminado",
+          description: "El chat ha sido eliminado correctamente",
+        })
+        router.push("/chats")
+      } else {
+        toast({
+          title: "Error",
+          description: result.message || "No se pudo eliminar el chat",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      console.error("Error deleting chat:", error)
+      toast({
+        title: "Error",
+        description: "Error al eliminar el chat",
+        variant: "destructive",
+      })
+    }
+  }
+
   if (loading) {
     return <LoadingSpinner />
   }
@@ -239,21 +293,41 @@ export default function ChatRoom({ chatId }: ChatRoomProps) {
       {/* Header */}
       <Card className="glass-effect border-0 rounded-b-none">
         <CardHeader className="p-4">
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" onClick={() => router.back()}>
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Button variant="ghost" size="icon" onClick={() => router.back()}>
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
 
-            <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200">
-              <div className="w-full h-full flex items-center justify-center">
-                <User className="h-5 w-5 text-gray-500" />
+              <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200">
+                <div className="w-full h-full flex items-center justify-center">
+                  <User className="h-5 w-5 text-gray-500" />
+                </div>
+              </div>
+
+              <div>
+                <h2 className="font-semibold">{otherUserName}</h2>
+                <p className="text-sm text-gray-600">En línea</p>
               </div>
             </div>
 
-            <div>
-              <h2 className="font-semibold">{otherUserName}</h2>
-              <p className="text-sm text-gray-600">En línea</p>
-            </div>
+            {/* Chat Options */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <MoreVertical className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={handleDeleteChat}
+                  className="text-red-600 focus:text-red-600"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Eliminar chat
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </CardHeader>
       </Card>
@@ -267,30 +341,44 @@ export default function ChatRoom({ chatId }: ChatRoomProps) {
                 key={message.id}
                 className={`flex ${message.sender === user?.email ? "justify-end" : "justify-start"}`}
               >
-                <div
-                  className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
-                    message.sender === user?.email
-                      ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
-                      : "bg-gray-200 text-gray-800"
-                  }`}
-                >
-                  {message.type === "image" && message.image ? (
-                    <div className="space-y-2">
-                      <div className="relative w-48 h-48 rounded-lg overflow-hidden">
-                        <Image
-                          src={message.image || "/placeholder.svg"}
-                          alt="Imagen del chat"
-                          fill
-                          className="object-cover"
-                        />
+                <div className="group relative">
+                  <div
+                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
+                      message.sender === user?.email
+                        ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+                        : "bg-gray-200 text-gray-800"
+                    }`}
+                  >
+                    {message.type === "image" && message.image ? (
+                      <div className="space-y-2">
+                        <div className="relative w-48 h-48 rounded-lg overflow-hidden">
+                          <Image
+                            src={message.image || "/placeholder.svg"}
+                            alt="Imagen del chat"
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                        <p className="text-xs opacity-75">{formatTime(message.timestamp)}</p>
                       </div>
-                      <p className="text-xs opacity-75">{formatTime(message.timestamp)}</p>
-                    </div>
-                  ) : (
-                    <div>
-                      <p className="break-words">{message.text}</p>
-                      <p className="text-xs opacity-75 mt-1">{formatTime(message.timestamp)}</p>
-                    </div>
+                    ) : (
+                      <div>
+                        <p className="break-words">{message.text}</p>
+                        <p className="text-xs opacity-75 mt-1">{formatTime(message.timestamp)}</p>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Delete button - only show for own messages */}
+                  {message.sender === user?.email && (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="absolute -top-2 -right-2 w-6 h-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity bg-red-500 hover:bg-red-600 text-white rounded-full"
+                      onClick={() => deleteMessage(message.id)}
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </Button>
                   )}
                 </div>
               </div>

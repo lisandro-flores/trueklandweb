@@ -3,10 +3,11 @@
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Heart, User, Calendar } from "lucide-react"
+import { Heart, User, Calendar, Edit } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { useAuth } from "@/context/AuthContext"
 
 interface Product {
   id: string
@@ -29,6 +30,9 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const [isLiked, setIsLiked] = useState(false)
   const [imageError, setImageError] = useState(false)
+  const { user } = useAuth()
+
+  const isOwner = user?.email === product.userEmail
 
   const formatDate = (dateString: string) => {
     try {
@@ -116,16 +120,32 @@ export default function ProductCard({ product }: ProductCardProps) {
       </CardContent>
 
       <CardFooter className="p-4 pt-0">
-        <Link href={`/product/${product.id}`} className="w-full">
-          <Button className="btn-primary w-full touch-target">
-            <span className="flex items-center justify-center gap-2">
-              Ver Detalles
-              <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </span>
-          </Button>
-        </Link>
+        {isOwner ? (
+          <div className="flex gap-2 w-full">
+            <Link href={`/product/${product.id}/edit`} className="flex-1">
+              <Button variant="outline" className="w-full touch-target">
+                <Edit className="w-4 h-4 mr-2" />
+                Editar
+              </Button>
+            </Link>
+            <Link href={`/product/${product.id}`} className="flex-1">
+              <Button className="btn-primary w-full touch-target">
+                Ver Detalles
+              </Button>
+            </Link>
+          </div>
+        ) : (
+          <Link href={`/product/${product.id}`} className="w-full">
+            <Button className="btn-primary w-full touch-target">
+              <span className="flex items-center justify-center gap-2">
+                Ver Detalles
+                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+            </Button>
+          </Link>
+        )}
       </CardFooter>
     </Card>
   )

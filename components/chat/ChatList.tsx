@@ -3,12 +3,20 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { collection, query, where, onSnapshot, orderBy, getFirestore } from "firebase/firestore"
-import { MessageCircle, Search, User } from "lucide-react"
+import { MessageCircle, Search, User, Trash2, MoreVertical } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu"
 import { useAuth } from "@/context/AuthContext"
-import { app } from "@/lib/firebase"
+import { useToast } from "@/hooks/use-toast"
+import { app, deleteChat } from "@/lib/firebase"
 import LoadingSpinner from "../ui/loading-spinner"
 
 interface Chat {
@@ -27,6 +35,7 @@ export default function ChatList() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const { user } = useAuth()
+  const { toast } = useToast()
   const db = getFirestore(app)
 
   useEffect(() => {
@@ -117,6 +126,34 @@ export default function ChatList() {
     return email.split("@")[0] // Simple fallback
   }
 
+  const handleDeleteChat = async (chatId: string, e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    try {
+      const result = await deleteChat(chatId)
+      if (result.success) {
+        toast({
+          title: "Chat eliminado",
+          description: "El chat ha sido eliminado correctamente",
+        })
+      } else {
+        toast({
+          title: "Error",
+          description: result.message || "No se pudo eliminar el chat",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      console.error("Error deleting chat:", error)
+      toast({
+        title: "Error",
+        description: "Error al eliminar el chat",
+        variant: "destructive",
+      })
+    }
+  }
+
   if (loading) {
     return <LoadingSpinner />
   }
@@ -179,6 +216,24 @@ export default function ChatList() {
                             {chat.unreadCount}
                           </Badge>
                         )}
+
+                        {/* Opciones del chat */}
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                              onClick={(e) => handleDeleteChat(chat.id, e)}
+                              className="text-red-600 focus:text-red-600"
+                            >
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              Eliminar chat
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
                     </CardContent>
                   </Card>

@@ -122,6 +122,7 @@ export default function ProfileContent() {
               <Button
                 size="icon"
                 className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600"
+                onClick={() => router.push("/profile/edit")}
               >
                 <Edit className="h-4 w-4" />
               </Button>
@@ -216,6 +217,13 @@ export default function ProfileContent() {
           </Link>
 
           <Separator />
+
+          <Link href="/profile/edit">
+            <Button variant="outline" className="w-full justify-start h-12">
+              <Edit className="h-5 w-5 mr-3" />
+              Editar Perfil
+            </Button>
+          </Link>
 
           <Button variant="outline" className="w-full justify-start h-12">
             <Settings className="h-5 w-5 mr-3" />

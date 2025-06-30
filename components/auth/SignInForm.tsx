@@ -2,12 +2,15 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { signInWithEmailAndPassword, getAuth } from "firebase/auth"
+import Link from "next/link"
+import { signInWithEmailAndPassword, signInWithPopup, getAuth } from "firebase/auth"
+import { doc, setDoc, getDoc } from "firebase/firestore"
 import { Eye, EyeOff, Mail, Lock, ArrowRight, Sparkles, LogIn } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/use-toast"
-import { app } from "@/lib/firebase"
+import { app, googleProvider, db } from "@/lib/firebase"
+import Image from "next/image"
 
 export default function SignInForm() {
   const [emailAddress, setEmailAddress] = useState("")
@@ -88,6 +91,61 @@ export default function SignInForm() {
     }
   }
 
+  const onGoogleSignIn = async () => {
+    setLoading(true)
+    
+    try {
+      const result = await signInWithPopup(auth, googleProvider)
+      const user = result.user
+
+      // Verificar si el usuario ya existe en Firestore
+      const userDocRef = doc(db, "Users", user.uid)
+      const userDoc = await getDoc(userDocRef)
+
+      if (!userDoc.exists()) {
+        // Crear documento del usuario si no existe
+        await setDoc(userDocRef, {
+          name: user.displayName || "",
+          email: user.email || "",
+          imageUrl: user.photoURL || "",
+          createdAt: new Date().toISOString(),
+          provider: "google"
+        })
+      }
+
+      toast({
+        title: "¡Bienvenido! 🎉",
+        description: "Has iniciado sesión con Google exitosamente.",
+      })
+      router.push("/dashboard")
+    } catch (err: unknown) {
+      console.error(err)
+      const error = err as { code?: string; message?: string }
+      
+      if (error.code === "auth/popup-closed-by-user") {
+        toast({
+          title: "Cancelado",
+          description: "El inicio de sesión fue cancelado.",
+          variant: "destructive",
+        })
+      } else if (error.code === "auth/popup-blocked") {
+        toast({
+          title: "Popup bloqueado",
+          description: "Por favor, permite las ventanas emergentes para continuar.",
+          variant: "destructive",
+        })
+      } else {
+        toast({
+          title: "Error",
+          description: "Hubo un problema al iniciar sesión con Google.",
+          variant: "destructive",
+        })
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="space-y-4 sm:space-y-6 lg:space-y-8">
       {/* Welcome Message - Only show on mobile */}
@@ -99,6 +157,36 @@ export default function SignInForm() {
           ¡Bienvenido! 👋
         </h3>
         <p className="text-gray-600 text-sm sm:text-base">Inicia sesión para continuar</p>
+      </div>
+
+      {/* Google Sign In Button */}
+      <div className="relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-red-500/20 rounded-2xl blur opacity-20"></div>
+        <Button
+          onClick={onGoogleSignIn}
+          disabled={loading}
+          variant="outline"
+          className="relative w-full h-12 sm:h-14 lg:h-16 rounded-2xl border-2 border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-semibold flex items-center justify-center space-x-3"
+        >
+          <Image
+            src="/assets/Google.svg"
+            alt="Google"
+            width={20}
+            height={20}
+            className="sm:w-6 sm:h-6"
+          />
+          <span className="text-sm sm:text-base">Continuar con Google</span>
+        </Button>
+      </div>
+
+      {/* Divider */}
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-gray-300"></div>
+        </div>
+        <div className="relative flex justify-center text-sm">
+          <span className="px-4 bg-white text-gray-500">o continúa con email</span>
+        </div>
       </div>
 
       {/* Email Field */}
@@ -148,9 +236,11 @@ export default function SignInForm() {
 
       {/* Forgot Password Link */}
       <div className="text-right">
-        <button className="text-xs sm:text-sm text-[#91f2b3] hover:text-[#fcf326] font-medium hover:underline transition-colors">
-          ¿Olvidaste tu contraseña?
-        </button>
+        <Link href="/forgot-password">
+          <button className="text-xs sm:text-sm text-[#91f2b3] hover:text-[#fcf326] font-medium hover:underline transition-colors">
+            ¿Olvidaste tu contraseña?
+          </button>
+        </Link>
       </div>
 
       {/* Sign In Button */}

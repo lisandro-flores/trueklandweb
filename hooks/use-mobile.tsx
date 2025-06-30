@@ -17,3 +17,41 @@ export function useIsMobile() {
 
   return !!isMobile
 }
+
+export function useMobile() {
+  const [isMobile, setIsMobile] = React.useState(false)
+
+  React.useEffect(() => {
+    const checkDevice = () => {
+      const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera
+      const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+      const isMobileDevice = mobileRegex.test(userAgent)
+      
+      // También verificar el ancho de pantalla
+      const isSmallScreen = window.innerWidth <= 768
+      
+      setIsMobile(isMobileDevice || isSmallScreen)
+    }
+
+    checkDevice()
+    window.addEventListener('resize', checkDevice)
+    
+    return () => window.removeEventListener('resize', checkDevice)
+  }, [])
+
+  return isMobile
+}
+
+export function isMobileDevice(): boolean {
+  if (typeof window === 'undefined') return false
+  
+  const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera
+  const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+  return mobileRegex.test(userAgent)
+}
+
+export function supportsCamera(): boolean {
+  if (typeof window === 'undefined') return false
+  
+  return 'mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices
+}

@@ -11,7 +11,9 @@
     "lint:check": "next lint",
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
-    "clean": "rm -rf .next out node_modules/.cache"
+    "clean": "rm -rf .next out node_modules/.cache",
+    "pre-deploy": "node scripts/pre-deploy-check.js",
+    "deploy-ready": "npm run lint:check && npm run type-check && npm run pre-deploy && npm run build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
