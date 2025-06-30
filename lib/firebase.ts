@@ -16,7 +16,14 @@ export const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 export const db = getFirestore(app)
 export const storage = getStorage(app)
+
+// Configuración del proveedor de Google
 export const googleProvider = new GoogleAuthProvider()
+googleProvider.addScope('email')
+googleProvider.addScope('profile')
+googleProvider.setCustomParameters({
+  prompt: 'select_account'
+})
 
 // Función para recuperar contraseña
 export const resetPassword = async (email: string) => {
