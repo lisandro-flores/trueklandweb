@@ -3,12 +3,12 @@
 import { useState } from "react"
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithPopup } from "firebase/auth"
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore"
-import { Eye, EyeOff, Mail, Lock, User, CheckCircle, ArrowRight, Sparkles, Send, UserPlus } from "lucide-react"
+import { Eye, EyeOff, Mail, Lock, User, CheckCircle, ArrowRight, Sparkles, Send, UserPlus, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/use-toast"
 import { app, googleProvider } from "@/lib/firebase"
-import Image from "next/image"
+import { GoogleIcon } from "@/components/ui/google-icon"
 
 interface SignUpFormProps {
   onSignUpSuccess: () => void
@@ -272,16 +272,21 @@ export default function SignUpForm({ onSignUpSuccess }: SignUpFormProps) {
           onClick={onGoogleSignUp}
           disabled={loading}
           variant="outline"
+          type="button"
+          aria-label="Registrarse con Google"
           className="relative w-full h-12 sm:h-14 lg:h-16 rounded-2xl border-2 border-[#233554] hover:border-[#00D8E8] bg-[#112240]/80 hover:bg-[#1A2F4F] text-[#E6F1FF] font-semibold flex items-center justify-center space-x-3 transition-all duration-300"
         >
-          <Image
-            src="/assets/Google.svg"
-            alt="Google"
-            width={20}
-            height={20}
-            className="sm:w-6 sm:h-6"
-          />
-          <span className="text-sm sm:text-base">Registrarse con Google</span>
+          {loading ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
+              <span>Conectando...</span>
+            </>
+          ) : (
+            <>
+              <GoogleIcon size={24} />
+              <span className="text-sm sm:text-base">Registrarse con Google</span>
+            </>
+          )}
         </Button>
       </div>
 
