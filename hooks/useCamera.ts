@@ -9,7 +9,7 @@ interface UseCameraReturn {
   hasPermission: boolean | null
   stream: MediaStream | null
   capturePhoto: () => Promise<File | null>
-  startCamera: () => Promise<boolean>
+  startCamera: (facingMode?: 'user' | 'environment') => Promise<boolean>
   stopCamera: () => void
   isMobile: boolean
   setVideoRef: (element: HTMLVideoElement | null) => void
@@ -31,8 +31,11 @@ export const useCamera = (): UseCameraReturn => {
     'mediaDevices' in navigator && 
     'getUserMedia' in navigator.mediaDevices
 
-  const startCamera = useCallback(async (): Promise<boolean> => {
+  const startCamera = useCallback(async (facingMode: 'user' | 'environment' = 'environment'): Promise<boolean> => {
+    console.log('🎬 Iniciando cámara con facingMode:', facingMode)
+    
     if (!isSupported) {
+      console.error('❌ Cámara no soportada')
       setError('La cámara no es compatible con este dispositivo')
       return false
     }
@@ -45,6 +48,7 @@ export const useCamera = (): UseCameraReturn => {
       if ('permissions' in navigator) {
         try {
           const permission = await navigator.permissions.query({ name: 'camera' as PermissionName })
+          console.log('🔐 Estado de permisos:', permission.state)
           if (permission.state === 'denied') {
             setError('Permisos de cámara denegados. Ve a configuración del navegador para habilitarlos.')
             setHasPermission(false)
@@ -53,7 +57,7 @@ export const useCamera = (): UseCameraReturn => {
           }
         } catch (e) {
           // Algunos navegadores no soportan la API de permisos, continuamos
-          console.log('Permissions API not supported, continuing...')
+          console.log('⚠️ Permissions API not supported, continuing...')
         }
       }
 
@@ -62,19 +66,30 @@ export const useCamera = (): UseCameraReturn => {
         video: {
           width: { ideal: 1920, max: 1920 },
           height: { ideal: 1080, max: 1080 },
-          facingMode: 'environment', // Cámara trasera por defecto
+          facingMode: facingMode, // Usar el parámetro recibido
           aspectRatio: { ideal: 16/9 }
         },
         audio: false
       }
 
+      console.log('📹 Solicitando acceso a cámara con constraints:', constraints)
       const mediaStream = await navigator.mediaDevices.getUserMedia(constraints)
+      console.log('✅ Stream obtenido:', mediaStream.getTracks().length, 'tracks')
+      
       setStream(mediaStream)
       setHasPermission(true)
 
       // Asignar el stream al video element si existe
       if (videoRef.current) {
+        console.log('📺 Asignando stream al video')
         videoRef.current.srcObject = mediaStream
+        // Forzar reproducción en móviles
+        try {
+          await videoRef.current.play()
+          console.log('▶️ Video reproduciendo')
+        } catch (playError) {
+          console.warn('⚠️ Autoplay failed, user interaction may be required:', playError)
+        }
       }
 
       return true
@@ -98,7 +113,7 @@ export const useCamera = (): UseCameraReturn => {
             // Intentar con configuración más básica
             try {
               const basicConstraints: MediaStreamConstraints = {
-                video: { facingMode: 'environment' },
+                video: { facingMode: facingMode },
                 audio: false
               }
               const basicStream = await navigator.mediaDevices.getUserMedia(basicConstraints)
@@ -106,6 +121,11 @@ export const useCamera = (): UseCameraReturn => {
               setHasPermission(true)
               if (videoRef.current) {
                 videoRef.current.srcObject = basicStream
+                try {
+                  await videoRef.current.play()
+                } catch (playError) {
+                  console.warn('Autoplay failed:', playError)
+                }
               }
               setError(null)
               return true
@@ -127,8 +147,10 @@ export const useCamera = (): UseCameraReturn => {
   }, [isSupported])
 
   const stopCamera = useCallback(() => {
+    console.log('⏹️ Deteniendo cámara')
     if (stream) {
       stream.getTracks().forEach(track => {
+        console.log('🛑 Deteniendo track:', track.label)
         track.stop()
       })
       setStream(null)
@@ -136,6 +158,7 @@ export const useCamera = (): UseCameraReturn => {
 
     if (videoRef.current) {
       videoRef.current.srcObject = null
+      console.log('📺 Video element limpiado')
     }
   }, [stream])
 
@@ -193,7 +216,16 @@ export const useCamera = (): UseCameraReturn => {
   const setVideoRef = useCallback((element: HTMLVideoElement | null) => {
     videoRef.current = element
     if (element && stream) {
+      console.log('📹 Asignando stream al video element')
       element.srcObject = stream
+      // Configurar atributos importantes para móviles
+      element.setAttribute('playsinline', 'true')
+      element.setAttribute('webkit-playsinline', 'true')
+      element.muted = true
+      // Intentar reproducir
+      element.play().catch(err => {
+        console.warn('⚠️ Error en autoplay:', err)
+      })
     }
   }, [stream])
 

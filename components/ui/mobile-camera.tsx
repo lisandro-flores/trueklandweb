@@ -18,7 +18,6 @@ interface MobileCameraProps {
 export default function MobileCamera({ onCapture, onClose, isOpen }: MobileCameraProps) {
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment')
   const [capturedImage, setCapturedImage] = useState<string | null>(null)
-  const videoRef = useRef<HTMLVideoElement>(null)
   
   const {
     isSupported,
@@ -29,32 +28,30 @@ export default function MobileCamera({ onCapture, onClose, isOpen }: MobileCamer
     capturePhoto,
     startCamera,
     stopCamera,
-    isMobile
+    isMobile,
+    setVideoRef
   } = useCamera()
 
   // Iniciar cámara cuando se abre el modal
   useEffect(() => {
     if (isOpen && isSupported) {
-      startCamera()
+      startCamera(facingMode)
     }
     
     return () => {
       stopCamera()
     }
-  }, [isOpen, isSupported, startCamera, stopCamera])
-
-  // Asignar stream al video cuando esté disponible
-  useEffect(() => {
-    if (stream && videoRef.current) {
-      videoRef.current.srcObject = stream
-    }
-  }, [stream])
+  }, [isOpen, isSupported, facingMode, startCamera, stopCamera])
 
   const handleCapture = async () => {
+    console.log('📸 Capturando foto...')
     const file = await capturePhoto()
     if (file) {
+      console.log('✅ Foto capturada exitosamente:', file.size, 'bytes')
       const imageUrl = URL.createObjectURL(file)
       setCapturedImage(imageUrl)
+    } else {
+      console.error('❌ Error al capturar foto')
     }
   }
 
@@ -79,6 +76,7 @@ export default function MobileCamera({ onCapture, onClose, isOpen }: MobileCamer
   }
 
   const handleClose = () => {
+    console.log('🔴 Cerrando cámara')
     if (capturedImage) {
       URL.revokeObjectURL(capturedImage)
       setCapturedImage(null)
@@ -89,13 +87,16 @@ export default function MobileCamera({ onCapture, onClose, isOpen }: MobileCamer
 
   const switchCamera = async () => {
     const newFacingMode = facingMode === 'user' ? 'environment' : 'user'
-    setFacingMode(newFacingMode)
+    console.log('🔄 Cambiando cámara a:', newFacingMode)
     
     stopCamera()
-    // Reiniciar con la nueva cámara
-    setTimeout(() => {
-      startCamera()
-    }, 100)
+    // Cambiar el facingMode y reiniciar con la nueva cámara
+    setFacingMode(newFacingMode)
+    
+    setTimeout(async () => {
+      console.log('🎥 Iniciando nueva cámara:', newFacingMode)
+      await startCamera(newFacingMode)
+    }, 200)
   }
 
   if (!isOpen) return null
@@ -126,7 +127,7 @@ export default function MobileCamera({ onCapture, onClose, isOpen }: MobileCamer
             {error && hasPermission === false && (
               <div className="p-4">
                 <CameraPermissionHelper 
-                  onRetry={startCamera}
+                  onRetry={() => startCamera(facingMode)}
                   error={error}
                 />
               </div>
@@ -143,7 +144,7 @@ export default function MobileCamera({ onCapture, onClose, isOpen }: MobileCamer
                 </Alert>
                 <div className="mt-4">
                   <Button 
-                    onClick={startCamera}
+                    onClick={() => startCamera(facingMode)}
                     variant="outline"
                     className="w-full"
                   >
@@ -200,11 +201,19 @@ export default function MobileCamera({ onCapture, onClose, isOpen }: MobileCamer
                 ) : (
                   // Video de la cámara
                   <video
-                    ref={videoRef}
+                    ref={setVideoRef}
                     autoPlay
                     playsInline
                     muted
                     className="w-full h-full object-cover"
+                    onLoadedMetadata={(e) => {
+                      // Forzar reproducción cuando el video esté listo
+                      const video = e.target as HTMLVideoElement
+                      console.log('📹 Video metadata cargado, intentando reproducir...')
+                      video.play().catch(err => {
+                        console.warn('⚠️ Failed to autoplay video:', err)
+                      })
+                    }}
                   />
                 )}
 
@@ -274,7 +283,7 @@ export default function MobileCamera({ onCapture, onClose, isOpen }: MobileCamer
                   Necesitamos acceso a tu cámara para tomar fotos
                 </p>
                 <Button
-                  onClick={startCamera}
+                  onClick={() => startCamera(facingMode)}
                   variant="outline"
                   className="border-[#233554] text-[#B4C7E7] hover:bg-[#1A2F4F]"
                 >
