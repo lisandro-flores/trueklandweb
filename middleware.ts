@@ -12,15 +12,15 @@ export function middleware(request: NextRequest) {
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
   response.headers.set('X-XSS-Protection', '1; mode=block')
   
-  // Content Security Policy (CSP)
+  // Content Security Policy (CSP) - Configuración completa para Firebase
   const cspHeader = `
     default-src 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.firebaseapp.com https://*.firebase.google.com;
-    style-src 'self' 'unsafe-inline';
+    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.firebaseapp.com https://*.firebase.google.com https://*.googleapis.com https://*.gstatic.com;
+    style-src 'self' 'unsafe-inline' https://*.googleapis.com https://*.gstatic.com;
     img-src 'self' data: https: blob:;
-    font-src 'self' data:;
-    connect-src 'self' https://*.firebaseio.com https://*.firebase.google.com wss://*.firebaseio.com https://firebasestorage.googleapis.com;
-    frame-src 'self' https://*.firebaseapp.com;
+    font-src 'self' data: https://*.gstatic.com;
+    connect-src 'self' https://*.firebaseio.com https://*.firebase.google.com https://*.googleapis.com wss://*.firebaseio.com https://firebasestorage.googleapis.com https://securetoken.googleapis.com https://identitytoolkit.googleapis.com;
+    frame-src 'self' https://*.firebaseapp.com https://*.google.com;
     object-src 'none';
     base-uri 'self';
     form-action 'self';

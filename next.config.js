@@ -50,7 +50,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' *.googleapis.com *.gstatic.com accounts.google.com fonts.googleapis.com",
               "img-src 'self' data: blob: https: *.firebasestorage.googleapis.com firebasestorage.googleapis.com *.googleusercontent.com *.googleapis.com *.gstatic.com",
               "font-src 'self' *.gstatic.com *.googleapis.com fonts.gstatic.com",
-              "connect-src 'self' *.googleapis.com *.firebase.com *.firebaseio.com *.firebasestorage.googleapis.com firebasestorage.googleapis.com accounts.google.com",
+              "connect-src 'self' *.googleapis.com *.google.com *.firebase.com *.firebaseio.com *.firebasestorage.googleapis.com firebasestorage.googleapis.com accounts.google.com securetoken.googleapis.com identitytoolkit.googleapis.com",
               "frame-src 'self' *.google.com accounts.google.com",
               "object-src 'none'",
               "base-uri 'self'",
