@@ -102,10 +102,10 @@ export default function MobileCamera({ onCapture, onClose, isOpen }: MobileCamer
 
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-95 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md mx-auto bg-black border-gray-700">
+      <Card className="w-full max-w-md mx-auto bg-black border-[#233554]">
         <CardContent className="p-0">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-700">
+          <div className="flex items-center justify-between p-4 border-b border-[#233554]">
             <h2 className="text-white font-semibold flex items-center gap-2">
               <Camera className="w-5 h-5" />
               Tomar Foto
@@ -179,7 +179,7 @@ export default function MobileCamera({ onCapture, onClose, isOpen }: MobileCamer
             {/* Loading */}
             {isLoading && (
               <div className="p-6 text-center">
-                <div className="w-8 h-8 border-2 border-gray-600 border-t-white rounded-full animate-spin mx-auto mb-4" />
+                <div className="w-8 h-8 border-2 border-[#233554] border-t-white rounded-full animate-spin mx-auto mb-4" />
                 <p className="text-gray-300">Iniciando cámara...</p>
               </div>
             )}
@@ -226,7 +226,7 @@ export default function MobileCamera({ onCapture, onClose, isOpen }: MobileCamer
                       <Button
                         onClick={handleCapture}
                         size="icon"
-                        className="w-16 h-16 rounded-full bg-white text-black hover:bg-gray-200 border-4 border-white"
+                        className="w-16 h-16 rounded-full bg-white text-black hover:bg-[#E6F1FF] border-4 border-white"
                       >
                         <div className="w-6 h-6 bg-black rounded-full" />
                       </Button>
@@ -276,7 +276,7 @@ export default function MobileCamera({ onCapture, onClose, isOpen }: MobileCamer
                 <Button
                   onClick={startCamera}
                   variant="outline"
-                  className="border-gray-600 text-gray-300 hover:bg-gray-800"
+                  className="border-[#233554] text-[#B4C7E7] hover:bg-[#1A2F4F]"
                 >
                   Intentar de nuevo
                 </Button>

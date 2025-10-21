@@ -35,6 +35,12 @@ export const useProducts = (options: UseProductsOptions = {}) => {
   
   const { user } = useAuth()
 
+  // Usar valores por defecto para evitar cambios de referencia
+  const category = options.category
+  const userId = options.userId
+  const productLimit = options.limit || 10
+  const authorized = options.authorized !== undefined ? options.authorized : true
+
   const fetchProducts = useCallback(async (reset = false) => {
     if (loading === 'loading') return
     
@@ -45,16 +51,14 @@ export const useProducts = (options: UseProductsOptions = {}) => {
       let q = query(collection(db, 'UserPost'))
 
       // Filtros
-      if (options.authorized !== undefined) {
-        q = query(q, where('isAuthorized', '==', options.authorized))
+      q = query(q, where('isAuthorized', '==', authorized))
+      
+      if (category) {
+        q = query(q, where('category', '==', category))
       }
       
-      if (options.category) {
-        q = query(q, where('category', '==', options.category))
-      }
-      
-      if (options.userId) {
-        q = query(q, where('userId', '==', options.userId))
+      if (userId) {
+        q = query(q, where('userId', '==', userId))
       }
 
       // Ordenar por fecha
@@ -66,7 +70,7 @@ export const useProducts = (options: UseProductsOptions = {}) => {
       }
 
       // Límite
-      q = query(q, limit(options.limit || 10))
+      q = query(q, limit(productLimit))
 
       const snapshot = await getDocs(q)
       const newProducts = snapshot.docs.map(doc => ({
@@ -81,14 +85,14 @@ export const useProducts = (options: UseProductsOptions = {}) => {
       }
 
       setLastDoc(snapshot.docs[snapshot.docs.length - 1] || null)
-      setHasMore(snapshot.docs.length === (options.limit || 10))
+      setHasMore(snapshot.docs.length === productLimit)
       setLoading('success')
     } catch (err) {
       console.error('Error fetching products:', err)
       setError('Error al cargar productos')
       setLoading('error')
     }
-  }, [options, lastDoc, loading])
+  }, [category, userId, authorized, productLimit, lastDoc, loading])
 
   const addProduct = async (productData: Omit<Product, 'id' | 'createdAt' | 'userId'>): Promise<FirebaseResponse<string>> => {
     if (!user) {
@@ -189,21 +193,22 @@ export const useProducts = (options: UseProductsOptions = {}) => {
     }
   }
 
-  const refetch = () => {
+  const refetch = useCallback(() => {
     setLastDoc(null)
     setHasMore(true)
     fetchProducts(true)
-  }
+  }, [fetchProducts])
 
-  const loadMore = () => {
+  const loadMore = useCallback(() => {
     if (hasMore && loading !== 'loading') {
       fetchProducts(false)
     }
-  }
+  }, [hasMore, loading, fetchProducts])
 
   useEffect(() => {
     fetchProducts(true)
-  }, [options.category, options.userId, options.authorized])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category, userId, authorized])
 
   return {
     products,

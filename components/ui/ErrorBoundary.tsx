@@ -29,15 +29,15 @@ export class ErrorBoundary extends React.Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="min-h-screen flex items-center justify-center bg-[#0A1628]">
           <div className="text-center max-w-md mx-auto px-6">
             <div className="w-16 h-16 mx-auto mb-6 text-red-500">
               <AlertTriangle className="w-full h-full" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            <h1 className="text-2xl font-bold text-[#E6F1FF] mb-4">
               ¡Oops! Algo salió mal
             </h1>
-            <p className="text-gray-600 mb-6">
+            <p className="text-[#B4C7E7] mb-6">
               Ha ocurrido un error inesperado. Por favor, intenta recargar la página.
             </p>
             <Button

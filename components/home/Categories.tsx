@@ -41,16 +41,16 @@ export default function Categories({ categoryList }: CategoriesProps) {
       <div className="relative flex items-center justify-between">
         <div className="flex items-center space-x-4">
           {/* Icon Badge */}
-          <div className="w-12 h-12 bg-gradient-to-br from-[#91f2b3] to-[#fcf326] rounded-2xl flex items-center justify-center shadow-lg border border-white/30">
-            <Grid3X3 className="w-6 h-6 text-gray-800" />
+          <div className="w-12 h-12 bg-gradient-to-br from-[#91f2b3] to-[#fcf326] rounded-2xl flex items-center justify-center shadow-lg border-2 border-[#233554]">
+            <Grid3X3 className="w-6 h-6 text-gray-900" />
           </div>
 
           {/* Title */}
           <div className="space-y-1">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold gradient-text">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-[#91f2b3] to-[#fcf326] bg-clip-text text-transparent">
               Categorías Populares
             </h2>
-            <p className="text-gray-600 text-sm sm:text-base">Explora por categorías y encuentra lo que buscas</p>
+            <p className="text-[#B4C7E7] text-sm sm:text-base">Explora por categorías y encuentra lo que buscas</p>
           </div>
         </div>
 
@@ -59,7 +59,7 @@ export default function Categories({ categoryList }: CategoriesProps) {
           <Button
             variant="ghost"
             onClick={() => setShowAll(!showAll)}
-            className="btn-secondary px-6 py-3 rounded-full"
+            className="bg-[#1A2F4F]/50 border-2 border-[#233554] text-[#E6F1FF] hover:bg-[#1A2F4F] hover:border-[#00D8E8] px-6 py-3 rounded-full transition-all"
           >
             <span className="font-medium">
               {showAll ? "Ver menos" : "Ver todas"}
@@ -83,15 +83,15 @@ export default function Categories({ categoryList }: CategoriesProps) {
               className="group relative flex-shrink-0 w-24 sm:w-auto"
             >
               {/* Category Card */}
-              <div className="glass-effect rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:scale-105">
+              <div className="bg-[#112240]/80 backdrop-blur-md border-2 border-[#233554] rounded-3xl shadow-lg hover:shadow-2xl hover:border-[#00D8E8] transition-all duration-300 overflow-hidden transform hover:scale-105">
                 {/* Background Gradient */}
-                <div className="bg-gradient-to-br from-white/50 to-white/20 hover:from-[#91f2b3]/10 hover:to-[#fcf326]/10 transition-all duration-300">
+                <div className="bg-gradient-to-br from-[#1A2F4F]/50 to-[#112240]/20 hover:from-[#91f2b3]/10 hover:to-[#fcf326]/10 transition-all duration-300">
                   {/* Content */}
                   <div className="p-2 sm:p-4 md:p-6 text-center space-y-2 sm:space-y-3 md:space-y-4">
                     {/* Icon Container */}
                     <div className="relative mx-auto">
                       {category.icon.startsWith("http") ? (
-                        <div className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto rounded-full overflow-hidden border-2 sm:border-3 border-border shadow-lg">
+                        <div className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto rounded-full overflow-hidden border-2 sm:border-3 border-[#233554] shadow-lg">
                           <Image
                             src={category.icon || "/placeholder.svg"}
                             alt={category.name}
@@ -102,7 +102,7 @@ export default function Categories({ categoryList }: CategoriesProps) {
                         </div>
                       ) : (
                         <div
-                          className={`w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#91f2b3] to-[#fcf326] flex items-center justify-center text-lg sm:text-2xl md:text-3xl shadow-lg border-2 sm:border-3 border-white/30`}
+                          className={`w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#91f2b3] to-[#fcf326] flex items-center justify-center text-lg sm:text-2xl md:text-3xl shadow-lg border-2 sm:border-3 border-[#233554]`}
                         >
                           {category.icon}
                         </div>
@@ -111,8 +111,8 @@ export default function Categories({ categoryList }: CategoriesProps) {
                       {/* Popular Badge - Siempre visible para las primeras 3 */}
                       {index < 3 && (
                         <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 z-10">
-                          <div className="w-4 h-4 sm:w-6 sm:h-6 bg-gradient-to-r from-[#fcf326] to-[#91f2b3] rounded-full flex items-center justify-center shadow-lg">
-                            <Star className="w-2 h-2 sm:w-3 sm:h-3 text-gray-800" />
+                          <div className="w-4 h-4 sm:w-6 sm:h-6 bg-gradient-to-r from-[#fcf326] to-[#91f2b3] rounded-full flex items-center justify-center shadow-lg border-2 border-[#112240]">
+                            <Star className="w-2 h-2 sm:w-3 sm:h-3 text-gray-900" />
                           </div>
                         </div>
                       )}
@@ -120,7 +120,7 @@ export default function Categories({ categoryList }: CategoriesProps) {
 
                     {/* Category Info */}
                     <div className="space-y-1">
-                      <h3 className="font-bold text-xs sm:text-sm md:text-base text-gray-800 leading-tight">
+                      <h3 className="font-bold text-xs sm:text-sm md:text-base text-[#E6F1FF] group-hover:text-[#91f2b3] transition-colors leading-tight">
                         {category.name}
                       </h3>
                     </div>
@@ -138,7 +138,7 @@ export default function Categories({ categoryList }: CategoriesProps) {
       {/* Show More Indicator */}
       {!showAll && categoryList.length > 8 && (
         <div className="text-center mt-8">
-          <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-[#91f2b3] to-[#fcf326] text-gray-800 px-6 py-3 rounded-full text-sm font-medium shadow-lg border border-white/30">
+          <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-[#91f2b3] to-[#fcf326] text-gray-900 px-6 py-3 rounded-full text-sm font-medium shadow-lg border-2 border-[#233554]">
             <Sparkles className="w-4 h-4" />
             <span>+{categoryList.length - 8} categorías más disponibles</span>
           </div>

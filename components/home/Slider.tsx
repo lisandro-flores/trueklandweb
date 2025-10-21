@@ -40,26 +40,29 @@ export default function Slider({ sliderList }: SliderProps) {
 
   if (sliderList.length === 0) {
     return (
-      <div className="relative h-48 md:h-64 glass-effect rounded-3xl flex items-center justify-center overflow-hidden">
+      <div className="relative h-48 md:h-64 bg-[#112240]/95 backdrop-blur-md border-2 border-[#233554] rounded-3xl flex items-center justify-center overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#91f2b3]/20 to-[#fcf326]/20"></div>
         <div className="relative text-center z-10">
-          <h3 className="text-2xl font-bold mb-2 gradient-text">¡Bienvenido a TrueKland!</h3>
-          <p className="text-lg text-gray-600">Descubre increíbles oportunidades de intercambio</p>
+          <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] bg-clip-text text-transparent">
+            ¡Bienvenido a TrueKland!
+          </h3>
+          <p className="text-lg text-[#E6F1FF]/70">Descubre increíbles oportunidades de intercambio</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="relative h-48 md:h-64 rounded-3xl overflow-hidden group glass-effect">
+    <div className="relative h-48 md:h-64 rounded-3xl overflow-hidden group bg-[#112240]/95 backdrop-blur-md border-2 border-[#233554]">
       <div className="relative w-full h-full">
         <Image
-          src={sliderList[currentIndex]?.image || "/placeholder.svg?height=300&width=800"}
+          src={sliderList[currentIndex]?.image || "/placeholder.svg"}
           alt={sliderList[currentIndex]?.name || "Slider"}
           fill
           className="object-cover transition-all duration-500"
           priority
+          unoptimized
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 
@@ -76,7 +79,7 @@ export default function Slider({ sliderList }: SliderProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 glass-effect hover:bg-white/30 text-white opacity-0 group-hover:opacity-100 transition-opacity rounded-full"
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-[#0A1628]/90 hover:bg-[#1A2F4F]/90 text-[#E6F1FF] opacity-0 group-hover:opacity-100 transition-opacity rounded-full border-2 border-[#233554]"
             onClick={goToPrevious}
           >
             <ChevronLeft className="h-6 w-6" />
@@ -85,7 +88,7 @@ export default function Slider({ sliderList }: SliderProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 glass-effect hover:bg-white/30 text-white opacity-0 group-hover:opacity-100 transition-opacity rounded-full"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#0A1628]/90 hover:bg-[#1A2F4F]/90 text-[#E6F1FF] opacity-0 group-hover:opacity-100 transition-opacity rounded-full border-2 border-[#233554]"
             onClick={goToNext}
           >
             <ChevronRight className="h-6 w-6" />

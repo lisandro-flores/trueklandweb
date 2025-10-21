@@ -3,65 +3,52 @@
 @tailwind utilities;
 
 :root {
-  /* Paleta de colores TruekLand - Friendly Marketplace */
+  /* Paleta de colores TruekLand - Dark Theme con Alto Contraste */
   --color-amarillo: #FFF833;        /* Promociones, íconos de "nuevo" */
   --color-turquesa: #00D8E8;        /* Botones primarios */
-  --color-gris-claro: #F8FAFC;      /* Fondo principal - más limpio */
-  --color-azul-claro: #E6F7FF;      /* Tarjetas de objetos/intercambios - más suave */
-  --color-verde-menta: #B2DFDB;     /* Fondos de éxito, estado "intercambiado" */
-  --color-gris-oscuro: #1E293B;     /* Texto principal - más legible */
-  --color-azul-oscuro: #0F172A;     /* Texto secundario, íconos - más contraste */
-  --color-naranja-coral: #FF6B47;   /* Botones secundarios - más vibrante */
-  --color-rojo-suave: #EF4444;      /* Alertas, errores - más estándar */
+  --color-verde-brillante: #91f2b3; /* Verde TrueKland */
+  --color-amarillo-brillante: #fcf326; /* Amarillo TrueKland */
   
-  /* Nuevos colores para mejor jerarquía */
+  /* Fondos Oscuros - Azul Navy */
+  --color-fondo-principal: #0A1628;     /* Fondo principal - Azul muy oscuro */
+  --color-fondo-secundario: #112240;    /* Fondo de tarjetas - Azul oscuro */
+  --color-fondo-terciario: #1A2F4F;     /* Fondo de elementos elevados */
+  --color-fondo-hover: #233554;         /* Hover states */
+  
+  /* Textos con Alto Contraste */
+  --color-texto-principal: #E6F1FF;     /* Texto principal - Blanco azulado */
+  --color-texto-secundario: #B4C7E7;    /* Texto secundario - Azul claro */
+  --color-texto-terciario: #8FA3C4;     /* Texto terciario - Azul medio */
+  --color-texto-deshabilitado: #5A6B89; /* Texto deshabilitado */
+  
+  /* Colores de Estado */
   --color-success: #10B981;         /* Verde más profesional */
   --color-warning: #F59E0B;         /* Amarillo más suave */
-  --color-accent: #8B5CF6;          /* Púrpura para destacar */
+  --color-error: #EF4444;           /* Rojo para errores */
   --color-info: #3B82F6;            /* Azul informativo */
+  --color-accent: #8B5CF6;          /* Púrpura para destacar */
   
-  /* Variaciones y transparencias */
-  --color-amarillo-light: #FFF83380;
-  --color-turquesa-light: #00D8E880;
-  --color-verde-menta-light: #B2DFDB80;
+  /* Bordes con Contraste */
+  --color-borde-principal: #233554;
+  --color-borde-secundario: #2A4166;
+  --color-borde-activo: #00D8E8;
   
-  /* Estados semánticos */
-  --color-success-state: var(--color-success);
-  --color-warning-state: var(--color-warning);
-  --color-error-state: var(--color-rojo-suave);
-  --color-info-state: var(--color-info);
+  /* Gradientes mejorados - Dark Theme */
+  --gradient-primary: linear-gradient(135deg, #0A1628 0%, #112240 100%);
+  --gradient-card: linear-gradient(135deg, rgba(17, 34, 64, 0.95) 0%, rgba(26, 47, 79, 0.90) 100%);
+  --gradient-glass: linear-gradient(135deg, rgba(17, 34, 64, 0.8) 0%, rgba(10, 22, 40, 0.6) 100%);
+  --gradient-hero: linear-gradient(135deg, rgba(0, 216, 232, 0.1) 0%, rgba(145, 242, 179, 0.1) 100%);
+  --gradient-truekland: linear-gradient(135deg, #91f2b3 0%, #fcf326 100%);
   
-  /* Grises mejorados */
-  --color-gris-50: #F8FAFC;
-  --color-gris-100: #F1F5F9;
-  --color-gris-200: #E2E8F0;
-  --color-gris-300: #CBD5E1;
-  --color-gris-400: #94A3B8;
-  --color-gris-500: #64748B;
-  --color-gris-600: #475569;
-  --color-gris-700: #334155;
-  --color-gris-800: #1E293B;
-  --color-gris-900: #0F172A;
-  
-  /* Gradientes mejorados - Friendly Marketplace */
-  --gradient-primary: linear-gradient(135deg, var(--color-turquesa) 0%, var(--color-success) 100%);
-  --gradient-secondary: linear-gradient(135deg, var(--color-amarillo) 0%, var(--color-naranja-coral) 100%);
-  --gradient-success: linear-gradient(135deg, var(--color-success) 0%, var(--color-verde-menta) 100%);
-  --gradient-hero: linear-gradient(135deg, var(--color-gris-50) 0%, var(--color-azul-claro) 50%, var(--color-verde-menta) 100%);
-  --gradient-card: linear-gradient(135deg, rgba(248, 250, 252, 0.9) 0%, rgba(230, 247, 255, 0.8) 100%);
-  --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.6) 100%);
-  
-  /* Sombras mejoradas - Glass Morphism */
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  --shadow-turquesa: 0 8px 32px rgba(0, 216, 232, 0.2), 0 4px 12px rgba(0, 216, 232, 0.1);
-  --shadow-turquesa-hover: 0 16px 48px rgba(0, 216, 232, 0.3), 0 8px 16px rgba(0, 216, 232, 0.15);
-  --shadow-amarillo: 0 8px 32px rgba(255, 248, 51, 0.2), 0 4px 12px rgba(255, 248, 51, 0.1);
-  --shadow-naranja: 0 8px 32px rgba(255, 107, 71, 0.2), 0 4px 12px rgba(255, 107, 71, 0.1);
-  --shadow-success: 0 8px 32px rgba(16, 185, 129, 0.2), 0 4px 12px rgba(16, 185, 129, 0.1);
+  /* Sombras mejoradas para Dark Theme */
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+  --shadow-turquesa: 0 8px 32px rgba(0, 216, 232, 0.3), 0 4px 12px rgba(0, 216, 232, 0.2);
+  --shadow-turquesa-hover: 0 16px 48px rgba(0, 216, 232, 0.4), 0 8px 16px rgba(0, 216, 232, 0.25);
+  --shadow-truekland: 0 8px 32px rgba(145, 242, 179, 0.3), 0 4px 12px rgba(252, 243, 38, 0.2);
   
   /* Sistema de border-radius - Friendly */
   --radius-xs: 6px;
@@ -84,7 +71,7 @@
 
 @layer base {
   * {
-    border-color: var(--color-gris-300);
+    border-color: var(--color-borde-principal);
   }
   
   html {
@@ -92,8 +79,8 @@
   }
   
   body {
-    background-color: var(--color-gris-claro);
-    color: var(--color-gris-oscuro);
+    background-color: var(--color-fondo-principal);
+    color: var(--color-texto-principal);
     font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

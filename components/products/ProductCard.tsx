@@ -48,28 +48,29 @@ export default function ProductCard({ product }: ProductCardProps) {
   }
 
   return (
-    <Card className="group product-card mobile-card">
+    <Card className="group bg-[#112240]/95 border-2 border-[#233554] shadow-xl hover:shadow-2xl hover:border-[#00D8E8] transition-all duration-300 rounded-xl">
       <div className="relative overflow-hidden rounded-t-xl">
         <div className="aspect-square relative">
           <Image
-            src={imageError ? "/placeholder.svg?height=300&width=300" : (product.images && product.images.length > 0 ? product.images[0] : "/placeholder.svg?height=300&width=300")}
+            src={imageError ? "/placeholder.svg" : (product.images && product.images.length > 0 ? product.images[0] : "/placeholder.svg")}
             alt={product.title}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             onError={() => setImageError(true)}
+            unoptimized={product.images && product.images.length > 0 && product.images[0].includes('firebasestorage.googleapis.com')}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0A1628]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
 
-        <Badge className="absolute top-3 left-3 badge-primary backdrop-blur-sm">
+        <Badge className="absolute top-3 left-3 bg-gradient-to-r from-[#91f2b3] to-[#fcf326] text-gray-900 border-0 backdrop-blur-sm shadow-lg font-semibold">
           {product.category}
         </Badge>
 
         <Button
           variant="ghost"
           size="icon"
-          className={`absolute top-3 right-3 glass h-9 w-9 touch-target ${
-            isLiked ? "text-red-500" : "text-gray-600"
+          className={`absolute top-3 right-3 bg-[#112240]/80 backdrop-blur-md border-2 border-[#233554] h-9 w-9 touch-target hover:bg-[#1A2F4F] hover:border-[#00D8E8] transition-all ${
+            isLiked ? "text-[#EF4444] border-[#EF4444]" : "text-[#B4C7E7]"
           }`}
           onClick={(e) => {
             e.preventDefault()
@@ -81,14 +82,14 @@ export default function ProductCard({ product }: ProductCardProps) {
       </div>
 
       <CardContent className="p-4 md:p-6">
-        <h3 className="font-semibold text-lg md:text-xl mb-2 line-clamp-2 group-hover:text-[var(--color-turquesa)] transition-colors duration-300">
+        <h3 className="font-semibold text-lg md:text-xl mb-2 line-clamp-2 text-[#E6F1FF] group-hover:text-[#91f2b3] transition-colors duration-300">
           {product.title}
         </h3>
 
-        <p className="text-[var(--color-azul-oscuro)] text-sm mb-4 line-clamp-2 leading-relaxed">{product.desc}</p>
+        <p className="text-[#B4C7E7] text-sm mb-4 line-clamp-2 leading-relaxed">{product.desc}</p>
 
         <div className="flex items-center space-x-3 mb-4">
-          <div className="w-8 h-8 rounded-full overflow-hidden glass ring-2 ring-[var(--color-turquesa)]/20 flex-shrink-0">
+          <div className="w-8 h-8 rounded-full overflow-hidden bg-[#1A2F4F] ring-2 ring-[#91f2b3]/30 flex-shrink-0">
             {product.userImage ? (
               <Image
                 src={product.userImage || "/placeholder.svg"}
@@ -98,14 +99,14 @@ export default function ProductCard({ product }: ProductCardProps) {
                 className="object-cover w-full h-full"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gradient-primary">
-                <User className="h-4 w-4 text-white" />
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-[#91f2b3] to-[#fcf326]">
+                <User className="h-4 w-4 text-gray-900" />
               </div>
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <span className="text-sm text-[var(--color-gris-oscuro)] truncate font-medium block">{product.userName}</span>
-            <div className="flex items-center text-xs text-[var(--color-azul-oscuro)] mt-1">
+            <span className="text-sm text-[#E6F1FF] truncate font-medium block">{product.userName}</span>
+            <div className="flex items-center text-xs text-[#8FA3C4] mt-1">
               <Calendar className="h-3 w-3 mr-1 flex-shrink-0" />
               {formatDate(product.createdAt)}
             </div>
@@ -113,8 +114,8 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {product.price && (
-          <div className="text-lg font-bold bg-gradient-primary bg-clip-text text-transparent mb-3">
-            ${product.price}
+          <div className="text-sm font-medium text-[#E6F1FF]/70 mb-3">
+            <span className="text-xs">Valor aprox:</span> <span className="text-lg font-bold bg-gradient-to-r from-[#91f2b3] to-[#fcf326] bg-clip-text text-transparent">${product.price} MXN</span>
           </div>
         )}
       </CardContent>
@@ -123,20 +124,20 @@ export default function ProductCard({ product }: ProductCardProps) {
         {isOwner ? (
           <div className="flex gap-2 w-full">
             <Link href={`/product/${product.id}/edit`} className="flex-1">
-              <Button variant="outline" className="w-full touch-target">
+              <Button variant="outline" className="w-full touch-target bg-[#1A2F4F]/50 border-2 border-[#233554] text-[#E6F1FF] hover:bg-[#1A2F4F] hover:border-[#fcf326] hover:text-[#fcf326]">
                 <Edit className="w-4 h-4 mr-2" />
                 Editar
               </Button>
             </Link>
             <Link href={`/product/${product.id}`} className="flex-1">
-              <Button className="btn-primary w-full touch-target">
+              <Button className="w-full touch-target bg-gradient-to-r from-[#91f2b3] to-[#fcf326] text-gray-900 font-semibold hover:shadow-lg transition-all">
                 Ver Detalles
               </Button>
             </Link>
           </div>
         ) : (
           <Link href={`/product/${product.id}`} className="w-full">
-            <Button className="btn-primary w-full touch-target">
+            <Button className="w-full touch-target bg-gradient-to-r from-[#91f2b3] to-[#fcf326] text-gray-900 font-semibold hover:shadow-lg transition-all">
               <span className="flex items-center justify-center gap-2">
                 Ver Detalles
                 <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

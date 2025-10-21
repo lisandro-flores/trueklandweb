@@ -40,9 +40,9 @@ export default function EditProfileForm() {
     if (user) {
       setProfileData({
         displayName: user.displayName || "",
-        bio: "", // This would come from Firestore user document
-        phone: "", // This would come from Firestore user document
-        location: "", // This would come from Firestore user document
+        bio: "",
+        phone: "",
+        location: "",
       })
       setInitialLoading(false)
     }
@@ -70,12 +70,10 @@ export default function EditProfileForm() {
     setLoading(true)
 
     try {
-      // Update Firebase Auth profile
       await updateProfile(user, {
         displayName: profileData.displayName,
       })
 
-      // Update Firestore user document
       const userDocRef = doc(db, "users", user.uid)
       await updateDoc(userDocRef, {
         displayName: profileData.displayName,
@@ -109,128 +107,121 @@ export default function EditProfileForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-[#0A1628] p-4">
       <div className="max-w-2xl mx-auto">
         <div className="mb-6">
           <Button
             variant="ghost"
             onClick={() => router.back()}
-            className="flex items-center space-x-2 text-gray-600 hover:text-gray-800"
+            className="flex items-center space-x-2 text-[#E6F1FF]/70 hover:text-[#91f2b3] hover:bg-[#1A2F4F]"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Volver</span>
           </Button>
         </div>
 
-        <Card className="shadow-lg">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold text-gray-800 flex items-center justify-center space-x-2">
-              <Edit2 className="w-6 h-6" />
+        <Card className="bg-[#112240]/95 backdrop-blur-md border-2 border-[#233554] shadow-xl">
+          <CardHeader className="text-center border-b border-[#233554]">
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] bg-clip-text text-transparent flex items-center justify-center space-x-2">
+              <Edit2 className="w-6 h-6 text-[#91f2b3]" />
               <span>Editar Perfil</span>
             </CardTitle>
           </CardHeader>
 
-          <CardContent className="space-y-6">
-            {/* Avatar Section */}
+          <CardContent className="space-y-6 pt-6">
             <div className="flex flex-col items-center space-y-4">
               <div className="relative">
-                <Avatar className="w-24 h-24">
+                <Avatar className="w-24 h-24 border-4 border-[#233554] shadow-lg">
                   <AvatarImage src={user?.photoURL || ""} alt={user?.displayName || ""} />
-                  <AvatarFallback className="bg-blue-100 text-blue-600 text-xl">
+                  <AvatarFallback className="bg-gradient-to-br from-[#91f2b3] to-[#fcf326] text-[#0A1628] text-xl font-bold">
                     {user?.displayName?.charAt(0) || user?.email?.charAt(0) || "U"}
                   </AvatarFallback>
                 </Avatar>
                 <Button
                   size="sm"
-                  className="absolute -bottom-2 -right-2 rounded-full w-8 h-8 p-0"
-                  variant="secondary"
+                  className="absolute -bottom-2 -right-2 rounded-full w-8 h-8 p-0 bg-gradient-to-r from-[#91f2b3] to-[#fcf326] hover:from-[#7fd89f] hover:to-[#e8e01f] text-[#0A1628] shadow-lg"
                 >
                   <Camera className="w-4 h-4" />
                 </Button>
               </div>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-[#E6F1FF]/60">
                 Haz clic en el ícono de cámara para cambiar tu foto
               </p>
             </div>
 
             <form onSubmit={handleSaveProfile} className="space-y-6">
-              {/* Name */}
               <div className="space-y-2">
-                <Label htmlFor="displayName" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="displayName" className="text-sm font-medium text-[#E6F1FF]">
                   Nombre completo
                 </Label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#E6F1FF]/60 w-4 h-4" />
                   <Input
                     id="displayName"
                     type="text"
                     placeholder="Tu nombre completo"
                     value={profileData.displayName}
                     onChange={(e) => handleInputChange("displayName", e.target.value)}
-                    className="pl-10"
+                    className="pl-10 bg-[#0A1628] border-2 border-[#233554] text-[#E6F1FF] placeholder:text-[#E6F1FF]/50 focus:border-[#91f2b3] focus:ring-2 focus:ring-[#91f2b3]/20"
                   />
                 </div>
               </div>
 
-              {/* Email (readonly) */}
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="email" className="text-sm font-medium text-[#E6F1FF]">
                   Correo electrónico
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#E6F1FF]/60 w-4 h-4" />
                   <Input
                     id="email"
                     type="email"
                     value={user?.email || ""}
-                    className="pl-10 bg-gray-50"
+                    className="pl-10 bg-[#1A2F4F]/50 border-2 border-[#233554] text-[#E6F1FF]/70 cursor-not-allowed"
                     disabled
                   />
                 </div>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-[#E6F1FF]/50">
                   El correo electrónico no se puede cambiar
                 </p>
               </div>
 
-              {/* Phone */}
               <div className="space-y-2">
-                <Label htmlFor="phone" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="phone" className="text-sm font-medium text-[#E6F1FF]">
                   Teléfono
                 </Label>
                 <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#E6F1FF]/60 w-4 h-4" />
                   <Input
                     id="phone"
                     type="tel"
                     placeholder="Tu número de teléfono"
                     value={profileData.phone}
                     onChange={(e) => handleInputChange("phone", e.target.value)}
-                    className="pl-10"
+                    className="pl-10 bg-[#0A1628] border-2 border-[#233554] text-[#E6F1FF] placeholder:text-[#E6F1FF]/50 focus:border-[#91f2b3] focus:ring-2 focus:ring-[#91f2b3]/20"
                   />
                 </div>
               </div>
 
-              {/* Location */}
               <div className="space-y-2">
-                <Label htmlFor="location" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="location" className="text-sm font-medium text-[#E6F1FF]">
                   Ubicación
                 </Label>
                 <div className="relative">
-                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#E6F1FF]/60 w-4 h-4" />
                   <Input
                     id="location"
                     type="text"
                     placeholder="Tu ciudad, país"
                     value={profileData.location}
                     onChange={(e) => handleInputChange("location", e.target.value)}
-                    className="pl-10"
+                    className="pl-10 bg-[#0A1628] border-2 border-[#233554] text-[#E6F1FF] placeholder:text-[#E6F1FF]/50 focus:border-[#91f2b3] focus:ring-2 focus:ring-[#91f2b3]/20"
                   />
                 </div>
               </div>
 
-              {/* Bio */}
               <div className="space-y-2">
-                <Label htmlFor="bio" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="bio" className="text-sm font-medium text-[#E6F1FF]">
                   Biografía
                 </Label>
                 <Textarea
@@ -239,19 +230,18 @@ export default function EditProfileForm() {
                   value={profileData.bio}
                   onChange={(e) => handleInputChange("bio", e.target.value)}
                   rows={4}
-                  className="resize-none"
+                  className="resize-none bg-[#0A1628] border-2 border-[#233554] text-[#E6F1FF] placeholder:text-[#E6F1FF]/50 focus:border-[#91f2b3] focus:ring-2 focus:ring-[#91f2b3]/20"
                 />
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-[#E6F1FF]/50">
                   Máximo 500 caracteres
                 </p>
               </div>
 
-              {/* Save Button */}
               <div className="flex space-x-4">
                 <Button
                   type="button"
                   variant="outline"
-                  className="flex-1"
+                  className="flex-1 bg-[#1A2F4F] border-2 border-[#233554] text-[#E6F1FF] hover:bg-[#233554] hover:border-[#91f2b3] hover:text-[#91f2b3] transition-all"
                   onClick={() => router.back()}
                   disabled={loading}
                 >
@@ -259,12 +249,12 @@ export default function EditProfileForm() {
                 </Button>
                 <Button
                   type="submit"
-                  className="flex-1"
+                  className="flex-1 bg-gradient-to-r from-[#91f2b3] to-[#fcf326] hover:from-[#7fd89f] hover:to-[#e8e01f] text-[#0A1628] font-semibold shadow-lg shadow-[#91f2b3]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={loading}
                 >
                   {loading ? (
                     <div className="flex items-center justify-center">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#0A1628] mr-2"></div>
                       Guardando...
                     </div>
                   ) : (

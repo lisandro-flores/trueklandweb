@@ -215,7 +215,7 @@ export default function EditProduct({ productId }: EditProductProps) {
   if (!product) {
     return (
       <div className="text-center py-16">
-        <h2 className="text-2xl font-bold text-gray-600 mb-4">Producto no encontrado</h2>
+        <h2 className="text-2xl font-bold text-[#B4C7E7] mb-4">Producto no encontrado</h2>
         <Button onClick={() => router.push("/profile")}>Volver al perfil</Button>
       </div>
     )
@@ -241,9 +241,11 @@ export default function EditProduct({ productId }: EditProductProps) {
         </Button>
       </div>
 
-      <Card className="glass-effect border-0">
+      <Card className="bg-[#112240]/95 backdrop-blur-md border-2 border-[#233554]">
         <CardHeader>
-          <CardTitle className="gradient-text">Editar Producto</CardTitle>
+          <CardTitle className="bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] bg-clip-text text-transparent">
+            Editar Producto
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Image Upload */}
@@ -316,12 +318,13 @@ export default function EditProduct({ productId }: EditProductProps) {
 
           {/* Price */}
           <div>
-            <label className="block text-sm font-medium mb-2">Precio (opcional)</label>
+            <label className="block text-sm font-medium mb-2 text-[#E6F1FF]">Valor aproximado en MXN (opcional)</label>
             <Input
+              type="number"
               value={formData.price}
               onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-              placeholder="Precio en USD"
-              className="h-12"
+              placeholder="Ej: 500"
+              className="h-12 bg-[#0A1628] border-2 border-[#233554] text-[#E6F1FF] placeholder:text-[#E6F1FF]/50 focus:border-[#91f2b3] focus:ring-2 focus:ring-[#91f2b3]/20"
             />
           </div>
 
@@ -329,7 +332,7 @@ export default function EditProduct({ productId }: EditProductProps) {
           <Button
             onClick={handleSave}
             disabled={saving}
-            className="w-full h-12 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+            className="w-full h-12 bg-gradient-to-r from-[#91f2b3] to-[#fcf326] hover:from-[#7fd89f] hover:to-[#e8e01f] text-[#0A1628] font-semibold shadow-lg shadow-[#91f2b3]/20 transition-all"
           >
             <Save className="h-5 w-5 mr-2" />
             {saving ? "Guardando..." : "Guardar Cambios"}

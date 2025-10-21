@@ -66,21 +66,28 @@ export default function MyProducts() {
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Header */}
-      <div className="glass-effect rounded-2xl p-6">
+      <div className="bg-[#112240]/95 backdrop-blur-md border-2 border-[#233554] rounded-2xl p-6">
         <div className="flex items-center justify-between mb-4">
-          <Button variant="ghost" onClick={() => router.back()} className="flex items-center space-x-2">
+          <Button 
+            variant="ghost" 
+            onClick={() => router.back()} 
+            className="flex items-center space-x-2 text-[#E6F1FF] hover:text-[#91f2b3] hover:bg-[#1A2F4F] transition-all"
+          >
             <ArrowLeft className="h-4 w-4" />
             <span>Volver</span>
           </Button>
 
           <div className="flex items-center space-x-4">
-            <Badge variant="secondary" className="text-lg px-4 py-2">
+            <Badge 
+              variant="secondary" 
+              className="text-lg px-4 py-2 bg-[#1A2F4F] border-2 border-[#233554] text-[#E6F1FF]"
+            >
               {products.length} productos
             </Badge>
 
             <Button
               onClick={() => router.push("/add-post")}
-              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+              className="bg-gradient-to-r from-[#91f2b3] to-[#fcf326] hover:from-[#7fd89f] hover:to-[#e8e01f] text-[#0A1628] font-semibold shadow-lg shadow-[#91f2b3]/20 transition-all"
             >
               <Plus className="h-4 w-4 mr-2" />
               Nuevo Producto
@@ -88,21 +95,23 @@ export default function MyProducts() {
           </div>
         </div>
 
-        <h1 className="text-3xl font-bold gradient-text mb-2">Mis Productos</h1>
-        <p className="text-gray-600">Gestiona todos tus productos publicados</p>
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] bg-clip-text text-transparent mb-2">
+          Mis Productos
+        </h1>
+        <p className="text-[#E6F1FF]/70">Gestiona todos tus productos publicados</p>
       </div>
 
       {/* Products */}
       {products.length > 0 ? (
         <ProductList products={products} />
       ) : (
-        <div className="text-center py-16 glass-effect rounded-2xl">
-          <Package className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-600 mb-2">Aún no has publicado productos</h3>
-          <p className="text-gray-500 mb-6">Comienza a intercambiar publicando tu primer producto</p>
+        <div className="text-center py-16 bg-[#112240]/95 backdrop-blur-md border-2 border-[#233554] rounded-2xl">
+          <Package className="h-16 w-16 text-[#E6F1FF]/50 mx-auto mb-4" />
+          <h3 className="text-xl font-semibold text-[#E6F1FF] mb-2">Aún no has publicado productos</h3>
+          <p className="text-[#E6F1FF]/60 mb-6">Comienza a intercambiar publicando tu primer producto</p>
           <Button
             onClick={() => router.push("/add-post")}
-            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+            className="bg-gradient-to-r from-[#91f2b3] to-[#fcf326] hover:from-[#7fd89f] hover:to-[#e8e01f] text-[#0A1628] font-semibold shadow-lg shadow-[#91f2b3]/20 transition-all"
           >
             <Plus className="h-4 w-4 mr-2" />
             Publicar Primer Producto

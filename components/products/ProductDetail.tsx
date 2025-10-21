@@ -169,9 +169,11 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
 
   if (!product) {
     return (
-      <div className="text-center py-8">
-        <h2 className="text-lg font-bold text-gray-600 mb-2">Producto no encontrado</h2>
-        <Button onClick={() => router.push("/explore")}>Volver a explorar</Button>
+      <div className="text-center py-8 bg-[#0A1628] min-h-screen flex items-center justify-center">
+        <div className="space-y-4">
+          <h2 className="text-lg font-bold text-[#E6F1FF] mb-2">Producto no encontrado</h2>
+          <Button onClick={() => router.push("/explore")} className="bg-gradient-to-r from-[#91f2b3] to-[#fcf326] text-gray-900">Volver a explorar</Button>
+        </div>
       </div>
     )
   }
@@ -179,14 +181,14 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
   const isOwner = user?.email === product.userEmail
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#0A1628]">
       <div className="max-w-4xl mx-auto px-4 py-6">
         {/* Compact Header */}
         <div className="flex items-center justify-between mb-6">
           <Button
             variant="ghost"
             onClick={() => router.back()}
-            className="flex items-center space-x-2 hover:bg-gray-100 text-sm"
+            className="flex items-center space-x-2 bg-[#1A2F4F]/50 border-2 border-[#233554] text-[#E6F1FF] hover:bg-[#1A2F4F] hover:border-[#00D8E8] text-sm"
           >
             <ArrowLeft className="h-4 w-4" />
             <span>Volver</span>
@@ -197,15 +199,15 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
               variant="outline"
               size="sm"
               onClick={() => setIsLiked(!isLiked)}
-              className={`transition-all duration-300 ${
-                isLiked ? "text-red-500 bg-red-50 border-red-200" : "hover:bg-gray-100"
+              className={`transition-all duration-300 border-2 ${
+                isLiked ? "text-[#EF4444] bg-[#EF4444]/10 border-[#EF4444]" : "bg-[#1A2F4F]/50 border-[#233554] text-[#E6F1FF] hover:bg-[#1A2F4F] hover:border-[#00D8E8]"
               }`}
             >
               <Heart className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
 
             </Button>
 
-            <Button variant="outline" size="sm" onClick={handleShare} className="hover:bg-gray-100">
+            <Button variant="outline" size="sm" onClick={handleShare} className="bg-[#1A2F4F]/50 border-2 border-[#233554] text-[#E6F1FF] hover:bg-[#1A2F4F] hover:border-[#00D8E8]">
               <Share2 className="h-4 w-4" />
             </Button>
 
@@ -215,7 +217,7 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
                 size="sm"
                 onClick={() => router.push(`/product/${productId}/edit`)
 }
-                className="hover:bg-gray-100"
+                className="bg-[#1A2F4F]/50 border-2 border-[#233554] text-[#E6F1FF] hover:bg-[#1A2F4F] hover:border-[#00D8E8]"
               >
                 <Edit className="h-4 w-4" />
               </Button>
@@ -225,16 +227,17 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Large Image Section - Mantiene el tamaño original */}
-          <Card className="overflow-hidden border shadow-sm bg-white">
+          <Card className="overflow-hidden border-2 border-[#233554] shadow-xl bg-[#112240]/95">
             <CardContent className="p-0">
               <div className="aspect-square relative group">
                 <Image
-                  src={imageError ? "/placeholder.svg?height=400&width=400" : product.images[0]}
+                  src={imageError ? "/placeholder.svg" : product.images[0]}
                   alt={product.title}
                   fill
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
                   onError={() => setImageError(true)}
                   priority
+                  unoptimized={product.images[0].includes('firebasestorage.googleapis.com')}
                 />
               </div>
             </CardContent>
@@ -243,35 +246,36 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
           {/* Compact Product Information */}
           <div className="space-y-4">
             {/* Main Product Card */}
-            <Card className="border shadow-sm bg-white">
+            <Card className="border-2 border-[#233554] shadow-xl bg-[#112240]/95">
               <CardContent className="p-5">
                 {/* Category and Date */}
                 <div className="flex items-center justify-between mb-4">
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge variant="secondary" className="text-xs bg-gradient-to-r from-[#91f2b3]/20 to-[#fcf326]/20 text-[#E6F1FF] border-2 border-[#233554]">
                     {product.category}
                   </Badge>
-                  <div className="flex items-center text-xs text-gray-500">
+                  <div className="flex items-center text-xs text-[#8FA3C4]">
                     <Calendar className="h-3 w-3 mr-1" />
                     {formatDate(product.createdAt)}
                   </div>
                 </div>
 
                 {/* Title */}
-                <h1 className="text-2xl lg:text-3xl font-bold mb-4 text-gray-900">{product.title}</h1>
+                <h1 className="text-2xl lg:text-3xl font-bold mb-4 text-[#E6F1FF]">{product.title}</h1>
 
                 {/* Price */}
                 {product.price && (
                   <div className="mb-4">
-                    <div className="inline-flex items-center bg-blue-600 text-white px-4 py-2 rounded-xl shadow-md">
-                      <span className="text-2xl font-bold">${product.price}</span>
+                    <div className="inline-flex flex-col items-start bg-gradient-to-r from-[#91f2b3] to-[#fcf326] text-gray-900 px-4 py-2 rounded-xl shadow-md">
+                      <span className="text-xs font-medium opacity-80">Valor aproximado</span>
+                      <span className="text-2xl font-bold">${product.price} MXN</span>
                     </div>
                   </div>
                 )}
 
                 {/* Description */}
                 <div className="mb-4">
-                  <h3 className="text-lg font-semibold mb-2 text-gray-800">Descripción</h3>
-                  <p className="text-gray-700 text-sm leading-relaxed bg-gray-50 p-4 rounded-lg border-l-4 border-blue-500">
+                  <h3 className="text-lg font-semibold mb-2 text-[#E6F1FF]">Descripción</h3>
+                  <p className="text-[#B4C7E7] text-sm leading-relaxed bg-[#1A2F4F]/50 p-4 rounded-lg border-l-4 border-[#00D8E8]">
                     {product.desc}
                   </p>
                 </div>
@@ -279,11 +283,11 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
             </Card>
 
             {/* Seller Information Card */}
-            <Card className="border shadow-sm bg-white">
+            <Card className="border-2 border-[#233554] shadow-xl bg-[#112240]/95">
               <CardContent className="p-5">
                 <div className="flex items-center space-x-4 mb-4">
                   <div className="relative">
-                    <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-200">
+                    <div className="w-12 h-12 rounded-full overflow-hidden bg-[#1A2F4F] border-2 border-[#233554]">
                       {product.userImage ? (
                         <Image
                           src={product.userImage || "/placeholder.svg"}
@@ -293,18 +297,18 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
                           className="object-cover w-full h-full"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                          <User className="h-6 w-6 text-gray-500" />
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-[#91f2b3] to-[#fcf326]">
+                          <User className="h-6 w-6 text-gray-900" />
                         </div>
                       )}
                     </div>
-                    <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                    <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-[#10B981] rounded-full border-2 border-[#112240]"></div>
                   </div>
 
                   <div className="flex-1">
-                    <h4 className="text-lg font-bold text-gray-900">{product.userName}</h4>
-                    <div className="flex items-center text-xs text-gray-500">
-                      <Star className="h-3 w-3 text-yellow-400 mr-1" />
+                    <h4 className="text-lg font-bold text-[#E6F1FF]">{product.userName}</h4>
+                    <div className="flex items-center text-xs text-[#8FA3C4]">
+                      <Star className="h-3 w-3 text-[#fcf326] mr-1" />
                       <span>4.8 (127)</span>
                     </div>
                   </div>
@@ -315,7 +319,7 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
                   {!isOwner && (
                     <Button
                       onClick={handleStartChat}
-                      className="w-full h-10 text-sm font-semibold bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg transition-all duration-300"
+                      className="w-full h-10 text-sm font-semibold bg-gradient-to-r from-[#91f2b3] to-[#fcf326] text-gray-900 shadow-md hover:shadow-lg transition-all duration-300"
                     >
                       <MessageCircle className="h-4 w-4 mr-2" />
                       Contactar Vendedor
@@ -326,7 +330,7 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
                     variant="outline"
                     onClick={() => router.push(`/user/${encodeURIComponent(product.userEmail)}`)
 }
-                    className="w-full h-9 text-sm border-gray-300 hover:border-gray-400 hover:bg-gray-50"
+                    className="w-full h-9 text-sm bg-[#1A2F4F]/50 border-2 border-[#233554] text-[#E6F1FF] hover:bg-[#1A2F4F] hover:border-[#00D8E8]"
                   >
                     <User className="h-4 w-4 mr-2" />
                     Ver Perfil

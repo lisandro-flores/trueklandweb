@@ -160,18 +160,20 @@ export default function ChatList() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="glass-effect rounded-2xl p-6">
-        <h1 className="text-3xl font-bold gradient-text mb-6">Mis Chats</h1>
+      <div className="bg-[#112240]/95 backdrop-blur-md rounded-2xl p-6 border-2 border-[#233554]">
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] bg-clip-text text-transparent mb-6">
+          Mis Chats
+        </h1>
 
         {/* Search */}
         <div className="relative mb-6">
-          <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+          <Search className="absolute left-3 top-3 h-5 w-5 text-[#E6F1FF]/60" />
           <Input
             type="text"
             placeholder="Buscar conversaciones..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 h-12"
+            className="pl-10 h-12 bg-[#0A1628] border-2 border-[#233554] text-[#E6F1FF] placeholder:text-[#E6F1FF]/50 focus:border-[#91f2b3] focus:ring-2 focus:ring-[#91f2b3]/20"
           />
         </div>
 
@@ -185,34 +187,34 @@ export default function ChatList() {
 
               return (
                 <Link key={chat.id} href={`/chats/${chat.id}`}>
-                  <Card className="hover:shadow-md transition-all duration-200 hover:-translate-y-1 glass-effect border-0">
+                  <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-[#0A1628]/80 backdrop-blur-sm border-2 border-[#233554] hover:border-[#91f2b3] hover:shadow-[#91f2b3]/10">
                     <CardContent className="p-4">
                       <div className="flex items-center space-x-4">
                         <div className="relative">
-                          <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-200">
+                          <div className="w-12 h-12 rounded-full overflow-hidden bg-[#1A2F4F] border-2 border-[#233554]">
                             <div className="w-full h-full flex items-center justify-center">
-                              <User className="h-6 w-6 text-gray-500" />
+                              <User className="h-6 w-6 text-[#91f2b3]" />
                             </div>
                           </div>
-                          {isUnread && <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full"></div>}
+                          {isUnread && <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#EF4444] rounded-full border-2 border-[#0A1628]"></div>}
                         </div>
 
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-1">
-                            <h3 className={`font-semibold truncate ${isUnread ? "text-gray-900" : "text-gray-700"}`}>
+                            <h3 className={`font-semibold truncate ${isUnread ? "text-[#E6F1FF]" : "text-[#E6F1FF]/80"}`}>
                               {otherUserName}
                             </h3>
-                            <span className="text-xs text-gray-500">{formatTime(chat.lastMessageTime)}</span>
+                            <span className="text-xs text-[#E6F1FF]/50">{formatTime(chat.lastMessageTime)}</span>
                           </div>
 
-                          <p className={`text-sm truncate ${isUnread ? "text-gray-900 font-medium" : "text-gray-600"}`}>
+                          <p className={`text-sm truncate ${isUnread ? "text-[#E6F1FF] font-medium" : "text-[#E6F1FF]/60"}`}>
                             {chat.lastMessageSender === user?.email ? "Tú: " : ""}
                             {chat.lastMessage}
                           </p>
                         </div>
 
                         {isUnread && chat.unreadCount && (
-                          <Badge variant="destructive" className="h-5 w-5 p-0 text-xs">
+                          <Badge variant="destructive" className="h-5 w-5 p-0 text-xs bg-[#EF4444] text-white border-0">
                             {chat.unreadCount}
                           </Badge>
                         )}
@@ -220,14 +222,14 @@ export default function ChatList() {
                         {/* Opciones del chat */}
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
+                            <Button variant="ghost" className="h-8 w-8 p-0 text-[#E6F1FF]/70 hover:text-[#91f2b3] hover:bg-[#1A2F4F]">
                               <MoreVertical className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
+                          <DropdownMenuContent align="end" className="bg-[#112240] border-2 border-[#233554]">
                             <DropdownMenuItem
                               onClick={(e) => handleDeleteChat(chat.id, e)}
-                              className="text-red-600 focus:text-red-600"
+                              className="text-[#EF4444] focus:text-[#EF4444] focus:bg-[#1A2F4F] cursor-pointer"
                             >
                               <Trash2 className="mr-2 h-4 w-4" />
                               Eliminar chat
@@ -242,11 +244,11 @@ export default function ChatList() {
             })
           ) : (
             <div className="text-center py-16">
-              <MessageCircle className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-600 mb-2">
+              <MessageCircle className="h-16 w-16 text-[#E6F1FF]/30 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-[#E6F1FF] mb-2">
                 {searchTerm ? "No se encontraron conversaciones" : "No tienes conversaciones"}
               </h3>
-              <p className="text-gray-500">
+              <p className="text-[#E6F1FF]/60">
                 {searchTerm
                   ? "Intenta con otros términos de búsqueda"
                   : "Comienza a intercambiar productos para iniciar conversaciones"}

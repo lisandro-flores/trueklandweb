@@ -48,7 +48,7 @@ export default function ProfilePage() {
           <div className="relative mx-auto w-24 h-24">
             <div className="absolute inset-0 bg-gradient-to-r from-[#91f2b3] to-[#fcf326] rounded-full blur-xl opacity-30 animate-pulse"></div>
             <div className="relative w-24 h-24 bg-gradient-to-br from-[#91f2b3] to-[#fcf326] rounded-full flex items-center justify-center shadow-2xl">
-              <User className="w-12 h-12 text-gray-800" />
+              <User className="w-12 h-12 text-[#0A1628]" />
             </div>
           </div>
 
@@ -63,7 +63,7 @@ export default function ProfilePage() {
             <h3 className="text-2xl font-bold bg-gradient-to-r from-[#91f2b3] to-[#fcf326] bg-clip-text text-transparent">
               Cargando tu perfil
             </h3>
-            <p className="text-gray-600 text-lg">Preparando tu espacio personal...</p>
+            <p className="text-[#B4C7E7] text-lg">Preparando tu espacio personal...</p>
 
             {/* Loading Steps */}
             <div className="flex items-center justify-center space-x-4 mt-6">
@@ -110,7 +110,7 @@ export default function ProfilePage() {
             <h3 className="text-3xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
               Acceso Restringido
             </h3>
-            <p className="text-gray-600 text-lg leading-relaxed">
+            <p className="text-[#B4C7E7] text-lg leading-relaxed">
               Necesitas iniciar sesión para acceder a tu perfil personal
             </p>
           </div>
@@ -151,7 +151,7 @@ export default function ProfilePage() {
         <DashboardLayout>
           {/* Welcome Header */}
           <div className="mb-8">
-            <div className="backdrop-blur-sm bg-white/60 rounded-3xl border border-white/30 shadow-xl p-6 sm:p-8">
+            <div className="backdrop-blur-sm bg-[#112240]/60 rounded-3xl border border-[#233554] shadow-xl p-6 sm:p-8">
               <div className="flex items-center space-x-4">
                 {/* User Avatar */}
                 <div className="relative">
@@ -162,14 +162,14 @@ export default function ProfilePage() {
                         alt={user.displayName || "Avatar"}
                         width={64}
                         height={64}
-                        className="rounded-full border-3 border-white/50 shadow-lg"
+                        className="rounded-full border-3 border-[#233554] shadow-lg"
                       />
-                      <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-[#91f2b3] rounded-full border-2 border-white flex items-center justify-center">
-                        <div className="w-2 h-2 bg-white rounded-full"></div>
+                      <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-[#91f2b3] rounded-full border-2 border-[#112240] flex items-center justify-center">
+                        <div className="w-2 h-2 bg-[#112240] rounded-full"></div>
                       </div>
                     </div>
                   ) : (
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#91f2b3] to-[#fcf326] flex items-center justify-center text-2xl font-bold text-gray-800 border-3 border-white/50 shadow-lg">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#91f2b3] to-[#fcf326] flex items-center justify-center text-2xl font-bold text-[#0A1628] border-3 border-[#233554] shadow-lg">
                       {user.displayName?.[0] || "U"}
                     </div>
                   )}
@@ -183,14 +183,14 @@ export default function ProfilePage() {
                       ¡Bienvenido de vuelta!
                     </h1>
                   </div>
-                  <p className="text-gray-600 text-lg">
+                  <p className="text-[#B4C7E7] text-lg">
                     {user.displayName || "Usuario"}, gestiona tu perfil y configuración
                   </p>
                 </div>
 
                 {/* Status Badge */}
                 <div className="hidden sm:block">
-                  <div className="bg-gradient-to-r from-[#91f2b3]/20 to-[#fcf326]/20 text-gray-800 px-4 py-2 rounded-full text-sm font-medium border border-[#91f2b3]/30">
+                  <div className="bg-gradient-to-r from-[#91f2b3]/20 to-[#fcf326]/20 text-[#E6F1FF] px-4 py-2 rounded-full text-sm font-medium border border-[#91f2b3]/30">
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 bg-[#91f2b3] rounded-full"></div>
                       <span>En línea</span>
@@ -202,7 +202,7 @@ export default function ProfilePage() {
           </div>
 
           {/* Profile Content */}
-          <div className="backdrop-blur-sm bg-white/40 rounded-3xl border border-white/30 shadow-lg overflow-hidden">
+          <div className="backdrop-blur-sm bg-[#112240]/40 rounded-3xl border border-[#233554] shadow-lg overflow-hidden">
             <ProfileContent />
           </div>
         </DashboardLayout>

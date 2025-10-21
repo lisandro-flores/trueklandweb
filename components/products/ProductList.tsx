@@ -53,15 +53,15 @@ export default function ProductList({ products, viewMode = "grid", showHeader = 
   if (products.length === 0) {
     return (
       <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl opacity-50"></div>
-        <div className="relative backdrop-blur-sm bg-white/60 rounded-3xl border border-white/30 shadow-lg">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#112240] to-[#1A2F4F] rounded-3xl opacity-50"></div>
+        <div className="relative backdrop-blur-md bg-[#112240]/80 rounded-3xl border-2 border-[#233554] shadow-lg">
           <div className="text-center py-16 sm:py-24 px-6">
-            <div className="mx-auto w-24 h-24 bg-gradient-to-br from-[#91f2b3]/30 to-[#fcf326]/30 rounded-full flex items-center justify-center mb-8 relative">
+            <div className="mx-auto w-24 h-24 bg-gradient-to-br from-[#91f2b3]/30 to-[#fcf326]/30 rounded-full flex items-center justify-center mb-8 relative border-2 border-[#233554]">
               <Package className="h-12 w-12 text-[#91f2b3]" />
               <div className="absolute inset-0 bg-gradient-to-r from-[#91f2b3] to-[#fcf326] rounded-full blur-xl opacity-20 animate-pulse"></div>
             </div>
-            <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">📦 No hay productos disponibles</h3>
-            <p className="text-gray-600 text-lg">Aún no se han agregado productos a esta sección</p>
+            <h3 className="text-2xl sm:text-3xl font-bold text-[#E6F1FF] mb-4">📦 No hay productos disponibles</h3>
+            <p className="text-[#B4C7E7] text-lg">Aún no se han agregado productos a esta sección</p>
           </div>
         </div>
       </div>
@@ -77,11 +77,11 @@ export default function ProductList({ products, viewMode = "grid", showHeader = 
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
               <div className="w-3 h-3 bg-gradient-to-r from-[#91f2b3] to-[#fcf326] rounded-full animate-pulse"></div>
-              <h2 className="text-xl font-semibold text-gray-800">Productos Destacados</h2>
+              <h2 className="text-xl font-semibold text-[#E6F1FF]">Productos Destacados</h2>
             </div>
             <Badge
               variant="secondary"
-              className="bg-gradient-to-r from-[#91f2b3]/20 to-[#fcf326]/20 text-gray-800 border-0 px-3 py-1 text-sm font-medium rounded-full"
+              className="bg-gradient-to-r from-[#91f2b3]/20 to-[#fcf326]/20 text-[#E6F1FF] border-2 border-[#233554] px-3 py-1 text-sm font-medium rounded-full"
             >
               <TrendingUp className="w-4 h-4 mr-1" />
               {products.length} productos
@@ -90,16 +90,16 @@ export default function ProductList({ products, viewMode = "grid", showHeader = 
 
           {/* Right Side - View Toggle */}
           <div className="flex items-center space-x-3">
-            <span className="text-sm text-gray-600 hidden sm:block">Vista:</span>
-            <div className="flex items-center bg-white/80 backdrop-blur-sm rounded-xl border border-white/30 p-1 shadow-sm">
+            <span className="text-sm text-[#B4C7E7] hidden sm:block">Vista:</span>
+            <div className="flex items-center bg-[#1A2F4F]/80 backdrop-blur-sm rounded-xl border-2 border-[#233554] p-1 shadow-sm">
               <Button
                 variant={currentViewMode === "grid" ? "default" : "ghost"}
                 size="sm"
                 onClick={() => setCurrentViewMode("grid")}
                 className={`h-8 px-3 rounded-lg transition-all duration-300 ${
                   currentViewMode === "grid"
-                    ? "bg-gradient-to-r from-[#91f2b3] to-[#fcf326] text-gray-800 shadow-md"
-                    : "text-gray-600 hover:text-[#91f2b3]"
+                    ? "bg-gradient-to-r from-[#91f2b3] to-[#fcf326] text-gray-900 shadow-md"
+                    : "text-[#B4C7E7] hover:text-[#91f2b3] hover:bg-[#1A2F4F]"
                 }`}
               >
                 <Grid3X3 className="h-4 w-4" />
@@ -110,8 +110,8 @@ export default function ProductList({ products, viewMode = "grid", showHeader = 
                 onClick={() => setCurrentViewMode("list")}
                 className={`h-8 px-3 rounded-lg transition-all duration-300 ${
                   currentViewMode === "list"
-                    ? "bg-gradient-to-r from-[#91f2b3] to-[#fcf326] text-gray-800 shadow-md"
-                    : "text-gray-600 hover:text-[#91f2b3]"
+                    ? "bg-gradient-to-r from-[#91f2b3] to-[#fcf326] text-gray-900 shadow-md"
+                    : "text-[#B4C7E7] hover:text-[#91f2b3] hover:bg-[#1A2F4F]"
                 }`}
               >
                 <List className="h-4 w-4" />
@@ -143,7 +143,7 @@ export default function ProductList({ products, viewMode = "grid", showHeader = 
                   <div className="absolute inset-0 bg-gradient-to-r from-[#91f2b3] to-[#fcf326] rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-all duration-500 scale-95 group-hover:scale-100"></div>
 
                   {/* Product Card */}
-                  <div className="relative backdrop-blur-sm bg-white/60 rounded-2xl border border-white/30 shadow-lg group-hover:shadow-2xl transition-all duration-300 overflow-hidden">
+                  <div className="relative backdrop-blur-sm bg-[#112240]/60 rounded-2xl border border-[#233554] shadow-lg group-hover:shadow-2xl transition-all duration-300 overflow-hidden">
                     <ProductCard product={product} />
                   </div>
 
@@ -176,7 +176,7 @@ export default function ProductList({ products, viewMode = "grid", showHeader = 
                 </Button>
               </div>
 
-              <p className="text-gray-500 text-sm mt-4">
+              <p className="text-[#E6F1FF]/50 text-sm mt-4">
                 Mostrando {visibleProducts.length} de {products.length} productos
               </p>
             </div>
@@ -188,7 +188,7 @@ export default function ProductList({ products, viewMode = "grid", showHeader = 
               <Button
                 onClick={() => setShowAll(false)}
                 variant="outline"
-                className="bg-white/80 backdrop-blur-sm border-white/30 hover:bg-white hover:shadow-lg transition-all duration-300"
+                className="bg-[#1A2F4F]/50 backdrop-blur-sm border-[#233554] hover:bg-[#1A2F4F] hover:shadow-lg transition-all duration-300"
               >
                 Mostrar menos productos
               </Button>
@@ -199,8 +199,8 @@ export default function ProductList({ products, viewMode = "grid", showHeader = 
 
       {/* Bottom Stats */}
       {showHeader && products.length > 0 && (
-        <div className="backdrop-blur-sm bg-white/40 rounded-2xl border border-white/30 shadow-lg p-4">
-          <div className="flex items-center justify-center space-x-6 text-sm text-gray-600">
+        <div className="backdrop-blur-sm bg-[#112240]/40 rounded-2xl border border-[#233554] shadow-lg p-4">
+          <div className="flex items-center justify-center space-x-6 text-sm text-[#B4C7E7]">
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-[#91f2b3] rounded-full animate-pulse"></div>
               <span>Productos verificados</span>

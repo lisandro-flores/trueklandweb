@@ -42,35 +42,35 @@ export default function LoginPage() {
       </div>
 
       {/* Desktop Layout */}
-      <div className="hidden lg:flex min-h-screen">
+      <div className="hidden lg:flex min-h-screen bg-[#0A1628]">
         {/* Left Side - Image and Branding */}
         <div className="flex-1 relative overflow-hidden">
-          <Image src={imagen || "/placeholder.svg"} alt="TrueKland" fill className="object-cover" priority />
+          <Image src={imagen || "/placeholder.svg"} alt="TrueKland" fill className="object-cover opacity-40" priority />
 
-          {/* Gradient Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-white/20" />
-          <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-blue-500/20" />
+          {/* Stronger Gradient Overlays for Better Contrast */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0A1628]/90 via-[#112240]/80 to-[#0A1628]/90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#91f2b3]/5 to-[#fcf326]/5" />
 
           {/* Left Side Content */}
-          <div className="absolute inset-0 flex flex-col justify-center items-start p-16 text-gray-800">
+          <div className="absolute inset-0 flex flex-col justify-center items-start p-16 text-white">
             {/* Logo/Brand */}
             <div className="mb-12">
-              <div className="inline-flex items-center space-x-3 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full border border-white/50 shadow-lg mb-6">
+              <div className="inline-flex items-center space-x-3 bg-[#112240]/95 backdrop-blur-md px-6 py-3 rounded-full border border-[#233554] shadow-2xl mb-6">
                 <Sparkles className="w-6 h-6 text-[#91f2b3]" />
-                <span className="text-lg font-semibold text-gray-800">TrueKland</span>
+                <span className="text-lg font-semibold text-[#E6F1FF]">TrueKland</span>
               </div>
 
               <h1 className="text-6xl xl:text-7xl font-bold leading-tight mb-6">
-                <span className="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 bg-clip-text text-transparent">
+                <span className="text-[#E6F1FF] drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]">
                   Tu Comunidad
                 </span>
                 <br />
-                <span className="bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                   de Intercambio
                 </span>
               </h1>
 
-              <p className="text-xl text-gray-700 font-light max-w-lg leading-relaxed mb-8">
+              <p className="text-xl text-[#B4C7E7] font-light max-w-lg leading-relaxed mb-8 drop-shadow-lg">
                 Donde cada objeto tiene una segunda oportunidad y cada intercambio cuenta una historia única
               </p>
             </div>
@@ -78,56 +78,56 @@ export default function LoginPage() {
             {/* Features List */}
             <div className="space-y-4 mb-12">
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 bg-[#112240]/95 backdrop-blur-md rounded-full flex items-center justify-center shadow-2xl border border-[#233554]">
                   <Repeat className="w-6 h-6 text-[#91f2b3]" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-800">Intercambios Seguros</h3>
-                  <p className="text-gray-600 text-sm">Sistema de verificación y confianza</p>
+                  <h3 className="text-lg font-semibold text-[#E6F1FF] drop-shadow-md">Intercambios Seguros</h3>
+                  <p className="text-[#B4C7E7] text-sm drop-shadow-md">Sistema de verificación y confianza</p>
                 </div>
               </div>
 
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 bg-[#112240]/95 backdrop-blur-md rounded-full flex items-center justify-center shadow-2xl border border-[#233554]">
                   <Users className="w-6 h-6 text-[#fcf326]" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-800">Comunidad Activa</h3>
-                  <p className="text-gray-600 text-sm">Miles de usuarios intercambiando</p>
+                  <h3 className="text-lg font-semibold text-[#E6F1FF] drop-shadow-md">Comunidad Activa</h3>
+                  <p className="text-[#B4C7E7] text-sm drop-shadow-md">Miles de usuarios intercambiando</p>
                 </div>
               </div>
 
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg">
-                  <Globe className="w-6 h-6 text-blue-500" />
+                <div className="w-12 h-12 bg-[#112240]/95 backdrop-blur-md rounded-full flex items-center justify-center shadow-2xl border border-[#233554]">
+                  <Globe className="w-6 h-6 text-[#00D8E8]" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-800">Alcance Global</h3>
-                  <p className="text-gray-600 text-sm">Conecta con personas de todo el mundo</p>
+                  <h3 className="text-lg font-semibold text-[#E6F1FF] drop-shadow-md">Alcance Global</h3>
+                  <p className="text-[#B4C7E7] text-sm drop-shadow-md">Conecta con personas de todo el mundo</p>
                 </div>
               </div>
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-gray-800 mb-1">1.5K+</div>
-                <div className="text-sm text-gray-600">Usuarios</div>
+              <div className="text-center bg-[#112240]/50 backdrop-blur-sm rounded-xl p-4 border border-[#233554]">
+                <div className="text-3xl font-bold text-[#E6F1FF] mb-1 drop-shadow-lg">1.5K+</div>
+                <div className="text-sm text-[#B4C7E7] drop-shadow-md">Usuarios</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-gray-800 mb-1">8.2K+</div>
-                <div className="text-sm text-gray-600">Intercambios</div>
+              <div className="text-center bg-[#112240]/50 backdrop-blur-sm rounded-xl p-4 border border-[#233554]">
+                <div className="text-3xl font-bold text-[#E6F1FF] mb-1 drop-shadow-lg">8.2K+</div>
+                <div className="text-sm text-[#B4C7E7] drop-shadow-md">Intercambios</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-gray-800 mb-1">99.2%</div>
-                <div className="text-sm text-gray-600">Satisfacción</div>
+              <div className="text-center bg-[#112240]/50 backdrop-blur-sm rounded-xl p-4 border border-[#233554]">
+                <div className="text-3xl font-bold text-[#E6F1FF] mb-1 drop-shadow-lg">99.2%</div>
+                <div className="text-sm text-[#B4C7E7] drop-shadow-md">Satisfacción</div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Right Side - Forms */}
-        <div className="flex-1 flex items-center justify-center p-16 bg-white/90 backdrop-blur-sm">
+        <div className="flex-1 flex items-center justify-center p-16 bg-[#112240]/90 backdrop-blur-sm border-l border-[#233554]">
           <div className="w-full max-w-lg">
             <div
               className={`transition-all duration-1000 ${
@@ -139,22 +139,22 @@ export default function LoginPage() {
                 <h2 className="text-4xl font-bold bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] bg-clip-text text-transparent mb-4">
                   {showSignIn ? "¡Bienvenido de vuelta!" : "¡Únete a nosotros!"}
                 </h2>
-                <p className="text-gray-600 text-lg">
+                <p className="text-[#B4C7E7] text-lg">
                   {showSignIn ? "Inicia sesión para continuar tu aventura" : "Crea tu cuenta y comienza a intercambiar"}
                 </p>
               </div>
 
               {/* Form Toggle */}
               <div className="flex items-center justify-center mb-10">
-                <div className="bg-gradient-to-r from-gray-100 to-gray-200 p-1.5 rounded-full shadow-inner">
+                <div className="bg-[#0A1628] p-1.5 rounded-full shadow-inner border border-[#233554]">
                   <div className="flex">
                     <Button
                       variant={showSignIn ? "default" : "ghost"}
                       onClick={() => setShowSignIn(true)}
                       className={`px-8 py-3 rounded-full transition-all duration-300 font-medium ${
                         showSignIn
-                          ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg transform scale-105"
-                          : "text-gray-600 hover:text-blue-600 hover:bg-white/50"
+                          ? "bg-gradient-to-r from-[#00D8E8] to-[#00A0B8] text-white shadow-lg transform scale-105"
+                          : "text-[#B4C7E7] hover:text-[#E6F1FF] hover:bg-[#1A2F4F]"
                       }`}
                     >
                       Iniciar Sesión
@@ -164,8 +164,8 @@ export default function LoginPage() {
                       onClick={() => setShowSignIn(false)}
                       className={`px-8 py-3 rounded-full transition-all duration-300 font-medium ${
                         !showSignIn
-                          ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg transform scale-105"
-                          : "text-gray-600 hover:text-purple-600 hover:bg-white/50"
+                          ? "bg-gradient-to-r from-[#91f2b3] to-[#fcf326] text-gray-900 shadow-lg transform scale-105"
+                          : "text-[#B4C7E7] hover:text-[#E6F1FF] hover:bg-[#1A2F4F]"
                       }`}
                     >
                       Registrarse
@@ -175,7 +175,7 @@ export default function LoginPage() {
               </div>
 
               {/* Forms */}
-              <div className="backdrop-blur-sm bg-white/80 rounded-3xl border border-white/40 shadow-xl p-8">
+              <div className="backdrop-blur-sm bg-[#0A1628]/80 rounded-3xl border border-[#233554] shadow-xl p-8">
                 <div
                   className={`transition-all duration-700 ${
                     isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
@@ -187,13 +187,13 @@ export default function LoginPage() {
 
               {/* Alternative Action */}
               <div className="text-center mt-8">
-                <p className="text-gray-600 mb-4 text-lg">
+                <p className="text-[#B4C7E7] mb-4 text-lg">
                   {showSignIn ? "¿Nuevo en TrueKland?" : "¿Ya tienes cuenta?"}
                 </p>
                 <Button
                   onClick={toggleForm}
                   variant="outline"
-                  className="bg-white/80 backdrop-blur-sm border-white/40 hover:bg-white hover:shadow-lg transition-all duration-300 group px-8 py-3 rounded-full text-lg font-medium"
+                  className="bg-[#112240]/80 backdrop-blur-sm border-[#233554] hover:bg-[#1A2F4F] hover:border-[#00D8E8] transition-all duration-300 group px-8 py-3 rounded-full text-lg font-medium text-[#E6F1FF]"
                 >
                   {showSignIn ? "Crear cuenta gratuita" : "Iniciar sesión"}
                   <ArrowRight className="w-5 h-5 ml-3 transition-transform group-hover:translate-x-1" />
@@ -201,17 +201,17 @@ export default function LoginPage() {
               </div>
 
               {/* Trust Indicators */}
-              <div className="flex items-center justify-center space-x-6 mt-8 text-sm text-gray-600">
+              <div className="flex items-center justify-center space-x-6 mt-8 text-sm text-[#B4C7E7]">
                 <div className="flex items-center space-x-2">
-                  <Shield className="w-4 h-4 text-green-500" />
+                  <Shield className="w-4 h-4 text-[#10B981]" />
                   <span>Seguro</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Heart className="w-4 h-4 text-red-500" />
+                  <Heart className="w-4 h-4 text-[#EF4444]" />
                   <span>Confiable</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Zap className="w-4 h-4 text-yellow-500" />
+                  <Zap className="w-4 h-4 text-[#fcf326]" />
                   <span>Rápido</span>
                 </div>
               </div>
@@ -221,54 +221,54 @@ export default function LoginPage() {
       </div>
 
       {/* Mobile Layout */}
-      <div className="lg:hidden min-h-screen">
+      <div className="lg:hidden min-h-screen bg-[#0A1628]">
         {/* Hero Image Section - Optimized for Mobile */}
         <div className="relative h-[50vh] sm:h-[60vh] w-full overflow-hidden">
-          <Image src={imagen || "/placeholder.svg"} alt="TrueKland" fill className="object-cover" priority />
+          <Image src={imagen || "/placeholder.svg"} alt="TrueKland" fill className="object-cover opacity-40" priority />
 
-          {/* Mobile Gradient Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-white/10" />
-          <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-blue-500/20" />
+          {/* Stronger Mobile Gradient Overlays */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0A1628]/95 via-[#112240]/80 to-[#0A1628]/90" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#91f2b3]/5 to-[#fcf326]/5" />
 
           {/* Mobile Hero Content */}
           <div className="absolute inset-0 flex items-end justify-center pb-8">
-            <div className="text-center text-gray-800 space-y-4 px-4 max-w-sm mx-auto">
+            <div className="text-center text-white space-y-4 px-4 max-w-sm mx-auto">
               {/* Mobile Badge */}
-              <div className="inline-flex items-center space-x-2 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium border border-white/50 shadow-lg">
+              <div className="inline-flex items-center space-x-2 bg-[#112240]/95 backdrop-blur-md px-4 py-2 rounded-full text-sm font-medium border border-[#233554] shadow-2xl">
                 <Sparkles className="w-4 h-4 text-[#91f2b3]" />
-                <span className="text-gray-800">TrueKland</span>
+                <span className="text-[#E6F1FF]">TrueKland</span>
               </div>
 
               {/* Mobile Title */}
               <div className="space-y-2">
-                <h1 className="text-3xl sm:text-4xl font-bold leading-tight">
-                  <span className="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 bg-clip-text text-transparent">
+                <h1 className="text-3xl sm:text-4xl font-bold leading-tight drop-shadow-2xl">
+                  <span className="text-[#E6F1FF] drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]">
                     Tu Comunidad
                   </span>
                   <br />
-                  <span className="bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                     de Intercambio
                   </span>
                 </h1>
 
-                <p className="text-base sm:text-lg text-gray-700 font-light leading-relaxed">
+                <p className="text-base sm:text-lg text-[#B4C7E7] font-light leading-relaxed drop-shadow-lg">
                   Intercambia, conecta y descubre
                 </p>
               </div>
 
               {/* Mobile Feature Pills */}
               <div className="flex flex-wrap justify-center gap-2 mt-4">
-                <div className="flex items-center space-x-1 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/50 text-xs shadow-sm">
+                <div className="flex items-center space-x-1 bg-[#112240]/95 backdrop-blur-md px-3 py-1.5 rounded-full border border-[#233554] text-xs shadow-lg">
                   <Star className="w-3 h-3 text-[#fcf326]" />
-                  <span className="text-gray-700">Seguro</span>
+                  <span className="text-[#E6F1FF]">Seguro</span>
                 </div>
-                <div className="flex items-center space-x-1 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/50 text-xs shadow-sm">
+                <div className="flex items-center space-x-1 bg-[#112240]/95 backdrop-blur-md px-3 py-1.5 rounded-full border border-[#233554] text-xs shadow-lg">
                   <Users className="w-3 h-3 text-[#91f2b3]" />
-                  <span className="text-gray-700">Activo</span>
+                  <span className="text-[#E6F1FF]">Activo</span>
                 </div>
-                <div className="flex items-center space-x-1 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/50 text-xs shadow-sm">
-                  <Shield className="w-3 h-3 text-blue-500" />
-                  <span className="text-gray-700">Gratuito</span>
+                <div className="flex items-center space-x-1 bg-[#112240]/95 backdrop-blur-md px-3 py-1.5 rounded-full border border-[#233554] text-xs shadow-lg">
+                  <Shield className="w-3 h-3 text-[#00D8E8]" />
+                  <span className="text-[#E6F1FF]">Gratuito</span>
                 </div>
               </div>
             </div>
@@ -276,7 +276,7 @@ export default function LoginPage() {
 
           {/* Mobile Wave */}
           <div className="absolute bottom-0 left-0 right-0">
-            <svg viewBox="0 0 1200 120" className="w-full h-12 fill-white">
+            <svg viewBox="0 0 1200 120" className="w-full h-12 fill-[#0A1628]">
               <path d="M0,60 C300,120 900,0 1200,60 L1200,120 L0,120 Z"></path>
             </svg>
           </div>
@@ -285,7 +285,7 @@ export default function LoginPage() {
         {/* Mobile Main Content */}
         <div className="relative z-10 px-4 py-6 -mt-6">
           <div
-            className={`backdrop-blur-sm bg-white/95 rounded-3xl border border-white/40 shadow-2xl overflow-hidden transition-all duration-1000 ${
+            className={`backdrop-blur-sm bg-[#112240]/95 rounded-3xl border border-[#233554] shadow-2xl overflow-hidden transition-all duration-1000 ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
@@ -296,21 +296,21 @@ export default function LoginPage() {
                   {showSignIn ? "¡Bienvenido!" : "¡Únete hoy!"}
                 </h2>
 
-                <p className="text-gray-600 text-sm sm:text-base">
+                <p className="text-[#B4C7E7] text-sm sm:text-base">
                   {showSignIn ? "Inicia sesión para continuar" : "Crea tu cuenta gratuita"}
                 </p>
 
                 {/* Mobile Feature Pills */}
                 <div className="flex flex-wrap justify-center gap-2 mt-4">
-                  <div className="flex items-center space-x-2 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 px-3 py-1.5 rounded-full text-xs font-medium border border-green-200">
+                  <div className="flex items-center space-x-2 bg-gradient-to-r from-[#91f2b3]/20 to-[#10B981]/20 text-[#91f2b3] px-3 py-1.5 rounded-full text-xs font-medium border border-[#91f2b3]/30">
                     <Repeat className="w-3 h-3" />
                     <span>Intercambia</span>
                   </div>
-                  <div className="flex items-center space-x-2 bg-gradient-to-r from-yellow-100 to-amber-100 text-yellow-700 px-3 py-1.5 rounded-full text-xs font-medium border border-yellow-200">
+                  <div className="flex items-center space-x-2 bg-gradient-to-r from-[#fcf326]/20 to-[#F59E0B]/20 text-[#fcf326] px-3 py-1.5 rounded-full text-xs font-medium border border-[#fcf326]/30">
                     <Users className="w-3 h-3" />
                     <span>Conecta</span>
                   </div>
-                  <div className="flex items-center space-x-2 bg-gradient-to-r from-blue-100 to-sky-100 text-blue-700 px-3 py-1.5 rounded-full text-xs font-medium border border-blue-200">
+                  <div className="flex items-center space-x-2 bg-gradient-to-r from-[#00D8E8]/20 to-[#3B82F6]/20 text-[#00D8E8] px-3 py-1.5 rounded-full text-xs font-medium border border-[#00D8E8]/30">
                     <Search className="w-3 h-3" />
                     <span>Descubre</span>
                   </div>
@@ -319,23 +319,23 @@ export default function LoginPage() {
 
               {/* Mobile Stats */}
               <div className="grid grid-cols-3 gap-3">
-                <div className="text-center p-3 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200">
-                  <div className="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <div className="text-center p-3 rounded-xl bg-[#0A1628]/50 border border-[#233554]">
+                  <div className="text-lg sm:text-xl font-bold bg-gradient-to-r from-[#00D8E8] to-[#00A0B8] bg-clip-text text-transparent">
                     1.5K+
                   </div>
-                  <div className="text-xs text-gray-600">Usuarios</div>
+                  <div className="text-xs text-[#8FA3C4]">Usuarios</div>
                 </div>
-                <div className="text-center p-3 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200">
-                  <div className="text-lg sm:text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                <div className="text-center p-3 rounded-xl bg-[#0A1628]/50 border border-[#233554]">
+                  <div className="text-lg sm:text-xl font-bold bg-gradient-to-r from-[#91f2b3] to-[#fcf326] bg-clip-text text-transparent">
                     8.2K+
                   </div>
-                  <div className="text-xs text-gray-600">Intercambios</div>
+                  <div className="text-xs text-[#8FA3C4]">Intercambios</div>
                 </div>
-                <div className="text-center p-3 rounded-xl bg-gradient-to-br from-pink-50 to-pink-100 border border-pink-200">
-                  <div className="text-lg sm:text-xl font-bold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent">
+                <div className="text-center p-3 rounded-xl bg-[#0A1628]/50 border border-[#233554]">
+                  <div className="text-lg sm:text-xl font-bold bg-gradient-to-r from-[#8B5CF6] to-[#EF4444] bg-clip-text text-transparent">
                     99.2%
                   </div>
-                  <div className="text-xs text-gray-600">Satisfacción</div>
+                  <div className="text-xs text-[#8FA3C4]">Satisfacción</div>
                 </div>
               </div>
             </div>
@@ -344,15 +344,15 @@ export default function LoginPage() {
             <div className="px-4 pb-6">
               {/* Mobile Form Toggle */}
               <div className="flex items-center justify-center mb-6">
-                <div className="bg-gradient-to-r from-gray-100 to-gray-200 p-1 rounded-full shadow-inner w-full max-w-xs">
+                <div className="bg-[#0A1628] p-1 rounded-full shadow-inner w-full max-w-xs border border-[#233554]">
                   <div className="flex">
                     <Button
                       variant={showSignIn ? "default" : "ghost"}
                       onClick={() => setShowSignIn(true)}
                       className={`flex-1 py-2.5 rounded-full transition-all duration-300 font-medium text-sm ${
                         showSignIn
-                          ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg transform scale-105"
-                          : "text-gray-600 hover:text-blue-600 hover:bg-white/50"
+                          ? "bg-gradient-to-r from-[#00D8E8] to-[#00A0B8] text-white shadow-lg transform scale-105"
+                          : "text-[#B4C7E7] hover:text-[#E6F1FF] hover:bg-[#1A2F4F]"
                       }`}
                     >
                       Iniciar Sesión
@@ -362,8 +362,8 @@ export default function LoginPage() {
                       onClick={() => setShowSignIn(false)}
                       className={`flex-1 py-2.5 rounded-full transition-all duration-300 font-medium text-sm ${
                         !showSignIn
-                          ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg transform scale-105"
-                          : "text-gray-600 hover:text-purple-600 hover:bg-white/50"
+                          ? "bg-gradient-to-r from-[#91f2b3] to-[#fcf326] text-gray-900 shadow-lg transform scale-105"
+                          : "text-[#B4C7E7] hover:text-[#E6F1FF] hover:bg-[#1A2F4F]"
                       }`}
                     >
                       Registrarse
@@ -373,7 +373,7 @@ export default function LoginPage() {
               </div>
 
               {/* Mobile Forms Container */}
-              <div className="backdrop-blur-sm bg-white/80 rounded-2xl border border-white/40 shadow-xl p-4">
+              <div className="backdrop-blur-sm bg-[#0A1628]/80 rounded-2xl border border-[#233554] shadow-xl p-4">
                 <div
                   className={`transition-all duration-700 ${
                     isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
@@ -385,13 +385,13 @@ export default function LoginPage() {
 
               {/* Mobile Alternative Action */}
               <div className="text-center mt-6">
-                <p className="text-gray-600 mb-3 text-sm">
+                <p className="text-[#B4C7E7] mb-3 text-sm">
                   {showSignIn ? "¿Nuevo en TrueKland?" : "¿Ya tienes cuenta?"}
                 </p>
                 <Button
                   onClick={toggleForm}
                   variant="outline"
-                  className="bg-white/80 backdrop-blur-sm border-white/40 hover:bg-white hover:shadow-lg transition-all duration-300 group px-6 py-2.5 rounded-full font-medium text-sm w-full sm:w-auto"
+                  className="bg-[#112240]/80 backdrop-blur-sm border-[#233554] hover:bg-[#1A2F4F] hover:border-[#00D8E8] transition-all duration-300 group px-6 py-2.5 rounded-full font-medium text-sm w-full sm:w-auto text-[#E6F1FF]"
                 >
                   {showSignIn ? "Crear cuenta gratuita" : "Iniciar sesión"}
                   <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
@@ -400,22 +400,23 @@ export default function LoginPage() {
             </div>
 
             {/* Mobile Trust Indicators */}
-            <div className="bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 px-4 py-4 border-t border-white/40">
-              <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-600">
+            <div className="bg-gradient-to-r from-[#0A1628] via-[#112240] to-[#0A1628] px-4 py-4 border-t border-[#233554]">
+              <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-[#B4C7E7]">
                 <div className="flex items-center space-x-1.5">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <div className="w-2 h-2 bg-[#10B981] rounded-full animate-pulse"></div>
                   <span>Seguro</span>
                 </div>
                 <div className="flex items-center space-x-1.5">
-                  <Heart className="w-3 h-3 text-red-500" />
+                  <Heart className="w-3 h-3 text-[#EF4444]" />
+                  <Heart className="w-3 h-3 text-[#EF4444]" />
                   <span>Confiable</span>
                 </div>
                 <div className="flex items-center space-x-1.5">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse delay-200"></div>
+                  <div className="w-2 h-2 bg-[#00D8E8] rounded-full animate-pulse delay-200"></div>
                   <span>Gratuito</span>
                 </div>
                 <div className="flex items-center space-x-1.5">
-                  <Shield className="w-3 h-3 text-purple-500" />
+                  <Shield className="w-3 h-3 text-[#8B5CF6]" />
                   <span>Protegido</span>
                 </div>
               </div>

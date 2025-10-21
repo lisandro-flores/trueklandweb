@@ -12,6 +12,30 @@ export function middleware(request: NextRequest) {
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
   response.headers.set('X-XSS-Protection', '1; mode=block')
   
+  // Content Security Policy (CSP)
+  const cspHeader = `
+    default-src 'self';
+    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.firebaseapp.com https://*.firebase.google.com;
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' data: https: blob:;
+    font-src 'self' data:;
+    connect-src 'self' https://*.firebaseio.com https://*.firebase.google.com wss://*.firebaseio.com https://firebasestorage.googleapis.com;
+    frame-src 'self' https://*.firebaseapp.com;
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    frame-ancestors 'none';
+    upgrade-insecure-requests;
+  `.replace(/\s{2,}/g, ' ').trim()
+  
+  response.headers.set('Content-Security-Policy', cspHeader)
+  
+  // Permissions Policy (antes Feature-Policy)
+  response.headers.set(
+    'Permissions-Policy',
+    'camera=(self), microphone=(self), geolocation=(self), payment=()'
+  )
+  
   // Strict Transport Security (solo para HTTPS en producción)
   if (process.env.NODE_ENV === 'production') {
     response.headers.set(

@@ -87,11 +87,11 @@ export default function Header() {
 
   return (
     <div className="relative overflow-hidden">
-      {/* Nuevo gradiente con los colores de la marca */}
-      <div className="absolute inset-0 gradient-hero"></div>
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http://www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.1%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+      {/* Dark gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0A1628] via-[#112240] to-[#1A2F4F]"></div>
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http://www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%2391f2b3%22%20fill-opacity%3D%220.1%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
       
-      <div className="relative glass border-0 text-[var(--color-azul-oscuro)] p-4 md:p-6 rounded-2xl animate-fade-in">
+      <div className="relative bg-[#112240]/50 backdrop-blur-md border-2 border-[#233554] text-[#E6F1FF] p-4 md:p-6 rounded-2xl animate-fade-in shadow-xl">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3 md:space-x-4">
             <div className="relative">
@@ -101,43 +101,43 @@ export default function Header() {
                   alt={user.displayName || "Avatar"}
                   width={40}
                   height={40}
-                  className="md:w-12 md:h-12 rounded-full border-3 border-[var(--color-turquesa)] shadow-[var(--shadow-turquesa)]"
+                  className="md:w-12 md:h-12 rounded-full border-3 border-[#91f2b3] shadow-lg"
                 />
               ) : (
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[var(--color-turquesa)] flex items-center justify-center text-lg md:text-2xl font-bold text-white shadow-[var(--shadow-turquesa)]">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-[#91f2b3] to-[#fcf326] flex items-center justify-center text-lg md:text-2xl font-bold text-gray-900 shadow-lg">
                   {user?.displayName?.[0] || "?"}
                 </div>
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-base md:text-lg font-semibold text-[var(--color-azul-oscuro)] truncate">{getGreeting()}</div>
-              <div className="font-bold text-lg md:text-xl text-[var(--color-gris-oscuro)] truncate">{user?.displayName || "Invitado"}</div>
-              <div className="text-xs md:text-sm text-[var(--color-azul-oscuro)] opacity-80 hidden sm:block">{currentTime.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" })}</div>
+              <div className="text-base md:text-lg font-semibold text-[#B4C7E7] truncate">{getGreeting()}</div>
+              <div className="font-bold text-lg md:text-xl text-[#E6F1FF] truncate drop-shadow-sm">{user?.displayName || "Invitado"}</div>
+              <div className="text-xs md:text-sm text-[#8FA3C4] hidden sm:block">{currentTime.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" })}</div>
             </div>
           </div>
           <div className="flex items-center space-x-1 md:space-x-2">
-            <Button variant="ghost" size="icon" className="text-[var(--color-azul-oscuro)] hover:bg-[var(--color-amarillo)]/20 hover:text-[var(--color-gris-oscuro)] relative h-8 w-8 md:h-10 md:w-10" aria-label="Notificaciones">
+            <Button variant="ghost" size="icon" className="text-[#B4C7E7] hover:bg-[#1A2F4F] hover:text-[#fcf326] relative h-8 w-8 md:h-10 md:w-10 border-2 border-transparent hover:border-[#233554]" aria-label="Notificaciones">
               <Bell className="h-4 w-4 md:h-6 md:w-6" />
             </Button>
-            <Button variant="ghost" size="icon" className="text-[var(--color-azul-oscuro)] hover:bg-[var(--color-naranja-coral)]/20 hover:text-[var(--color-gris-oscuro)] h-8 w-8 md:h-10 md:w-10" aria-label="Regalos">
+            <Button variant="ghost" size="icon" className="text-[#B4C7E7] hover:bg-[#1A2F4F] hover:text-[#91f2b3] h-8 w-8 md:h-10 md:w-10 border-2 border-transparent hover:border-[#233554]" aria-label="Regalos">
               <Gift className="h-4 w-4 md:h-6 md:w-6" />
             </Button>
           </div>
         </div>
         
-        {/* Stats section with new colors */}
+        {/* Stats section with dark theme */}
         <div className="grid grid-cols-3 gap-2 md:gap-4 mt-4 md:mt-6">
-          <div className="text-center p-2 md:p-3 rounded-xl bg-[var(--color-turquesa)]/10 border border-[var(--color-turquesa)]/20">
-            <div className="text-lg md:text-2xl font-bold text-[var(--color-turquesa)]">{exchangeCount}</div>
-            <div className="text-[var(--color-azul-oscuro)] text-xs md:text-sm">Intercambios</div>
+          <div className="text-center p-2 md:p-3 rounded-xl bg-[#00D8E8]/10 border-2 border-[#00D8E8]/30 shadow-md">
+            <div className="text-lg md:text-2xl font-bold text-[#00D8E8]">{exchangeCount}</div>
+            <div className="text-[#B4C7E7] text-xs md:text-sm">Intercambios</div>
           </div>
-          <div className="text-center p-2 md:p-3 rounded-xl bg-[var(--color-amarillo)]/10 border border-[var(--color-amarillo)]/20">
-            <div className="text-lg md:text-2xl font-bold text-[var(--color-gris-oscuro)]">{postCount}</div>
-            <div className="text-[var(--color-azul-oscuro)] text-xs md:text-sm">Publicaciones</div>
+          <div className="text-center p-2 md:p-3 rounded-xl bg-[#fcf326]/10 border-2 border-[#fcf326]/30 shadow-md">
+            <div className="text-lg md:text-2xl font-bold text-[#fcf326] drop-shadow-sm">{postCount}</div>
+            <div className="text-[#B4C7E7] text-xs md:text-sm">Publicaciones</div>
           </div>
-          <div className="text-center p-2 md:p-3 rounded-xl bg-[var(--color-verde-menta)]/10 border border-[var(--color-verde-menta)]/20">
-            <div className="text-lg md:text-2xl font-bold text-[var(--color-azul-oscuro)]">{chatCount}</div>
-            <div className="text-[var(--color-azul-oscuro)] text-xs md:text-sm">Chats activos</div>
+          <div className="text-center p-2 md:p-3 rounded-xl bg-[#91f2b3]/10 border-2 border-[#91f2b3]/30 shadow-md">
+            <div className="text-lg md:text-2xl font-bold text-[#91f2b3]">{chatCount}</div>
+            <div className="text-[#B4C7E7] text-xs md:text-sm">Chats activos</div>
           </div>
         </div>
       </div>

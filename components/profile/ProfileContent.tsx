@@ -101,11 +101,11 @@ export default function ProfileContent() {
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Profile Header */}
-      <Card className="glass-effect border-0">
+      <Card className="bg-[#112240]/95 backdrop-blur-md border-2 border-[#233554]">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
             <div className="relative">
-              <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-200 border-4 border-white shadow-lg">
+              <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-to-br from-[#91f2b3] to-[#fcf326] border-4 border-[#233554] shadow-lg">
                 {user?.photoURL ? (
                   <Image
                     src={user.photoURL || "/placeholder.svg"}
@@ -114,14 +114,14 @@ export default function ProfileContent() {
                     className="object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <User className="h-12 w-12 text-gray-500" />
+                  <div className="w-full h-full flex items-center justify-center bg-[#1A2F4F]">
+                    <User className="h-12 w-12 text-[#8FA3C4]" />
                   </div>
                 )}
               </div>
               <Button
                 size="icon"
-                className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600"
+                className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-r from-[#91f2b3] to-[#fcf326] hover:from-[#7fd89f] hover:to-[#e8e01f] text-[#0A1628] shadow-lg shadow-[#91f2b3]/30"
                 onClick={() => router.push("/profile/edit")}
               >
                 <Edit className="h-4 w-4" />
@@ -130,9 +130,9 @@ export default function ProfileContent() {
 
             <div className="flex-1 text-center md:text-left">
               <h1 className="text-3xl font-bold gradient-text mb-2">{user?.displayName || "Usuario"}</h1>
-              <p className="text-gray-600 mb-4">{user?.email}</p>
+              <p className="text-[#B4C7E7] mb-4">{user?.email}</p>
 
-              <div className="flex flex-wrap justify-center md:justify-start gap-4 text-sm text-gray-600">
+              <div className="flex flex-wrap justify-center md:justify-start gap-4 text-sm text-[#8FA3C4]">
                 <div className="flex items-center space-x-1">
                   <Calendar className="h-4 w-4" />
                   <span>Miembro desde {formatDate(user?.metadata?.creationTime || "")}</span>
@@ -158,74 +158,74 @@ export default function ProfileContent() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="glass-effect border-0 hover:shadow-lg transition-shadow">
+        <Card className="bg-[#112240]/95 backdrop-blur-md border-2 border-[#233554] hover:shadow-xl hover:shadow-[#91f2b3]/10 transition-all">
           <CardContent className="p-6 text-center">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Package className="h-6 w-6 text-white" />
+            <div className="w-12 h-12 bg-gradient-to-r from-[#91f2b3] to-[#7fd89f] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <Package className="h-6 w-6 text-[#0A1628]" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-1">{stats.totalProducts}</h3>
-            <p className="text-gray-600">Productos Publicados</p>
+            <h3 className="text-2xl font-bold text-[#E6F1FF] mb-1">{stats.totalProducts}</h3>
+            <p className="text-[#E6F1FF]/70">Productos Publicados</p>
           </CardContent>
         </Card>
 
-        <Card className="glass-effect border-0 hover:shadow-lg transition-shadow">
+        <Card className="bg-[#112240]/95 backdrop-blur-md border-2 border-[#233554] hover:shadow-xl hover:shadow-[#fcf326]/10 transition-all">
           <CardContent className="p-6 text-center">
-            <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <MessageCircle className="h-6 w-6 text-white" />
+            <div className="w-12 h-12 bg-gradient-to-r from-[#fcf326] to-[#e8e01f] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <MessageCircle className="h-6 w-6 text-[#0A1628]" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-1">{stats.activeChats}</h3>
-            <p className="text-gray-600">Chats Activos</p>
+            <h3 className="text-2xl font-bold text-[#E6F1FF] mb-1">{stats.activeChats}</h3>
+            <p className="text-[#E6F1FF]/70">Chats Activos</p>
           </CardContent>
         </Card>
 
-        <Card className="glass-effect border-0 hover:shadow-lg transition-shadow">
+        <Card className="bg-[#112240]/95 backdrop-blur-md border-2 border-[#233554] hover:shadow-xl hover:shadow-[#91f2b3]/10 transition-all">
           <CardContent className="p-6 text-center">
-            <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Badge className="h-6 w-6 text-white" />
+            <div className="w-12 h-12 bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <Badge className="h-6 w-6 text-[#0A1628]" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-1">{stats.totalExchanges}</h3>
-            <p className="text-gray-600">Intercambios Realizados</p>
+            <h3 className="text-2xl font-bold text-[#E6F1FF] mb-1">{stats.totalExchanges}</h3>
+            <p className="text-[#E6F1FF]/70">Intercambios Realizados</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Quick Actions */}
-      <Card className="glass-effect border-0">
+      <Card className="bg-[#112240]/95 backdrop-blur-md border-2 border-[#233554]">
         <CardHeader>
-          <CardTitle className="gradient-text">Acciones Rápidas</CardTitle>
+          <CardTitle className="bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] bg-clip-text text-transparent">Acciones Rápidas</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <Link href="/profile/my-products">
-            <Button variant="outline" className="w-full justify-start h-12">
+            <Button variant="outline" className="w-full justify-start h-12 bg-[#1A2F4F] border-2 border-[#233554] text-[#E6F1FF] hover:bg-[#233554] hover:border-[#91f2b3] hover:text-[#91f2b3] transition-all">
               <Package className="h-5 w-5 mr-3" />
               Mis Productos
             </Button>
           </Link>
 
           <Link href="/chats">
-            <Button variant="outline" className="w-full justify-start h-12">
+            <Button variant="outline" className="w-full justify-start h-12 bg-[#1A2F4F] border-2 border-[#233554] text-[#E6F1FF] hover:bg-[#233554] hover:border-[#91f2b3] hover:text-[#91f2b3] transition-all">
               <MessageCircle className="h-5 w-5 mr-3" />
               Mis Conversaciones
             </Button>
           </Link>
 
           <Link href="/add-post">
-            <Button className="w-full justify-start h-12 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700">
+            <Button className="w-full justify-start h-12 bg-gradient-to-r from-[#91f2b3] to-[#fcf326] hover:from-[#7fd89f] hover:to-[#e8e01f] text-[#0A1628] font-semibold shadow-lg shadow-[#91f2b3]/20 transition-all">
               <Package className="h-5 w-5 mr-3" />
               Publicar Nuevo Producto
             </Button>
           </Link>
 
-          <Separator />
+          <Separator className="bg-[#233554]" />
 
           <Link href="/profile/edit">
-            <Button variant="outline" className="w-full justify-start h-12">
+            <Button variant="outline" className="w-full justify-start h-12 bg-[#1A2F4F] border-2 border-[#233554] text-[#E6F1FF] hover:bg-[#233554] hover:border-[#91f2b3] hover:text-[#91f2b3] transition-all">
               <Edit className="h-5 w-5 mr-3" />
               Editar Perfil
             </Button>
           </Link>
 
-          <Button variant="outline" className="w-full justify-start h-12">
+          <Button variant="outline" className="w-full justify-start h-12 bg-[#1A2F4F] border-2 border-[#233554] text-[#E6F1FF] hover:bg-[#233554] hover:border-[#91f2b3] hover:text-[#91f2b3] transition-all">
             <Settings className="h-5 w-5 mr-3" />
             Configuración de Cuenta
           </Button>

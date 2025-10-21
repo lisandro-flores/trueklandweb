@@ -73,44 +73,46 @@ export default function ForgotPasswordForm() {
 
   if (emailSent) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md shadow-2xl border-0">
+      <div className="min-h-screen bg-gradient-to-br from-[#0A1628] via-[#112240] to-[#0A1628] flex items-center justify-center p-4">
+        <Card className="w-full max-w-md shadow-2xl border border-[#233554] bg-[#112240]/95 backdrop-blur-lg">
           <CardHeader className="text-center pb-8">
-            <div className="mx-auto mb-4 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-              <Check className="w-8 h-8 text-green-600" />
+            <div className="mx-auto mb-4 w-20 h-20 bg-gradient-to-br from-[#91f2b3] to-[#fcf326] rounded-full flex items-center justify-center shadow-lg">
+              <Check className="w-10 h-10 text-gray-900 drop-shadow-md" strokeWidth={3} />
             </div>
-            <CardTitle className="text-2xl font-bold text-gray-800">
-              Email Enviado
+            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] bg-clip-text text-transparent">
+              ¡Email Enviado!
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="text-center">
-              <p className="text-gray-600 mb-4">
+              <p className="text-[#B4C7E7] mb-4 text-lg">
                 Hemos enviado un enlace de recuperación a:
               </p>
-              <p className="font-semibold text-gray-800 mb-6">
-                {email}
-              </p>
-              <p className="text-sm text-gray-500 mb-6">
-                Revisa tu bandeja de entrada y sigue las instrucciones para restablecer tu contraseña.
+              <div className="bg-gradient-to-r from-[#91f2b3]/10 to-[#fcf326]/10 rounded-lg p-4 mb-6 border border-[#233554]">
+                <p className="font-semibold text-[#E6F1FF] text-lg">
+                  {email}
+                </p>
+              </div>
+              <p className="text-sm text-[#8FA3C4] mb-6 leading-relaxed">
+                Revisa tu bandeja de entrada y sigue las instrucciones para restablecer tu contraseña. Si no lo encuentras, verifica tu carpeta de spam.
               </p>
             </div>
             
-            <div className="space-y-4">
+            <div className="space-y-3">
               <Button
                 onClick={() => {
                   setEmailSent(false)
                   setEmail("")
                 }}
                 variant="outline"
-                className="w-full"
+                className="w-full h-12 border-2 border-[#233554] text-[#E6F1FF] hover:bg-[#1A2F4F] hover:border-[#00D8E8] transition-all"
               >
                 Enviar a otro correo
               </Button>
               
               <Link href="/" className="block">
-                <Button variant="default" className="w-full">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
+                <Button className="w-full h-12 bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] hover:opacity-90 text-gray-900 font-semibold shadow-lg">
+                  <ArrowLeft className="w-5 h-5 mr-2" />
                   Volver al inicio
                 </Button>
               </Link>
@@ -122,57 +124,64 @@ export default function ForgotPasswordForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-2xl border-0">
+    <div className="min-h-screen bg-gradient-to-br from-[#0A1628] via-[#112240] to-[#0A1628] flex items-center justify-center p-4">
+      <Card className="w-full max-w-md shadow-2xl border border-[#233554] bg-[#112240]/95 backdrop-blur-lg">
         <CardHeader className="text-center pb-8">
-          <div className="mx-auto mb-4 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-            <Mail className="w-8 h-8 text-blue-600" />
+          <div className="mx-auto mb-4 w-20 h-20 bg-gradient-to-br from-[#91f2b3] to-[#fcf326] rounded-full flex items-center justify-center shadow-lg animate-pulse">
+            <Mail className="w-10 h-10 text-gray-900 drop-shadow-md" />
           </div>
-          <CardTitle className="text-2xl font-bold text-gray-800">
+          <CardTitle className="text-3xl font-bold bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] bg-clip-text text-transparent">
             Recuperar Contraseña
           </CardTitle>
-          <p className="text-gray-600 mt-2">
-            Ingresa tu email para recibir un enlace de recuperación
+          <p className="text-[#B4C7E7] mt-3 text-base">
+            Ingresa tu email y te enviaremos un enlace para restablecer tu contraseña
           </p>
         </CardHeader>
         
         <CardContent>
           <form onSubmit={handleResetPassword} className="space-y-6">
             <div className="space-y-2">
+              <label className="text-sm font-medium text-[#E6F1FF]">
+                Correo Electrónico
+              </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#8FA3C4] w-5 h-5" />
                 <Input
                   type="email"
                   placeholder="correo@ejemplo.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                  className="pl-10 h-12 border-2 border-[#233554] bg-[#0A1628] text-[#E6F1FF] placeholder:text-[#5A6B89] focus:border-[#00D8E8] focus:ring-[#00D8E8] transition-all"
                   disabled={loading}
+                  autoComplete="email"
                 />
               </div>
             </div>
 
             <Button
               type="submit"
-              className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+              className="w-full h-12 bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] hover:opacity-90 text-gray-900 font-semibold shadow-lg transition-all"
               disabled={loading}
             >
               {loading ? (
                 <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-900 mr-2"></div>
                   Enviando...
                 </div>
               ) : (
-                "Enviar enlace de recuperación"
+                <>
+                  <Mail className="w-5 h-5 mr-2" />
+                  Enviar enlace de recuperación
+                </>
               )}
             </Button>
 
-            <div className="text-center">
+            <div className="text-center pt-4">
               <Link 
                 href="/" 
-                className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium"
+                className="inline-flex items-center text-[#B4C7E7] hover:text-[#E6F1FF] font-medium transition-colors"
               >
-                <ArrowLeft className="w-4 h-4 mr-1" />
+                <ArrowLeft className="w-4 h-4 mr-2" />
                 Volver al inicio de sesión
               </Link>
             </div>

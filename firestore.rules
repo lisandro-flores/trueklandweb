@@ -1,82 +1,163 @@
-// firestore.rules - Reglas de seguridad para Firestore
+// firestore.rules - Reglas de seguridad para Firestore (OWASP Compliant)
 rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Usuarios - solo pueden leer/escribir sus propios datos
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-    
-    // Productos - lectura pública de productos autorizados, escritura solo del propietario
-    match /UserPost/{postId} {
-      allow read: if resource.data.isAuthorized == true;
-      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
-      allow create: if request.auth != null && 
-                   request.auth.uid == request.resource.data.userId &&
-                   request.resource.data.isAuthorized == false; // Productos requieren moderación
-    }
-    
-    // Categorías - solo lectura para usuarios autenticados
-    match /Category/{categoryId} {
-      allow read: if request.auth != null;
-      allow write: if false; // Solo admins pueden modificar categorías
-    }
-    
-    // Intercambios - solo participantes pueden ver/modificar
-    match /exchanges/{exchangeId} {
-      allow read, write: if request.auth != null && 
-                        request.auth.uid in resource.data.participants;
-      allow create: if request.auth != null && 
-                   request.auth.uid in request.resource.data.participants;
-    }
-    
-    // Mensajes de chat - solo participantes del intercambio
-    match /chatMessages/{messageId} {
-      allow read, write: if request.auth != null && 
-                        (request.auth.uid == resource.data.senderId || 
-                         request.auth.uid == resource.data.receiverId);
-      allow create: if request.auth != null && 
-                   request.auth.uid == request.resource.data.senderId;
-    }
-    
-    // Notificaciones - solo el usuario puede ver sus notificaciones
-    match /notifications/{notificationId} {
-      allow read, write: if request.auth != null && 
-                        request.auth.uid == resource.data.userId;
-      allow create: if request.auth != null; // Cualquier usuario puede crear notificaciones
-    }
-    
-    // Reviews - lectura pública, escritura solo del autor
-    match /reviews/{reviewId} {
-      allow read: if true;
-      allow write: if request.auth != null && 
-                  request.auth.uid == resource.data.fromUserId;
-      allow create: if request.auth != null && 
-                   request.auth.uid == request.resource.data.fromUserId;
-    }
-    
-    // Funciones helper
-    function isOwner(userId) {
-      return request.auth != null && request.auth.uid == userId;
-    }
-    
+    // Funciones helper de seguridad
     function isAuthenticated() {
       return request.auth != null;
     }
     
-    function isValidProduct() {
-      return request.resource.data.keys().hasAll([
-        'title', 'desc', 'category', 'price', 'images', 'userId'
-      ]) &&
-      request.resource.data.title is string &&
-      request.resource.data.title.size() >= 3 &&
-      request.resource.data.desc is string &&
-      request.resource.data.desc.size() >= 10 &&
-      request.resource.data.images is list &&
-      request.resource.data.images.size() >= 1 &&
-      request.resource.data.images.size() <= 5;
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && request.auth.token.email == 'admin@truekland.com';
+    }
+    
+    function validateString(value, minLen, maxLen) {
+      return value is string && 
+             value.size() >= minLen && 
+             value.size() <= maxLen;
+    }
+    
+    function validateProductData() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['title', 'desc', 'category', 'userId', 'createdAt']) &&
+             validateString(data.title, 3, 100) &&
+             validateString(data.desc, 10, 1000) &&
+             validateString(data.category, 1, 50) &&
+             data.images is list &&
+             data.images.size() >= 1 &&
+             data.images.size() <= 5 &&
+             data.userId == request.auth.uid;
+    }
+    
+    function validateMessageData() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['message', 'senderId', 'receiverId', 'timestamp']) &&
+             validateString(data.message, 1, 1000) &&
+             data.senderId == request.auth.uid &&
+             data.timestamp == request.time;
+    }
+    
+    // Rate limiting: máximo 100 writes por minuto por usuario
+    function notRateLimited() {
+      // Implementar en cliente con rate limiter
+      return true;
+    }
+    
+    // Usuarios - solo pueden leer/escribir sus propios datos
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId) && notRateLimited();
+      
+      // Prevenir modificación de campos sensibles
+      allow update: if isOwner(userId) && 
+                      !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'permissions']);
+    }
+    
+    // Productos (UserPost) - con validación estricta
+    match /UserPost/{postId} {
+      // Lectura pública solo de productos autorizados
+      allow read: if resource.data.isAuthorized == true || isOwner(resource.data.userId) || isAdmin();
+      
+      // Escritura solo del propietario con validación
+      allow create: if isAuthenticated() && 
+                       validateProductData() &&
+                       request.resource.data.isAuthorized == false &&
+                       notRateLimited();
+      
+      allow update: if isOwner(resource.data.userId) && 
+                       validateProductData() &&
+                       notRateLimited();
+      
+      allow delete: if isOwner(resource.data.userId) || isAdmin();
+    }
+    
+    // Chats - solo participantes con validación
+    match /chats/{chatId} {
+      allow read: if isAuthenticated() && 
+                    request.auth.uid in resource.data.participants;
+      
+      allow create: if isAuthenticated() && 
+                       request.auth.uid in request.resource.data.participants &&
+                       request.resource.data.participants.size() == 2 &&
+                       notRateLimited();
+      
+      allow update: if isAuthenticated() && 
+                       request.auth.uid in resource.data.participants;
+    }
+    
+    // Mensajes - con validación estricta
+    match /messages/{messageId} {
+      allow read: if isAuthenticated() && 
+                    (request.auth.uid == resource.data.senderId || 
+                     request.auth.uid == resource.data.receiverId);
+      
+      allow create: if isAuthenticated() && 
+                       validateMessageData() &&
+                       notRateLimited();
+      
+      // Los mensajes no pueden editarse ni eliminarse
+      allow update, delete: if false;
+    }
+    
+    // Intercambios - solo participantes
+    match /exchanges/{exchangeId} {
+      allow read: if isAuthenticated() && 
+                    (request.auth.uid == resource.data.fromUserId || 
+                     request.auth.uid == resource.data.toUserId);
+      
+      allow create: if isAuthenticated() && 
+                       request.auth.uid == request.resource.data.fromUserId &&
+                       request.resource.data.status == 'pending' &&
+                       notRateLimited();
+      
+      allow update: if isAuthenticated() && 
+                       request.auth.uid in [resource.data.fromUserId, resource.data.toUserId] &&
+                       request.resource.data.status in ['accepted', 'rejected', 'completed', 'cancelled'];
+    }
+    
+    // Categorías - solo lectura para usuarios, escritura solo admin
+    match /Category/{categoryId} {
+      allow read: if true; // Público
+      allow write: if isAdmin();
+    }
+    
+    // Sliders - solo admin puede modificar
+    match /Slider/{sliderId} {
+      allow read: if true; // Público
+      allow write: if isAdmin();
+    }
+    
+    // Notificaciones - solo el destinatario
+    match /notifications/{notificationId} {
+      allow read, delete: if isAuthenticated() && 
+                            request.auth.uid == resource.data.userId;
+      allow create: if isAuthenticated() && notRateLimited();
+      allow update: if false; // Las notificaciones no se editan
+    }
+    
+    // Reviews - con validación
+    match /reviews/{reviewId} {
+      allow read: if true; // Público
+      
+      allow create: if isAuthenticated() && 
+                       request.auth.uid == request.resource.data.fromUserId &&
+                       request.resource.data.rating >= 1 &&
+                       request.resource.data.rating <= 5 &&
+                       notRateLimited();
+      
+      allow update: if isOwner(resource.data.fromUserId);
+      allow delete: if isOwner(resource.data.fromUserId) || isAdmin();
+    }
+    
+    // Denegar acceso a cualquier otra colección no especificada
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

@@ -211,7 +211,7 @@ export default function AddPostForm() {
       setSelectedImage(null)
       setImagePreview("")
 
-      router.push("/dashboard")
+      router.push("/explore")
     } catch (error) {
       console.error("Error creating post:", error)
       toast({
@@ -230,29 +230,29 @@ export default function AddPostForm() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6 animate-fade-in">
-      <Card className="glass-effect border-0">
+      <Card className="bg-[#112240]/95 backdrop-blur-md border-2 border-[#233554]">
         <CardHeader>
-          <CardTitle className="gradient-text text-2xl">
+          <CardTitle className="text-2xl bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] bg-clip-text text-transparent">
             Publicar Nuevo Producto
           </CardTitle>
-          <p className="text-gray-600">Completa los detalles de tu producto para publicarlo</p>
+          <p className="text-[#E6F1FF]/70">Completa los detalles de tu producto para publicarlo</p>
         </CardHeader>
         <CardContent className="space-y-6">
           <form onSubmit={onSubmit} className="space-y-6">
             {/* Image Upload */}
             <div>
-              <label className="block text-sm font-medium mb-2">
-                Imagen del producto <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium mb-2 text-[#E6F1FF]">
+                Imagen del producto <span className="text-[#EF4444]">*</span>
               </label>
               <div className="space-y-4">
                 {imagePreview && (
-                  <div className="relative w-full h-64 rounded-2xl overflow-hidden glass-effect">
+                  <div className="relative w-full h-64 rounded-2xl overflow-hidden bg-[#0A1628] border-2 border-[#233554]">
                     <Image src={imagePreview} alt="Preview" fill className="object-cover" />
                     <Button
                       type="button"
                       variant="ghost"
                       size="icon"
-                      className="absolute top-2 right-2 bg-red-500/80 hover:bg-red-600 text-white rounded-full"
+                      className="absolute top-2 right-2 bg-[#EF4444]/90 hover:bg-[#DC2626] text-white rounded-full shadow-lg"
                       onClick={removeImage}
                     >
                       <X className="h-4 w-4" />
@@ -262,7 +262,7 @@ export default function AddPostForm() {
                 <div className="flex items-center space-x-4">
                   <input type="file" accept="image/*" onChange={handleImageSelect} className="hidden" id="image-upload" />
                   <label htmlFor="image-upload">
-                    <Button variant="outline" className="btn-secondary cursor-pointer" asChild>
+                    <Button variant="outline" className="cursor-pointer bg-[#1A2F4F] border-2 border-[#233554] text-[#E6F1FF] hover:bg-[#233554] hover:border-[#91f2b3] hover:text-[#91f2b3] transition-all" asChild>
                       <span>
                         <Upload className="h-4 w-4 mr-2" />
                         {imagePreview ? "Cambiar Imagen" : "Seleccionar Imagen"}
@@ -275,7 +275,7 @@ export default function AddPostForm() {
                     <Button
                       type="button"
                       variant="outline"
-                      className="btn-secondary"
+                      className="bg-[#1A2F4F] border-2 border-[#233554] text-[#E6F1FF] hover:bg-[#233554] hover:border-[#91f2b3] hover:text-[#91f2b3] transition-all"
                       onClick={() => setShowCamera(true)}
                     >
                       <Camera className="h-4 w-4 mr-2" />
@@ -288,43 +288,47 @@ export default function AddPostForm() {
 
             {/* Title */}
             <div>
-              <label className="block text-sm font-medium mb-2">
-                Título <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium mb-2 text-[#E6F1FF]">
+                Título <span className="text-[#EF4444]">*</span>
               </label>
               <Input
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder="Título del producto"
-                className="input-modern h-12"
+                className="h-12 bg-[#0A1628] border-2 border-[#233554] text-[#E6F1FF] placeholder:text-[#E6F1FF]/50 focus:border-[#91f2b3] focus:ring-2 focus:ring-[#91f2b3]/20"
               />
             </div>
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-medium mb-2">
-                Descripción <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium mb-2 text-[#E6F1FF]">
+                Descripción <span className="text-[#EF4444]">*</span>
               </label>
               <Textarea
                 value={formData.desc}
                 onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
                 placeholder="Describe tu producto..."
                 rows={4}
-                className="input-modern"
+                className="bg-[#0A1628] border-2 border-[#233554] text-[#E6F1FF] placeholder:text-[#E6F1FF]/50 focus:border-[#91f2b3] focus:ring-2 focus:ring-[#91f2b3]/20 resize-none"
               />
             </div>
 
             {/* Category */}
             <div>
-              <label className="block text-sm font-medium mb-2">
-                Categoría <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium mb-2 text-[#E6F1FF]">
+                Categoría <span className="text-[#EF4444]">*</span>
               </label>
               <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
-                <SelectTrigger className="input-modern h-12">
+                <SelectTrigger className="h-12 bg-[#0A1628] border-2 border-[#233554] text-[#E6F1FF] focus:border-[#91f2b3] focus:ring-2 focus:ring-[#91f2b3]/20">
                   <SelectValue placeholder="Selecciona una categoría" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-[#112240] border-2 border-[#233554]">
                   {categories.map((category) => (
-                    <SelectItem key={category.name} value={category.name}>
+                    <SelectItem 
+                      key={category.name} 
+                      value={category.name}
+                      className="text-[#E6F1FF] focus:bg-[#1A2F4F] focus:text-[#91f2b3]"
+                    >
                       <div className="flex items-center space-x-2">
                         <span>{category.icon}</span>
                         <span>{category.name}</span>
@@ -337,15 +341,15 @@ export default function AddPostForm() {
 
             {/* Price */}
             <div>
-              <label className="block text-sm font-medium mb-2">
-                Precio (opcional)
+              <label className="block text-sm font-medium mb-2 text-[#E6F1FF]">
+                Valor aproximado en MXN (opcional)
               </label>
               <Input
                 type="number"
                 value={formData.price}
                 onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                placeholder="Precio en USD"
-                className="input-modern h-12"
+                placeholder="Ej: 500"
+                className="h-12 bg-[#0A1628] border-2 border-[#233554] text-[#E6F1FF] placeholder:text-[#E6F1FF]/50 focus:border-[#91f2b3] focus:ring-2 focus:ring-[#91f2b3]/20"
               />
             </div>
 
@@ -353,7 +357,7 @@ export default function AddPostForm() {
             <Button
               type="submit"
               disabled={submitting}
-              className="btn-primary w-full h-12"
+              className="w-full h-12 bg-gradient-to-r from-[#91f2b3] to-[#fcf326] hover:from-[#7fd89f] hover:to-[#e8e01f] text-[#0A1628] font-semibold shadow-lg shadow-[#91f2b3]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Plus className="h-5 w-5 mr-2" />
               {submitting ? "Publicando..." : "Publicar Producto"}

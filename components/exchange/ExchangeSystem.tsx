@@ -106,12 +106,12 @@ export default function ExchangeSystem() {
 
   const getStatusColor = (status: Exchange['status']) => {
     switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-800'
-      case 'accepted': return 'bg-green-100 text-green-800'
-      case 'rejected': return 'bg-red-100 text-red-800'
-      case 'completed': return 'bg-blue-100 text-blue-800'
-      case 'cancelled': return 'bg-gray-100 text-gray-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'pending': return 'bg-[#fcf326]/20 text-[#fcf326] border-[#fcf326]/30'
+      case 'accepted': return 'bg-[#91f2b3]/20 text-[#91f2b3] border-[#91f2b3]/30'
+      case 'rejected': return 'bg-[#EF4444]/20 text-[#EF4444] border-[#EF4444]/30'
+      case 'completed': return 'bg-[#91f2b3]/20 text-[#91f2b3] border-[#91f2b3]/30'
+      case 'cancelled': return 'bg-[#E6F1FF]/10 text-[#E6F1FF]/50 border-[#233554]'
+      default: return 'bg-[#E6F1FF]/10 text-[#E6F1FF]/50 border-[#233554]'
     }
   }
 
@@ -142,31 +142,31 @@ export default function ExchangeSystem() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold gradient-text">Mis Intercambios</h2>
-        <Badge variant="outline" className="badge-modern px-3 py-1">
+        <Badge variant="outline" className="badge-modern px-3 py-1 bg-[#1A2F4F] border-2 border-[#233554] text-[#E6F1FF]">
           {exchanges.length} intercambios
         </Badge>
       </div>
 
       {exchanges.length === 0 ? (
-        <Card className="glass-effect border-0 p-8 text-center">
+        <Card className="bg-[#112240]/95 backdrop-blur-md border-2 border-[#233554] p-8 text-center">
           <ArrowLeftRight className="w-12 h-12 mx-auto text-[#91f2b3] mb-4" />
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+          <h3 className="text-lg font-semibold text-[#E6F1FF] mb-2">
             No tienes intercambios aún
           </h3>
-          <p className="text-gray-600">
+          <p className="text-[#E6F1FF]/60">
             Encuentra productos interesantes y propón tu primer intercambio
           </p>
         </Card>
       ) : (
         <div className="space-y-4">
           {exchanges.map(exchange => (
-            <Card key={exchange.id} className="glass-effect border-0 overflow-hidden">
+            <Card key={exchange.id} className="bg-[#112240]/95 backdrop-blur-md border-2 border-[#233554] overflow-hidden">
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg gradient-text">
+                  <CardTitle className="text-lg bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] bg-clip-text text-transparent">
                     Intercambio #{exchange.id.slice(-6)}
                   </CardTitle>
-                  <Badge className={`badge-modern ${getStatusColor(exchange.status)}`}>
+                  <Badge className={`badge-modern border-2 ${getStatusColor(exchange.status)}`}>
                     {getStatusText(exchange.status)}
                   </Badge>
                 </div>
@@ -177,7 +177,7 @@ export default function ExchangeSystem() {
                 <div className="flex items-center justify-center space-x-4">
                   {/* Producto origen */}
                   <div className="flex-1 text-center">
-                    <div className="relative w-20 h-20 mx-auto mb-2 rounded-lg overflow-hidden bg-gray-100">
+                    <div className="relative w-20 h-20 mx-auto mb-2 rounded-lg overflow-hidden bg-[#0A1628] border-2 border-[#233554]">
                       {exchange.fromProduct?.images?.[0] ? (
                         <Image
                           src={exchange.fromProduct.images[0]}
@@ -187,28 +187,28 @@ export default function ExchangeSystem() {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <Package className="w-8 h-8 text-gray-400" />
+                          <Package className="w-8 h-8 text-[#E6F1FF]/50" />
                         </div>
                       )}
                     </div>
-                    <h4 className="font-medium text-sm text-gray-900">
+                    <h4 className="font-medium text-sm text-[#E6F1FF]">
                       {exchange.fromProduct?.title || 'Producto no encontrado'}
                     </h4>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-[#E6F1FF]/50">
                       {exchange.fromUserId === user?.uid ? 'Tu producto' : 'Su producto'}
                     </p>
                   </div>
 
                   {/* Icono de intercambio */}
                   <div className="flex-shrink-0">
-                    <div className="w-10 h-10 bg-[#91f2b3] rounded-full flex items-center justify-center">
-                      <ArrowLeftRight className="w-5 h-5 text-gray-800" />
+                    <div className="w-10 h-10 bg-gradient-to-r from-[#91f2b3] to-[#fcf326] rounded-full flex items-center justify-center">
+                      <ArrowLeftRight className="w-5 h-5 text-[#0A1628]" />
                     </div>
                   </div>
 
                   {/* Producto destino */}
                   <div className="flex-1 text-center">
-                    <div className="relative w-20 h-20 mx-auto mb-2 rounded-lg overflow-hidden bg-gray-100">
+                    <div className="relative w-20 h-20 mx-auto mb-2 rounded-lg overflow-hidden bg-[#0A1628] border-2 border-[#233554]">
                       {exchange.toProduct?.images?.[0] ? (
                         <Image
                           src={exchange.toProduct.images[0]}
@@ -218,14 +218,14 @@ export default function ExchangeSystem() {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <Package className="w-8 h-8 text-gray-400" />
+                          <Package className="w-8 h-8 text-[#E6F1FF]/50" />
                         </div>
                       )}
                     </div>
-                    <h4 className="font-medium text-sm text-gray-900">
+                    <h4 className="font-medium text-sm text-[#E6F1FF]">
                       {exchange.toProduct?.title || 'Producto no encontrado'}
                     </h4>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-[#E6F1FF]/50">
                       {exchange.toUserId === user?.uid ? 'Tu producto' : 'Su producto'}
                     </p>
                   </div>
@@ -233,13 +233,13 @@ export default function ExchangeSystem() {
 
                 {/* Mensaje */}
                 {exchange.message && (
-                  <div className="bg-gray-50 rounded-lg p-3">
-                    <p className="text-sm text-gray-700">{exchange.message}</p>
+                  <div className="bg-[#0A1628]/80 border border-[#233554] rounded-lg p-3">
+                    <p className="text-sm text-[#E6F1FF]/80">{exchange.message}</p>
                   </div>
                 )}
 
                 {/* Información adicional */}
-                <div className="flex items-center justify-between text-xs text-gray-500">
+                <div className="flex items-center justify-between text-xs text-[#E6F1FF]/50">
                   <div className="flex items-center space-x-1">
                     <Clock className="w-3 h-3" />
                     <span>{new Date(exchange.createdAt).toLocaleDateString()}</span>

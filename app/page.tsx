@@ -12,7 +12,9 @@ export default function Home() {
 
   useEffect(() => {
     if (!loading && user) {
-      router.push("/dashboard")
+      // Redirigir admin a su panel, usuarios normales a explorar
+      const isAdmin = user.email === "admin@truekland.com"
+      router.push(isAdmin ? "/admin" : "/explore")
     }
   }, [user, loading, router])
 

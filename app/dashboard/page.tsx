@@ -14,6 +14,12 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!loading && !user) {
       router.push("/")
+      return
+    }
+
+    // Redirigir admin a su panel
+    if (user && user.email === "admin@truekland.com") {
+      router.push("/admin")
     }
   }, [user, loading, router])
 

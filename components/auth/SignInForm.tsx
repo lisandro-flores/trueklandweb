@@ -5,18 +5,20 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { signInWithEmailAndPassword, signInWithPopup, getAuth } from "firebase/auth"
 import { doc, setDoc, getDoc } from "firebase/firestore"
-import { Eye, EyeOff, Mail, Lock, ArrowRight, Sparkles, LogIn } from "lucide-react"
+import { Eye, EyeOff, Mail, Lock, ArrowRight, Sparkles, LogIn, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/use-toast"
 import { app, googleProvider, db } from "@/lib/firebase"
-import Image from "next/image"
+import { GoogleIcon } from "@/components/ui/google-icon"
 
 export default function SignInForm() {
   const [emailAddress, setEmailAddress] = useState("")
   const [password, setPassword] = useState("")
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [emailError, setEmailError] = useState("")
+  const [passwordError, setPasswordError] = useState("")
   const router = useRouter()
   const { toast } = useToast()
   const auth = getAuth(app)
@@ -24,6 +26,22 @@ export default function SignInForm() {
   const validateEmail = (email: string) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return regex.test(email)
+  }
+
+  const handleEmailBlur = () => {
+    if (emailAddress && !validateEmail(emailAddress)) {
+      setEmailError("Por favor ingresa un email válido")
+    } else {
+      setEmailError("")
+    }
+  }
+
+  const handlePasswordBlur = () => {
+    if (password && password.length < 6) {
+      setPasswordError("La contraseña debe tener al menos 6 caracteres")
+    } else {
+      setPasswordError("")
+    }
   }
 
   const onSignInPress = async () => {
@@ -52,11 +70,15 @@ export default function SignInForm() {
       const user = userCredential.user
 
       if (user.emailVerified) {
+        // Verificar si es admin y redirigir al panel de admin
+        const isAdmin = user.email === "admin@truekland.com"
+        
         toast({
-          title: "¡Bienvenido de vuelta! 🎉",
+          title: isAdmin ? "¡Bienvenido Administrador! 🛡️" : "¡Bienvenido de vuelta! 🎉",
           description: "Has iniciado sesión exitosamente.",
         })
-        router.push("/dashboard")
+        
+        router.push(isAdmin ? "/admin" : "/explore")
       } else {
         toast({
           title: "Verificación pendiente",
@@ -113,11 +135,14 @@ export default function SignInForm() {
         })
       }
 
+      // Verificar si es admin y redirigir al panel de admin
+      const isAdmin = user.email === "admin@truekland.com"
+
       toast({
-        title: "¡Bienvenido! 🎉",
+        title: isAdmin ? "¡Bienvenido Administrador! 🛡️" : "¡Bienvenido! 🎉",
         description: "Has iniciado sesión con Google exitosamente.",
       })
-      router.push("/dashboard")
+      router.push(isAdmin ? "/admin" : "/explore")
     } catch (err: unknown) {
       console.error(err)
       const error = err as { code?: string; message?: string }
@@ -150,94 +175,138 @@ export default function SignInForm() {
     <div className="space-y-4 sm:space-y-6 lg:space-y-8">
       {/* Welcome Message - Only show on mobile */}
       <div className="text-center space-y-2 lg:hidden">
-        <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 glass-effect rounded-2xl mb-3 border border-white/30">
-          <LogIn className="w-6 h-6 sm:w-8 sm:h-8 text-[#91f2b3]" />
+        <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-[#112240]/80 backdrop-blur-md rounded-2xl mb-3 border border-[#233554]">
+          <LogIn className="w-6 h-6 sm:w-8 sm:h-8 text-[#91f2b3]" aria-hidden="true" />
         </div>
-        <h3 className="text-xl sm:text-2xl font-bold gradient-text">
+        <h3 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] bg-clip-text text-transparent">
           ¡Bienvenido! 👋
         </h3>
-        <p className="text-gray-600 text-sm sm:text-base">Inicia sesión para continuar</p>
+        <p className="text-[#B4C7E7] text-sm sm:text-base">Inicia sesión para continuar</p>
       </div>
 
       {/* Google Sign In Button */}
       <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-red-500/20 rounded-2xl blur opacity-20"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#91f2b3]/10 to-[#fcf326]/10 rounded-2xl blur opacity-30"></div>
         <Button
           onClick={onGoogleSignIn}
           disabled={loading}
           variant="outline"
-          className="relative w-full h-12 sm:h-14 lg:h-16 rounded-2xl border-2 border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-semibold flex items-center justify-center space-x-3"
+          type="button"
+          aria-label="Continuar con Google"
+          className="relative w-full h-12 sm:h-14 lg:h-16 rounded-2xl border-2 border-[#233554] hover:border-[#00D8E8] bg-[#112240]/80 hover:bg-[#1A2F4F] text-[#E6F1FF] font-semibold flex items-center justify-center space-x-3 transition-all duration-300"
         >
-          <Image
-            src="/assets/Google.svg"
-            alt="Google"
-            width={20}
-            height={20}
-            className="sm:w-6 sm:h-6"
-          />
-          <span className="text-sm sm:text-base">Continuar con Google</span>
+          {loading ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
+              <span>Conectando...</span>
+            </>
+          ) : (
+            <>
+              <GoogleIcon size={24} />
+              <span className="text-sm sm:text-base">Continuar con Google</span>
+            </>
+          )}
         </Button>
       </div>
 
       {/* Divider */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-gray-300"></div>
+          <div className="w-full border-t border-[#233554]"></div>
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-4 bg-white text-gray-500">o continúa con email</span>
+          <span className="px-4 bg-[#0A1628] text-[#8FA3C4]">o continúa con email</span>
         </div>
       </div>
 
       {/* Email Field */}
       <div className="space-y-2">
-        <label className="text-xs sm:text-sm font-semibold text-gray-800 flex items-center space-x-2">
-          <Mail className="w-3 h-3 sm:w-4 sm:h-4 text-[#91f2b3]" />
+        <label 
+          htmlFor="email"
+          className="text-xs sm:text-sm font-semibold text-[#E6F1FF] flex items-center space-x-2"
+        >
+          <Mail className="w-3 h-3 sm:w-4 sm:h-4 text-[#91f2b3]" aria-hidden="true" />
           <span>Correo electrónico</span>
         </label>
         <div className="relative group">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#91f2b3]/20 to-[#fcf326]/20 rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#91f2b3]/10 to-[#fcf326]/10 rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity"></div>
           <Input
+            id="email"
             type="email"
             placeholder="tu@email.com"
             value={emailAddress}
-            onChange={(e) => setEmailAddress(e.target.value)}
-            className="input-modern relative h-11 sm:h-12 lg:h-14 text-sm sm:text-base lg:text-lg pl-10 sm:pl-12"
+            onChange={(e) => {
+              setEmailAddress(e.target.value)
+              if (emailError) setEmailError("")
+            }}
+            onBlur={handleEmailBlur}
+            className={`relative h-11 sm:h-12 lg:h-14 text-sm sm:text-base lg:text-lg pl-10 sm:pl-12 bg-[#0A1628] border-2 border-[#233554] text-[#E6F1FF] placeholder:text-[#5A6B89] focus:border-[#00D8E8] focus:ring-[#00D8E8] rounded-xl transition-all ${
+              emailError ? "border-[#EF4444] focus:border-[#EF4444]" : ""
+            }`}
+            aria-invalid={emailError ? "true" : "false"}
+            aria-describedby={emailError ? "email-error" : undefined}
+            autoComplete="email"
           />
-          <Mail className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-500 group-hover:text-[#91f2b3] transition-colors" />
+          <Mail className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-[#8FA3C4] group-hover:text-[#91f2b3] transition-colors" aria-hidden="true" />
         </div>
+        {emailError && (
+          <p id="email-error" className="text-[#EF4444] text-xs sm:text-sm flex items-center space-x-1" role="alert">
+            <span className="inline-block w-1 h-1 bg-[#EF4444] rounded-full"></span>
+            <span>{emailError}</span>
+          </p>
+        )}
       </div>
 
       {/* Password Field */}
       <div className="space-y-2">
-        <label className="text-xs sm:text-sm font-semibold text-gray-800 flex items-center space-x-2">
-          <Lock className="w-3 h-3 sm:w-4 sm:h-4 text-[#fcf326]" />
+        <label 
+          htmlFor="password"
+          className="text-xs sm:text-sm font-semibold text-[#E6F1FF] flex items-center space-x-2"
+        >
+          <Lock className="w-3 h-3 sm:w-4 sm:h-4 text-[#fcf326]" aria-hidden="true" />
           <span>Contraseña</span>
         </label>
         <div className="relative group">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#fcf326]/20 to-[#91f2b3]/20 rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#fcf326]/10 to-[#91f2b3]/10 rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity"></div>
           <Input
+            id="password"
             type={passwordVisible ? "text" : "password"}
             placeholder="Tu contraseña segura"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="input-modern relative h-11 sm:h-12 lg:h-14 text-sm sm:text-base lg:text-lg pl-10 sm:pl-12 pr-10 sm:pr-12"
+            onChange={(e) => {
+              setPassword(e.target.value)
+              if (passwordError) setPasswordError("")
+            }}
+            onBlur={handlePasswordBlur}
+            className={`relative h-11 sm:h-12 lg:h-14 text-sm sm:text-base lg:text-lg pl-10 sm:pl-12 pr-10 sm:pr-12 bg-[#0A1628] border-2 border-[#233554] text-[#E6F1FF] placeholder:text-[#5A6B89] focus:border-[#00D8E8] focus:ring-[#00D8E8] rounded-xl transition-all ${
+              passwordError ? "border-[#EF4444] focus:border-[#EF4444]" : ""
+            }`}
+            aria-invalid={passwordError ? "true" : "false"}
+            aria-describedby={passwordError ? "password-error" : undefined}
+            autoComplete="current-password"
           />
-          <Lock className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-500 group-hover:text-[#fcf326] transition-colors" />
+          <Lock className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-[#8FA3C4] group-hover:text-[#fcf326] transition-colors" aria-hidden="true" />
           <button
             type="button"
             onClick={() => setPasswordVisible(!passwordVisible)}
-            className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-[#fcf326] transition-colors p-1 sm:p-2 rounded-full hover:bg-[#fcf326]/10"
+            aria-label={passwordVisible ? "Ocultar contraseña" : "Mostrar contraseña"}
+            className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 text-[#8FA3C4] hover:text-[#fcf326] transition-colors p-1 sm:p-2 rounded-full hover:bg-[#fcf326]/10"
           >
             {passwordVisible ? <EyeOff className="h-4 w-4 sm:h-5 sm:w-5" /> : <Eye className="h-4 w-4 sm:h-5 sm:w-5" />}
           </button>
         </div>
+        {passwordError && (
+          <p id="password-error" className="text-[#EF4444] text-xs sm:text-sm flex items-center space-x-1" role="alert">
+            <span className="inline-block w-1 h-1 bg-[#EF4444] rounded-full"></span>
+            <span>{passwordError}</span>
+          </p>
+        )}
       </div>
 
       {/* Forgot Password Link */}
       <div className="text-right">
         <Link href="/forgot-password">
-          <button className="text-xs sm:text-sm text-[#91f2b3] hover:text-[#fcf326] font-medium hover:underline transition-colors">
+          <button className="text-xs sm:text-sm text-[#00D8E8] hover:text-[#91f2b3] font-medium hover:underline transition-colors">
             ¿Olvidaste tu contraseña?
           </button>
         </Link>
@@ -245,22 +314,24 @@ export default function SignInForm() {
 
       {/* Sign In Button */}
       <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#91f2b3] to-[#fcf326] rounded-full blur-xl opacity-30"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#91f2b3] to-[#fcf326] rounded-full blur-xl opacity-40"></div>
         <Button
           onClick={onSignInPress}
-          disabled={loading}
-          className="btn-primary relative w-full h-12 sm:h-14 lg:h-16 rounded-full text-sm sm:text-base lg:text-lg font-semibold flex items-center justify-center space-x-2 sm:space-x-3"
+          disabled={loading || !!emailError || !!passwordError}
+          type="button"
+          aria-label="Iniciar sesión"
+          className="relative w-full h-12 sm:h-14 lg:h-16 rounded-full text-sm sm:text-base lg:text-lg font-semibold flex items-center justify-center space-x-2 sm:space-x-3 bg-gradient-to-r from-[#91f2b3] via-[#fcf326] to-[#91f2b3] hover:opacity-90 text-gray-900 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
         >
           {loading ? (
             <>
-              <div className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 border-2 border-gray-800/30 border-t-gray-800 rounded-full animate-spin"></div>
-              <span>Iniciando...</span>
+              <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 animate-spin" aria-hidden="true" />
+              <span>Iniciando sesión...</span>
             </>
           ) : (
             <>
-              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
               <span>Iniciar sesión</span>
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
             </>
           )}
         </Button>
@@ -268,8 +339,8 @@ export default function SignInForm() {
 
       {/* Security Note */}
       <div className="text-center">
-        <span className="text-xs text-gray-500 flex items-center justify-center space-x-1.5">
-          <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#91f2b3] rounded-full animate-pulse inline-block"></span>
+        <span className="text-xs text-[#8FA3C4] flex items-center justify-center space-x-1.5">
+          <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#10B981] rounded-full animate-pulse inline-block"></span>
           <span>Conexión segura SSL</span>
         </span>
       </div>

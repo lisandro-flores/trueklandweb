@@ -1,10 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // DESACTIVADO PARA PRODUCCIÓN - Debe pasar validaciones
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   images: {
     domains: ["firebasestorage.googleapis.com", "lh3.googleusercontent.com", "avatars.githubusercontent.com"],
@@ -14,10 +15,24 @@ const nextConfig = {
         hostname: "**",
       },
     ],
-    unoptimized: true,
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 60,
+    unoptimized: false, // Optimizar imágenes en producción
   },
+  
+  // Optimizaciones de producción
+  reactStrictMode: true,
+  compress: true,
+  
+  // Eliminar console.logs en producción (excepto error y warn)
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'],
+    } : false,
+  },
+  
   experimental: {
-    optimizePackageImports: ["lucide-react"],
+    optimizePackageImports: ["lucide-react", "@radix-ui/react-icons"],
   },
   // Configuración de cabeceras de seguridad
   async headers() {
@@ -33,9 +48,9 @@ const nextConfig = {
               "default-src 'self'",
               "script-src 'self' 'unsafe-eval' 'unsafe-inline' *.googleapis.com *.gstatic.com apis.google.com accounts.google.com ssl.gstatic.com",
               "style-src 'self' 'unsafe-inline' *.googleapis.com *.gstatic.com accounts.google.com fonts.googleapis.com",
-              "img-src 'self' data: blob: *.firebasestorage.googleapis.com *.googleusercontent.com *.googleapis.com *.gstatic.com",
+              "img-src 'self' data: blob: https: *.firebasestorage.googleapis.com firebasestorage.googleapis.com *.googleusercontent.com *.googleapis.com *.gstatic.com",
               "font-src 'self' *.gstatic.com *.googleapis.com fonts.gstatic.com",
-              "connect-src 'self' *.googleapis.com *.firebase.com *.firebaseio.com *.firebasestorage.googleapis.com accounts.google.com",
+              "connect-src 'self' *.googleapis.com *.firebase.com *.firebaseio.com *.firebasestorage.googleapis.com firebasestorage.googleapis.com accounts.google.com",
               "frame-src 'self' *.google.com accounts.google.com",
               "object-src 'none'",
               "base-uri 'self'",

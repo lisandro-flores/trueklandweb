@@ -115,10 +115,10 @@ export default function UserProfile({ email }: UserProfileProps) {
       </div>
 
       {/* Profile Info */}
-      <Card className="glass-effect border-0">
+      <Card className="bg-[#112240]/95 backdrop-blur-md border-2 border-[#233554]">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
-            <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-200 border-4 border-white shadow-lg">
+            <div className="w-24 h-24 rounded-full overflow-hidden bg-[#0A1628] border-4 border-[#233554] shadow-lg">
               {products.length > 0 && products[0].userImage ? (
                 <Image src={products[0].userImage || "/placeholder.svg"} alt={userName} fill className="object-cover" />
               ) : (
@@ -130,9 +130,9 @@ export default function UserProfile({ email }: UserProfileProps) {
 
             <div className="flex-1 text-center md:text-left">
               <h1 className="text-3xl font-bold gradient-text mb-2">{userName}</h1>
-              <p className="text-gray-600 mb-4">{email}</p>
+              <p className="text-[#B4C7E7] mb-4">{email}</p>
 
-              <div className="flex flex-wrap justify-center md:justify-start gap-4 text-sm text-gray-600 mb-6">
+              <div className="flex flex-wrap justify-center md:justify-start gap-4 text-sm text-[#8FA3C4] mb-6">
                 <div className="flex items-center space-x-1">
                   <Calendar className="h-4 w-4" />
                   <span>Miembro activo</span>
@@ -156,7 +156,7 @@ export default function UserProfile({ email }: UserProfileProps) {
             {!isOwnProfile && (
               <Button
                 onClick={handleStartChat}
-                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+                className="bg-gradient-to-r from-[#91f2b3] to-[#fcf326] hover:from-[#7fd89f] hover:to-[#e8e01f] text-[#0A1628] font-semibold shadow-lg shadow-[#91f2b3]/20 transition-all"
               >
                 <MessageCircle className="h-4 w-4 mr-2" />
                 Contactar
@@ -175,10 +175,10 @@ export default function UserProfile({ email }: UserProfileProps) {
         {products.length > 0 ? (
           <ProductList products={products} />
         ) : (
-          <div className="text-center py-16 glass-effect rounded-2xl">
-            <User className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-600 mb-2">Este usuario no ha publicado productos</h3>
-            <p className="text-gray-500">Aún no hay productos disponibles de este usuario</p>
+          <div className="text-center py-16 bg-[#112240]/95 backdrop-blur-md border-2 border-[#233554] rounded-2xl">
+            <User className="h-16 w-16 text-[#E6F1FF]/50 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-[#E6F1FF] mb-2">Este usuario no ha publicado productos</h3>
+            <p className="text-[#E6F1FF]/60">Aún no hay productos disponibles de este usuario</p>
           </div>
         )}
       </div>
