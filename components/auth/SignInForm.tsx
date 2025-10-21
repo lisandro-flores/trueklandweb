@@ -117,14 +117,17 @@ export default function SignInForm() {
     setLoading(true)
     
     try {
+      console.log('🔐 Iniciando autenticación con Google...')
       const result = await signInWithPopup(auth, googleProvider)
       const user = result.user
+      console.log('✅ Usuario autenticado:', user.email)
 
       // Verificar si el usuario ya existe en Firestore
       const userDocRef = doc(db, "Users", user.uid)
       const userDoc = await getDoc(userDocRef)
 
       if (!userDoc.exists()) {
+        console.log('📝 Creando nuevo usuario en Firestore...')
         // Crear documento del usuario si no existe
         await setDoc(userDocRef, {
           name: user.displayName || "",
@@ -133,6 +136,9 @@ export default function SignInForm() {
           createdAt: new Date().toISOString(),
           provider: "google"
         })
+        console.log('✅ Usuario creado en Firestore')
+      } else {
+        console.log('ℹ️ Usuario ya existe en Firestore')
       }
 
       // Verificar si es admin y redirigir al panel de admin
@@ -144,7 +150,7 @@ export default function SignInForm() {
       })
       router.push(isAdmin ? "/admin" : "/explore")
     } catch (err: unknown) {
-      console.error(err)
+      console.error('❌ Error en autenticación con Google:', err)
       const error = err as { code?: string; message?: string }
       
       if (error.code === "auth/popup-closed-by-user") {
@@ -159,10 +165,22 @@ export default function SignInForm() {
           description: "Por favor, permite las ventanas emergentes para continuar.",
           variant: "destructive",
         })
+      } else if (error.code === "auth/unauthorized-domain") {
+        toast({
+          title: "Dominio no autorizado",
+          description: "Configura este dominio en Firebase Console > Authentication > Settings > Authorized domains",
+          variant: "destructive",
+        })
+      } else if (error.code === "auth/configuration-not-found") {
+        toast({
+          title: "Error de configuración",
+          description: "OAuth de Google no está configurado. Verifica Firebase Console.",
+          variant: "destructive",
+        })
       } else {
         toast({
           title: "Error",
-          description: "Hubo un problema al iniciar sesión con Google.",
+          description: `${error.code || 'Error desconocido'}: ${error.message || 'Hubo un problema al iniciar sesión con Google.'}`,
           variant: "destructive",
         })
       }
