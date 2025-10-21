@@ -195,17 +195,17 @@ export default function Navbar() {
                     variant="ghost"
                     size="sm"
                     className={cn(
-                      "relative flex flex-col items-center justify-center h-16 sm:h-18 w-full p-2 sm:p-3 rounded-2xl sm:rounded-3xl transition-all duration-300 border-2 overflow-hidden touch-target",
+                      "relative flex items-center justify-center h-14 sm:h-16 w-full p-3 sm:p-4 rounded-2xl sm:rounded-3xl transition-all duration-300 border-2 overflow-hidden touch-target",
                       isActive
                         ? "bg-gradient-to-r from-[#91f2b3] to-[#fcf326] text-gray-900 shadow-lg border-[#91f2b3]/30 scale-105"
                         : "text-[#E6F1FF] hover:bg-[#1A2F4F] hover:text-[#91f2b3] border-transparent hover:scale-105 hover:shadow-lg hover:border-[#233554]",
                     )}
                   >
-                    <div className="relative z-10 flex flex-col items-center gap-1">
+                    <div className="relative z-10 flex items-center justify-center">
                       <div className="relative">
                         <item.icon
                           className={cn(
-                            "h-5 w-5 sm:h-6 sm:w-6 transition-all duration-300",
+                            "h-6 w-6 sm:h-7 sm:w-7 transition-all duration-300",
                             isActive ? "drop-shadow-sm" : "group-hover:scale-110",
                           )}
                         />
@@ -213,14 +213,13 @@ export default function Navbar() {
                           <span className="absolute -top-2 -right-2 z-20">
                             <Badge
                               variant="destructive"
-                              className="flex items-center justify-center h-4 w-4 sm:h-5 sm:w-5 p-0 text-[9px] sm:text-[10px] font-bold bg-[#EF4444] text-white border-2 border-[#112240] rounded-full shadow"
+                              className="flex items-center justify-center h-5 w-5 p-0 text-[10px] font-bold bg-[#EF4444] text-white border-2 border-[#112240] rounded-full shadow"
                             >
                               {item.badge > 9 ? "9+" : item.badge}
                             </Badge>
                           </span>
                         )}
                       </div>
-                      <span className="text-[10px] sm:text-xs font-semibold leading-tight tracking-wide mobile-friendly-text">{item.name}</span>
                     </div>
 
                     {/* Shine effect */}

@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
+import AdminLayout from "@/components/layouts/AdminLayout"
 import { 
   Search, 
   CheckCircle, 
@@ -191,38 +192,19 @@ export default function AdminPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0A1628] flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <Loader2 className="h-12 w-12 animate-spin text-[#91f2b3] mx-auto" />
-          <p className="text-[#B4C7E7]">Cargando panel de administración...</p>
+      <AdminLayout title="Gestión de Publicaciones">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-center space-y-4">
+            <Loader2 className="h-12 w-12 animate-spin text-[#91f2b3] mx-auto" />
+            <p className="text-[#B4C7E7]">Cargando panel de administración...</p>
+          </div>
         </div>
-      </div>
+      </AdminLayout>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#0A1628]">
-      {/* Header */}
-      <div className="sticky top-0 z-50 bg-[#112240]/95 backdrop-blur-xl border-b border-[#233554] shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-[#91f2b3] to-[#fcf326] bg-clip-text text-transparent">
-                Panel de Administración
-              </h1>
-              <p className="text-[#B4C7E7] mt-1">Gestiona las publicaciones de TruekLand</p>
-            </div>
-            <Button
-              onClick={() => router.push("/")}
-              variant="outline"
-              className="border-[#233554] text-[#E6F1FF] hover:bg-[#1A2F4F]"
-            >
-              Volver al inicio
-            </Button>
-          </div>
-        </div>
-      </div>
-
+    <AdminLayout title="Gestión de Publicaciones">
       {/* Stats */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -399,7 +381,7 @@ export default function AdminPage() {
           </TabsContent>
         </Tabs>
       </div>
-    </div>
+    </AdminLayout>
   )
 }
 
